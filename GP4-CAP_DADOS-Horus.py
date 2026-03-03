@@ -1,17 +1,17 @@
 import psutil
 import csv
 from datetime import datetime
-import os
 import time
 
-arquivo_csv = "captura_dados-brutos_maquina.csv"
-arquivo_ja_existe = os.path.isfile(arquivo_csv) and os.path.getsize(arquivo_csv) > 0
+arquivo_csv = "dados-brutos_maquina.csv"
+
 
 with open(arquivo_csv, 'a', newline='') as csvfile:
     while(True): 
         colunas = ['CPU','RAM','DISCO','DATA_HORA']
         CSV_DIC_WRITER = csv.DictWriter(csvfile, fieldnames=colunas)
-        if not arquivo_ja_existe:
+        
+        if csvfile.tell() == 0:
             CSV_DIC_WRITER.writeheader()
 
         cpu_usage = psutil.cpu_percent(interval=1)
