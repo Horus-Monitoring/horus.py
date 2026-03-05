@@ -2,13 +2,6 @@ CREATE DATABASE horus_db;
 
 USE horus_db;
 
-CREATE TABLE Papel (
-idPapel INT PRIMARY KEY AUTO_INCREMENT,
-nivel VARCHAR(45),
-descricao VARCHAR(80)
-);
-
-
 CREATE TABLE Localizacao (
 idLocalizacao INT PRIMARY KEY AUTO_INCREMENT,
 uf CHAR(2),
@@ -18,6 +11,7 @@ logradouro VARCHAR(45),
 numero INT,
 cep CHAR(11)
 );
+
 
 
 CREATE TABLE Empresa (
@@ -34,23 +28,41 @@ CONSTRAINT fk_localizacao_registro
 
 
 
+
+CREATE TABLE Papel (
+idPapel INT  AUTO_INCREMENT,
+nivel VARCHAR(45),
+descricao VARCHAR(80),
+fk_empresa INT, 
+CONSTRAINT pk_papel_empresa
+	PRIMARY KEY(idPapel, fk_empresa),
+CONSTRAINT fk_empresa_registro
+	FOREIGN KEY (fk_empresa)
+		REFERENCES Empresa (idEMpresa)
+);
+
+
+
+
+
+
 CREATE TABLE Funcionario (
 idFuncionario INT AUTO_INCREMENT,
-fk_empresa INT,
 nome VARCHAR(45),
+nome_social VARCHAR(45),
 cpf CHAR(11) NOT NULL UNIQUE,
 email VARCHAR(45) NOT NULL UNIQUE,
 senha VARCHAR(45),
-fk_papel INT,
-CONSTRAINT pk_funcionario_empresa
-	PRIMARY KEY(idFuncionario, fk_empresa),
-CONSTRAINT fk_empresa_registro
-	FOREIGN KEY (fk_empresa)
-		REFERENCES Empresa(idEmpresa),
+fk_papel_empresa INT,
+CONSTRAINT pk_funcionario_papel_empresa
+	PRIMARY KEY(idFuncionario, fk_papel_empresa),
 CONSTRAINT fk_papel_registro
-	FOREIGN KEY (fk_papel)
+	FOREIGN KEY (fk_papel_empresa)
 		REFERENCES Papel(idPapel)
 );
+
+
+
 
 
 
@@ -101,3 +113,22 @@ CONSTRAINT fk_servidor_componente
 	FOREIGN KEY (fk_servidor_componentes)
 		REFERENCES CompServidor(id_componente_v)
 ); 
+
+
+INSERT INTO Localizacao (uf, cidade, bairro, logradouro, numero, cep) VALUES
+	('SP', 'São Paulo', 'Paulista','Rua Hadock Lobo', 12, '08412210');
+    
+INSERT INTO Empresa (razao_social, cnpj, telefone_empresa, token_empresa, fk_localizacao) VALUES
+	('LIPSU AERO', '123456789101234', '5573-1234', 'ABC12345', 1);
+    
+INSERT INTO Papel (nivel, descricao, fk_empresa) VALUES
+	('Gerente de ATC', 'Deve monitorar e solucionar problemas', 1);
+    
+INSERT INTO Funcionario (fk_papel_empresa, nome,  cpf, email, senha) VALUES
+	(1, 'Herycka', '32187634567', 'herycka@gmail.com', 'Herycka_1234');
+    
+    
+SELECT  nivel  FROM Papel JOIN Funcionario
+	ON idPapel = fk_papel_empresa
+    WHERE nome = 'Herycka';
+    
