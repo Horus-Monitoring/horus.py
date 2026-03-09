@@ -2,6 +2,15 @@ CREATE DATABASE horus_db;
 
 USE horus_db;
 
+
+CREATE TABLE Contato_inicial (
+idContato_inicial INT PRIMARY KEY AUTO_INCREMENT,
+nome VARCHAR(45),
+sobrenome VARCHAR(45),
+emaill VARCHAR(45),
+mensagem VARCHAR(240)
+); 
+
 CREATE TABLE Localizacao (
 idLocalizacao INT PRIMARY KEY AUTO_INCREMENT,
 uf CHAR(2),
@@ -58,7 +67,8 @@ CONSTRAINT pk_funcionario_papel_empresa
 	PRIMARY KEY(idFuncionario, fk_papel_empresa),
 CONSTRAINT fk_papel_registro
 	FOREIGN KEY (fk_papel_empresa)
-		REFERENCES Papel(idPapel)
+		REFERENCES Papel(idPapel),
+foto_usuario VARCHAR(255)
 );
 
 
@@ -113,6 +123,8 @@ CONSTRAINT fk_servidor_componente
 	FOREIGN KEY (fk_servidor_componentes)
 		REFERENCES CompServidor(id_componente_v)
 ); 
+
+
 
 
 INSERT INTO Localizacao (uf, cidade, bairro, logradouro, numero, cep) VALUES
