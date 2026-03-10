@@ -8,7 +8,7 @@ idContato_inicial INT PRIMARY KEY AUTO_INCREMENT,
 nome VARCHAR(45),
 sobrenome VARCHAR(45),
 emaill VARCHAR(45),
-mensagem VARCHAR(240)
+mensagem VARCHAR(255)
 ); 
 
 CREATE TABLE Localizacao (
@@ -68,7 +68,7 @@ CONSTRAINT pk_funcionario_papel_empresa
 CONSTRAINT fk_papel_registro
 	FOREIGN KEY (fk_papel_empresa)
 		REFERENCES Papel(idPapel),
-foto_usuario VARCHAR(255)
+foto VARCHAR(255)
 );
 
 
