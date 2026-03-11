@@ -2,4 +2,7 @@ Banco, Capturação e scripts do projeto
 
 modelagem atual:
 
-<img width="860" height="786" alt="image" src="https://github.com/user-attachments/assets/4b9f70cb-f823-45d9-88e4-cbea94561dcb" />
+<img width="875" height="779" alt="image" src="https://github.com/user-attachments/assets/96619abc-3d11-4352-9fe3-c2841186f736" />
+
+
+
