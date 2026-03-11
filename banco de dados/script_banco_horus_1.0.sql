@@ -29,7 +29,7 @@ razao_social VARCHAR(45),
 cnpj CHAR(15) NOT NULL UNIQUE,
 telefone_empresa CHAR(11) NOT NULL UNIQUE,
 token_empresa CHAR(8) NOT NULL UNIQUE,
-fk_localizacao INT,
+fk_localizacao INT UNIQUE,
 CONSTRAINT fk_localizacao_registro
 	FOREIGN KEY (fk_localizacao)
 		REFERENCES Localizacao(idLocalizacao)
