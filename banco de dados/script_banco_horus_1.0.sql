@@ -90,12 +90,18 @@ CONSTRAINT fk_empresa_registro_servidor
 		REFERENCES Empresa(idEmpresa)
 );
 
+
+
+
 CREATE TABLE Componentes (
 idComponentes INT PRIMARY KEY AUTO_INCREMENT,
 nome_componente VARCHAR(45),
 tipo_componente VARCHAR(45),
 unidade_medida VARCHAR(45)
 );
+
+
+
 
 
 CREATE TABLE CompServidor (
@@ -137,10 +143,44 @@ INSERT INTO Papel (nivel, descricao, fk_empresa) VALUES
 	('Gerente de ATC', 'Deve monitorar e solucionar problemas', 1);
     
 INSERT INTO Funcionario (fk_papel_empresa, nome,  cpf, email, senha) VALUES
-	(1, 'Herycka', '32187634567', 'herycka@gmail.com', 'Herycka_1234');
+	(1, 'Herycka', '32187634567', 'Erycka@gmail.com', 'Herycka_1234');
     
     
 SELECT  nivel  FROM Papel JOIN Funcionario
 	ON idPapel = fk_papel_empresa
-    WHERE nome = 'Herycka';
+    WHERE idPapel = 1;
     
+    
+INSERT INTO Servidor (data_instalacao, tag_servidor, fk_empresa) VALUES
+	('2021-10-03', 'A03', 1);
+    
+SELECT tag_servidor, razao_social FROM Servidor JOIN Empresa ON fk_empresa = idEmpresa;    
+    
+    
+    
+INSERT INTO Componentes (nome_componente, tipo_componente, unidade_medida) VALUES
+	('RAM GIGABYTE', 'MEMORIA RAM', 'GB'),
+    ('INTEL XEON 2640v3', 'CPU', 'PERCENT'),
+    ('SANDISK 240', 'DISCO', 'GB');
+
+
+select * from Componentes;
+
+
+INSERT INTO CompServidor (fk_componente, fk_servidor, limite) VALUES
+	(1, 1, '32'),
+    (2, 1, '80%'),
+    (3, 1, '290GB');
+    
+    
+SELECT nome_componente, tipo_componente, limite, tag_servidor FROM CompServidor JOIN Servidor
+		ON fk_servidor = idServidor
+        JOIN Componentes ON  fk_componente = idComponentes;
+        
+        
+INSERT Registro_Alerta (criticidade, fk_servidor_componentes) VALUES
+		('CRITICO', 1);
+        
+SELECT * FROM Registro_Alerta JOIN CompServidor ON fk_servidor_componentes = id_componente_v ;
+
+
