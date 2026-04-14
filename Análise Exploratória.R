@@ -9,15 +9,15 @@ azul5 <- "#0e0e52"
 
 # Dados importantes para análise:
 # Pesquisa dos componentes priorizados em cada setor 
-# Adicionar coluna para setores (Airspace Management(CPU) e 
-# Track Correlation / Flight Plan(Armazenamento))
+
+# Quando tiver um dataframe completo:
 # Análise de feriados e finais de semana (com pesquisas)
 # Análise da relação entre os componentes e processos
 # IOWAIT(Percentual do Tempo que a CPU fica esperando operações I/O) - Disco
 # SWAP(Memória Virtual do Disco) - RAM
-# mean(df_horus$proc_asm_cpu) 
-# mean(df_horus$proc_correlation_cpu) 
-# mean(df_horus$proc_db_cpu)
+# Fontes, Considerações Finais e Análise
+
+# Ideias para adicionar
 # mediana, desvio padrão e moda
 # variavel qualitativa ordinal
 # ggplot
@@ -53,6 +53,11 @@ df_horus$proc_correlation_cpu <- gsub("\\%", "", df_horus$proc_correlation_cpu)
 # remover o símbolo '%' da coluna 'proc_db_cpu'
 df_horus$proc_db_cpu <- gsub("\\%", "", df_horus$proc_db_cpu)
 
+# Removendo colunas que não serão utilizadas
+df_horus$proc_asm_cpu <- NULL
+df_horus$proc_correlation_cpu <- NULL
+df_horus$proc_db_cpu <- NULL
+
 # transformando as colunas para tipo numérico
 df_horus$cpu_percent <- as.numeric(df_horus$cpu_percent)
 df_horus$memory_available_gb <- as.numeric(df_horus$memory_available_gb)
@@ -65,9 +70,14 @@ df_horus$proc_db_cpu <- as.numeric(df_horus$proc_db_cpu)
 df_horus$net_bytes_sent <- df_horus$net_bytes_sent/1000
 df_horus$net_bytes_recv <- df_horus$net_bytes_recv/1000
 
+# Assumindo que a memoria total é de 128GB (transformar em porcentagem)
+memoria_total <- 128
+df_horus$memory_available_gb <- df_horus$memory_available_gb * 8
+df_horus$memory_percent <- round((df_horus$memory_available_gb * 100) / memoria_total, 1)
+
 # Médias dos Componentes - Geral 
 media_cpu <- mean(df_horus$cpu_percent)
-media_memoria <- mean(df_horus$memory_available_gb)
+media_memoria <- mean(df_horus$memory_percent)
 media_disco <- mean(df_horus$disk_usage_percent)
 media_bytes_env <- mean(df_horus$net_bytes_sent)
 media_bytes_recv <- mean(df_horus$net_bytes_recv)
@@ -79,8 +89,12 @@ media_swap <- mean(df_horus$swap_percent)
 # Classificação das Colunas 
 # Qualitativa Nominal: dia_semana
 # Quantitativa Contínua: cpu_percent, memory_available_gb, disk_usage_percent,
-# proc_asm_cpu, proc_correlation_cpu, proc_db_cpu, latency_ms, iowait_percent, swap_percent 
+# proc_asm_cpu, proc_correlation_cpu, proc_db_cpu, latency_ms, iowait_percent, 
+# swap_percent, memory_percent 
 # Quantitativa Discreta: net_bytes_sent, net_bytes_recv, active_processes
+
+# Identificar o comportamento dos servidores de cada "setor" do Sagiário
+# Track Correlation / Flight Plan(Armazenamento)
 
 # Analisando o comportamento e distribuição de cada uma das colunas e suas médias
 hist(df_horus$cpu_percent,
@@ -90,10 +104,19 @@ hist(df_horus$cpu_percent,
      ylab = "Frequência")
 abline(v = media_cpu, col = azul5, lwd = 2)
 
-hist(df_horus$memory_available_gb,
+df_horus$timestamp <- as.POSIXct(
+  df_horus$timestamp,
+  format = "%Y-%m-%d %H:%M:%S"
+)
+
+plot(df_horus$timestamp, df_horus$cpu_percent)
+
+plot(df_horus$memory_available_gb, df_horus$active_processes)
+
+hist(df_horus$memory_percent,
      main = c("Relação entre Uso de Memória durante o Mês"),
      col = (azul2),
-     xlab = "Memória(GB)",
+     xlab = "Memória(%)",
      ylab = "Frequência")
 abline(v = media_memoria, col = azul5, lwd = 2)
 
@@ -139,11 +162,16 @@ hist(df_horus$active_processes,
      ylab = "Frequência")
 abline(v = media_processos, col = azul1, lwd = 2)
 
+df_horus$setor <- "Flight Plan / Track Correlation"
+
+# (Airspace Management(CPU))
+
+# Dataframe completo:
+
 # Instalando oactive_processes# Instalando o pacote lubridate para manipulação de datas
 install.packages("lubridate")
 library(lubridate)
 
 # Adicionando coluna do dia da semana de acordo com a data
 df_horus$dia_semana <- wday(df_horus$timestamp, label = TRUE, abbr = TRUE)
-
 
