@@ -8,11 +8,11 @@ azul4 <- "#150578"
 azul5 <- "#0e0e52"
 
 # Dados importantes para análise:
-# Análise de feriados e finais de semana (com pesquisas)
-# Análise da relação entre os componentes e processos
+# Pesquisa dos componentes priorizados em cada setor 
 # Adicionar coluna para setores (Airspace Management(CPU) e 
 # Track Correlation / Flight Plan(Armazenamento))
-# Pesquisa dos componentes priorizados em cada setor 
+# Análise de feriados e finais de semana (com pesquisas)
+# Análise da relação entre os componentes e processos
 # IOWAIT(Percentual do Tempo que a CPU fica esperando operações I/O) - Disco
 # SWAP(Memória Virtual do Disco) - RAM
 # mean(df_horus$proc_asm_cpu) 
@@ -20,7 +20,16 @@ azul5 <- "#0e0e52"
 # mean(df_horus$proc_db_cpu)
 # mediana, desvio padrão e moda
 # variavel qualitativa ordinal
-# Gráficos para as variaveis discretas
+# ggplot
+# variavel limite
+# coluna de incidentes
+# coluna custo
+# coluna data e hora de resolução do incidente
+# coluna com localização
+# coluna com o nome do servidor
+# coluna com ip
+# coluna com so
+# coluna status
 
 df_horus <- data.frame(sagitario)
 
@@ -73,47 +82,62 @@ media_swap <- mean(df_horus$swap_percent)
 # proc_asm_cpu, proc_correlation_cpu, proc_db_cpu, latency_ms, iowait_percent, swap_percent 
 # Quantitativa Discreta: net_bytes_sent, net_bytes_recv, active_processes
 
+# Analisando o comportamento e distribuição de cada uma das colunas e suas médias
 hist(df_horus$cpu_percent,
      main = c("Relação entre Uso de CPU durante o Mês"),
      col = (azul1),
      xlab = "CPU(%)",
-     ylab = "frequência")
+     ylab = "Frequência")
 abline(v = media_cpu, col = azul5, lwd = 2)
 
 hist(df_horus$memory_available_gb,
      main = c("Relação entre Uso de Memória durante o Mês"),
      col = (azul2),
      xlab = "Memória(GB)",
-     ylab = "frequência")
+     ylab = "Frequência")
 abline(v = media_memoria, col = azul5, lwd = 2)
 
 hist(df_horus$disk_usage_percent,
      main = c("Relação entre Uso de Disco durante o Mês"),
      col = (azul3),
      xlab = "Disco(%)",
-     ylab = "frequência")
+     ylab = "Frequência")
 abline(v = media_disco, col = azul1, lwd = 2)
 
 hist(df_horus$latency_ms,
      main = c("Distribuição do tempo de latência durante o Mês"),
      col = (azul4),
      xlab = "Latência(m/s)",
-     ylab = "frequência")
+     ylab = "Frequência")
 abline(v = media_disco, col = azul1, lwd = 2)
 
 hist(df_horus$iowait_percent,
      main = c("Distribuição de I/O Wait (%) durante o Mês"),
      col = (azul5),
-     xlab = "I/O Wait(%)",
-     ylab = "frequência")
+     xlab = "I/O Wait (%)",
+     ylab = "Frequência")
 abline(v = media_iowait, col = azul1, lwd = 2)
 
-# Gráficos para as variaveis discretas
-# hist(df_horus$net_bytes_sent)
-# hist(df_horus$net_bytes_recv)
-# hist(df_horus$active_processes)
-# table(df_horus$active_processes)
-# barplot(table(df_horus$active_processes))
+hist(df_horus$net_bytes_sent,
+     main = c("Distribuição da Quantidade de Bytes Enviados Durante o Mês"),
+     col = (azul1),
+     xlab = "KiloBytes(KB)",
+     ylab = "Frequência")
+abline(v = media_bytes_env, col = azul5, lwd = 2)
+
+hist(df_horus$net_bytes_recv,
+     main = c("Distribuição da Quantidade de Bytes Recebidos Durante o Mês"),
+     col = (azul2),
+     xlab = "KiloBytes(KB)",
+     ylab = "Frequência")
+abline(v = media_bytes_recv, col = azul4, lwd = 2)
+
+hist(df_horus$active_processes,
+     main = c("Distribuição da Quantidade de Processos Ativos Durante o Mês"),
+     col = (azul3),
+     xlab = "Processos Ativos",
+     ylab = "Frequência")
+abline(v = media_processos, col = azul1, lwd = 2)
 
 # Instalando oactive_processes# Instalando o pacote lubridate para manipulação de datas
 install.packages("lubridate")
@@ -122,6 +146,4 @@ library(lubridate)
 # Adicionando coluna do dia da semana de acordo com a data
 df_horus$dia_semana <- wday(df_horus$timestamp, label = TRUE, abbr = TRUE)
 
-# OBS: transformar em numerico para fazer o histograma!
-hist(df_horus$dia_semana)
 
