@@ -130,13 +130,13 @@ print(paste("Desvio CPU:", round(desvio_cpu, 1)))
 # o uso da CPU ficou concentrado entre o intervalo de 20% a 40%, apresentando 
 # alguns outliers (casos isolados - incidentes), tendo como foco o dia 16 de 
 # março, no qual o uso percentual chegou a 90% durante algumas horas, voltando 
-# ao normal seu comportamento usual logo em seguida. Ademais, vale destacar que 
+# ao seu comportamento usual logo em seguida. Ademais, vale destacar que 
 # a média e a mediana do uso da cpu durante o mês de março possuem valor 
 # aproximado, o que indica simetria e equilibrio na distribuição dos dados durante
 # o período de análise. 
 
 
-# SWAP E LATÊNCIA IOWAIT
+# LATÊNCIA IOWAIT
 # RAM 
 hist(df_horus$memory_used,
      main = c("Distribuição do Uso de Memória durante o Mês"),
@@ -181,14 +181,28 @@ hist(df_horus$swap_percent,
 
 df_horus$periodo <- ifelse(df_horus$timestamp < as.POSIXct("2026-03-16"),
                            "Antes",
-                    ifelse(df_horus$timestamp < as.POSIXct("2026-03-17"),
+                    ifelse(df_horus$timestamp < as.POSIXct("2026-03-16 11:00:00"),
                            "Durante", "Depois"))
+df_horus$periodo <- factor(df_horus$periodo, levels = c("Antes", "Durante", "Depois"))
 boxplot(swap_percent ~ periodo, data = df_horus,
-        col = c((azul1), (azul4), (azul2)),
-        main = "Swap Antes, Durante e Depois do Incidente")
+        col = c((azul1), (azul2), (azul3)),
+        main = "Swap Antes, Durante e Depois do Incidente",
+        xlab = "",
+        ylab = "SWAP(%)")
 
-df_horus$swap_faixa <- cut(df_horus$swap_percent, breaks = c(0, 20, 40, 80, 100))
-boxplot(memory_used ~ swap_faixa, data = df_horus)
+# relação entre swap e memória
+# df_horus$swap_faixa <- cut(df_horus$swap_percent, breaks = c(0, 20, 40, 80, 100))
+# boxplot(memory_used ~ swap_faixa, data = df_horus)
+
+# latência
+# por dia
+# 23 - 30
+# aumento de outliers
+plot(df_horus$timestamp, df_horus$latency_ms,
+     main = "Distribuição da latência em m/s durante o mês",
+     ylab = "Latência(m/s)",
+     xlab = "Dias do Mês",
+     col = (azul4))
 
 # Buscando compreender melhor as causas para o incidente, foi feita a análise do
 # uso de memória durante o mês. Com isso, por meio do histograma, conseguimos observar
@@ -204,14 +218,18 @@ boxplot(memory_used ~ swap_faixa, data = df_horus)
 # realizada a observação do uso da memória swap ao longo do mês, na qual é possível notar
 # o crescimento lento e contínuo, até chegar no dia 16 de março, onde ocorreu um salto
 # abrupto, representando um evento (incidente) no servidor. Após isso, o uso de swap 
-# permaneceu em 100%, não retornando ao comportamento anterior. Entre uma das explicações 
-# isso, podemos citar o fato de que a memória swap não é "auto limpante", ou seja, ela só é 
-# liberada quando os processos terminam ou quando os dados armazenados sejam necessários
-# para algum processo. Caso o contrário, eles permanecem na swap ocupando espaço. Por meio
-# do bloxplot "Swap Antes e Depois do Incidente" é possível analisar o comportamento entre
-# os dois diferentes estados do sistema. Antes do imprevisto, o percentual de swap apresentava
-# baixa variabilidade (caixa pequena), tendo um valor máximo por volta dos 25%, sem outliers,
-# demonstrando estabilidade e previsibilidade. Porém, após o ocorrido, 
+# permaneceu em 100%, não retornando ao comportamento anterior. A diferença de comportamento
+# da memória swap pode ser analisada também por meio de um boxplot, que indica a variação entre
+# antes, durante e depois do dia 16. Antes: o intervalo da swap teve um crescimento no intervalo de 5% a
+# 23%, apresentando baixa variabilidade (caixa pequena), tendo um valor máximo por volta dos 25%, sem 
+# outliers, demonstrando estabilidade e previsibilidade. Durante: em um intervalo de 7 horas o uso de swap 
+# foi de 37% até 100%, apresentando alta variação entre os dados (caixa grande). Depois: permanence 
+# neste valor até o final da análise não tendo variação, o que pode ser observado por meio da caixa 
+# "achatada". Entre uma das explicações, podemos citar o fato de que a memória swap não é "auto limpante", 
+# ou seja, ela só é liberada quando os processos terminam ou quando os dados armazenados sejam necessários 
+# para algum processo. Caso o contrário, eles permanecem na swap ocupando espaço. 
+
+# Relação entre memória swap e memória ram. 
 
 # Assim, ressalta-se
 # a importância do monitoramento contínuo do uso da memória, sendo essencial para identificar
