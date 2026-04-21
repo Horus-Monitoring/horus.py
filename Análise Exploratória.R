@@ -13,7 +13,6 @@ azul5 <- "#0e0e52"
 # Análise de feriados e finais de semana (com pesquisas)
 # IOWAIT(Percentual do Tempo que a CPU fica esperando operações I/O) - Disco
 # Fontes, Considerações Finais e Análise
-# variavel qualitativa ordinal
 # ggplot
 # variavel limite
 # coluna de incidentes
@@ -24,6 +23,7 @@ azul5 <- "#0e0e52"
 # coluna com ip
 # coluna com so
 # coluna status
+# nova kpi analista
 
 df_horus <- data.frame(sagitario)
 
@@ -87,7 +87,7 @@ desvio_disco <- sd(df_horus$disk_usage_percent)
 
 # media_bytes_env <- mean(df_horus$net_bytes_sent)
 # media_bytes_recv <- mean(df_horus$net_bytes_recv)
-# media_latencia <- mean(df_horus$latency_ms) 
+media_latencia <- mean(df_horus$latency_ms) 
 # media_processos <- mean(df_horus$active_processes) 
 # media_iowait <- mean(df_horus$iowait_percent)  
 
@@ -99,16 +99,25 @@ desvio_disco <- sd(df_horus$disk_usage_percent)
 
 # Analisando o comportamento e distribuição de CPU, RAM e DISCO
 
-# 23 - 30
-# DESVIO
+# DESVIO PADRÃO
+# 23 - 30 (CPU, Latência, Disco) / aumento de outliers
 
 # CPU 
+
+cores <- ifelse(
+  df_horus$periodo == "Durante",
+  "red", azul2)
+
 hist(df_horus$cpu_percent,
      main = c("Relação entre Uso de CPU durante o Mês"),
      col = (azul1),
      xlab = "CPU(%)",
      ylab = "Frequência")
 abline(v = media_cpu, col = azul5, lwd = 2)
+
+print(paste("Média CPU:", round(media_cpu, 1)))
+print(paste("Mediana CPU:", round(mediana_cpu, 1)))
+print(paste("Desvio CPU:", round(desvio_cpu, 1)))
 
 # Convertendo a coluna timestamp para um formato de data e hora, possibilitando a manipulação de datas
 df_horus$timestamp <- as.POSIXct(
@@ -120,11 +129,12 @@ plot(df_horus$timestamp, df_horus$cpu_percent,
      main = "Distribuição do Uso de CPU Durante o Mês",
      ylab = "CPU(%)",
      xlab = "Dias do Mês",
-     col = (azul2))
+     col = cores)
 
-print(paste("Média CPU:", round(media_cpu, 1)))
-print(paste("Mediana CPU:", round(mediana_cpu, 1)))
-print(paste("Desvio CPU:", round(desvio_cpu, 1)))
+legend("topleft",
+       legend = c("Normal", "Incidente"),
+       col = c(azul2, "red"),
+       pch = 16)
 
 # Através da análise do histograma e do plot, é possível notar que durante o mês
 # o uso da CPU ficou concentrado entre o intervalo de 20% a 40%, apresentando 
@@ -136,31 +146,62 @@ print(paste("Desvio CPU:", round(desvio_cpu, 1)))
 # o período de análise. 
 
 
-# LATÊNCIA IOWAIT
-# RAM 
+# IOWAIT
+# RAM
+
 hist(df_horus$memory_used,
      main = c("Distribuição do Uso de Memória durante o Mês"),
-     col = (azul2),
+     col = (azul1),
      xlab = "Memória(%)",
      ylab = "Frequência",
      xlim = c(20,100))
 abline(v = media_memoria, col = azul5, lwd = 2)
 
-plot(df_horus$timestamp, df_horus$memory_used,
-     main = "Distribuição do Uso de RAM Durante o Mês",
-     ylab = "RAM(%)",
-     xlab = "Dias do Mês",
-     col = (azul4))
-
 print(paste("Média RAM:", round(media_memoria, 1)))
 print(paste("Mediana RAM:", round(mediana_memoria, 1)))
 print(paste("Desvio RAM:", round(desvio_memoria, 1)))
 
+plot(df_horus$timestamp, df_horus$memory_used,
+     main = "Distribuição do Uso de RAM Durante o Mês",
+     ylab = "RAM(%)",
+     xlab = "Dias do Mês",
+     col = cores)
+
+legend("topleft",
+       legend = c("Normal", "Incidente"),
+       col = c(azul2, "red"),
+       pch = 16)
+
+# correlação - regressão linear
+df_antesIncidente <- subset(df_horus,
+                     as.Date(timestamp) >= "2026-03-11" &
+                       as.Date(timestamp) <= "2026-03-15"
+)
+
+cor(as.numeric(df_antesIncidente$timestamp),
+    df_antesIncidente$memory_used)
+
+ggplot(data = df_antesIncidente, aes(timestamp, memory_used)) + 
+  geom_point() +
+  geom_smooth(method = "lm",
+              se = FALSE) + theme_gray()
+
+plot(df_semana$timestamp, df_semana$memory_used, type = "l",
+     main = "Uso de Memória RAM na semana do incidente",
+     xlab = "Tempo", ylab = "RAM(%)",
+     col = (azul3),
+     lwd = 2)
+
 plot(df_horus$active_processes, df_horus$memory_used,
-     col = (azul1),
+     col = cores,
      xlab = "Quantidade de Processos Ativos",
      ylab = "Memória(%)",
      main = "Relação entre Quantidade de Processos Ativos e Memória Usada")
+
+legend("topleft",
+       legend = c("Normal", "Incidente"),
+       col = c(azul2, "red"),
+       pch = 16)
 
 plot(df_horus$timestamp, df_horus$swap_percent, 
      type = "l",
@@ -184,8 +225,9 @@ df_horus$periodo <- ifelse(df_horus$timestamp < as.POSIXct("2026-03-16"),
                     ifelse(df_horus$timestamp < as.POSIXct("2026-03-16 11:00:00"),
                            "Durante", "Depois"))
 df_horus$periodo <- factor(df_horus$periodo, levels = c("Antes", "Durante", "Depois"))
+
 boxplot(swap_percent ~ periodo, data = df_horus,
-        col = c((azul1), (azul2), (azul3)),
+        col = (azul1),
         main = "Swap Antes, Durante e Depois do Incidente",
         xlab = "",
         ylab = "SWAP(%)")
@@ -195,14 +237,109 @@ boxplot(swap_percent ~ periodo, data = df_horus,
 # boxplot(memory_used ~ swap_faixa, data = df_horus)
 
 # latência
-# por dia
-# 23 - 30
-# aumento de outliers
+
 plot(df_horus$timestamp, df_horus$latency_ms,
-     main = "Distribuição da latência em m/s durante o mês",
-     ylab = "Latência(m/s)",
+     main = "Distribuição da latência em ms durante o mês",
+     ylab = "Latência(ms)",
      xlab = "Dias do Mês",
-     col = (azul4))
+     col = cores)
+
+legend("topright",
+       legend = c("Normal", "Incidente"),
+       col = c(azul2, "red"),
+       pch = 16)
+
+plot(df_horus$timestamp, df_horus$latency_ms, type = "l",
+     main = "Latência ao longo do tempo",
+     xlab = "Tempo", ylab = "Latência (ms)",
+     col = (azul2))
+
+
+boxplot(latency_ms ~ periodo, data = df_horus,
+        main = "Latência antes, durante e depois do incidente",
+        ylab = "Latência (ms)",
+        xlab = "",
+        col = (azul4),
+        medcol = "#f1faee")
+
+plot(df_horus$memory_used, df_horus$latency_ms,
+     main = "Relação entre Uso Percentual de Memória RAM e Latência",
+     xlab = "RAM(%)",
+     ylab = "Latência (ms)",
+     col = cores)
+
+legend("topleft",
+       legend = c("Normal", "Incidente"),
+       col = c(azul2, "red"),
+       pch = 16)
+
+dia_escolhido <- as.Date("2026-03-16")
+
+df_dia <- subset(df_horus, as.Date(timestamp) == dia_escolhido)
+
+plot(df_dia$timestamp, df_dia$latency_ms, type = "l",
+     main = "Latência no dia 16",
+     xlab = "Tempo", ylab = "Latência (ms)",
+     col = (azul3),
+     lwd = 3, xaxt = "n")
+
+axis.POSIXct(1,
+             at = seq(min(df_dia$timestamp),
+                      max(df_dia$timestamp),
+                      by = "1 hour"),
+             format = "%H:%M")
+
+inicio <- as.POSIXct("2026-03-10")
+fim    <- as.POSIXct("2026-03-17 00:00:00")
+df_semana <- subset(df_horus, timestamp >= inicio & timestamp <= fim)
+
+plot(df_semana$timestamp, df_semana$latency_ms, type = "l",
+     main = "Latência na semana do incidente",
+     xlab = "Tempo", ylab = "Latência (ms)",
+     col = (azul1),
+     lwd = 2, xaxt = "n")
+
+axis.POSIXct(1,
+             at = seq(min(df_semana$timestamp),
+                      max(df_semana$timestamp),
+                      by = "1 day"),
+             format = "%d/%m")
+
+dia_antes   <- as.Date("2026-03-10")
+dia_depois  <- as.Date("2026-03-20")
+
+df_antes   <- df_horus[as.Date(df_horus$timestamp) == dia_antes, ]
+df_durante <- df_horus[as.Date(df_horus$timestamp) == dia_durante, ]
+df_depois  <- df_horus[as.Date(df_horus$timestamp) == dia_depois, ]
+
+df_antes$hora   <- format(df_antes$timestamp, "%H:%M")
+df_dia$hora <- format(df_dia$timestamp, "%H:%M")
+df_depois$hora  <- format(df_depois$timestamp, "%H:%M")
+
+# range() garante que o eixo Y vai do menor valor entre os 3 dias até o maior valor entre os 3 dias
+plot(df_antes$latency_ms, type = "l", col = "blue", lwd = 2,
+     ylim = range(c(df_antes$latency_ms,
+                    df_dia$latency_ms,
+                    df_depois$latency_ms), na.rm = TRUE),
+     xaxt = "n",
+     xlab = "Hora do dia", ylab = "Latência (ms)",
+     main = "Comparação de Latência Antes, Durante, Depois do Incidente")
+
+lines(df_dia$latency_ms, col = "red", lwd = 2)
+lines(df_depois$latency_ms, col = "darkgreen", lwd = 2)
+
+# 1 - horizontal
+# nrow() número de linhas
+axis(1,
+     at = seq(1, nrow(df_antes), length.out = 8),
+     labels = df_antes$hora[seq(1, nrow(df_antes), length.out = 8)])
+
+legend("topright",
+       legend = c("Antes", "Durante", "Depois"),
+       col = c("blue", "red", "darkgreen"),
+       lty = 1,
+       lwd = 2)
+
 
 # Buscando compreender melhor as causas para o incidente, foi feita a análise do
 # uso de memória durante o mês. Com isso, por meio do histograma, conseguimos observar
@@ -230,10 +367,11 @@ plot(df_horus$timestamp, df_horus$latency_ms,
 # para algum processo. Caso o contrário, eles permanecem na swap ocupando espaço. 
 
 # Relação entre memória swap e memória ram. 
+# Latência
 
 # Assim, ressalta-se
 # a importância do monitoramento contínuo do uso da memória, sendo essencial para identificar
-# anomalias, evitando assim possíveis conflitos e prejuízos.
+# anomalias, evitando possíveis conflitos e prejuízos.
 
 
 # DISCO (23 - 30)
@@ -269,12 +407,6 @@ abline(v = media_iowait, col = azul1, lwd = 2)
 # ================================================================================
 
 # Outros Graficos
-hist(df_horus$latency_ms,
-     main = c("Distribuição do tempo de latência durante o Mês"),
-     col = (azul4),
-     xlab = "Latência(m/s)",
-     ylab = "Frequência")
-abline(v = media_disco, col = azul1, lwd = 2)
 
 hist(df_horus$net_bytes_sent,
      main = c("Distribuição da Quantidade de Bytes Enviados Durante o Mês"),
@@ -289,6 +421,9 @@ hist(df_horus$net_bytes_recv,
      xlab = "KiloBytes(KB)",
      ylab = "Frequência")
 abline(v = media_bytes_recv, col = azul4, lwd = 2)
+
+# Ordena os dados e captura os 5 processos com maior uso de memória
+top5 <- processos[order(processos$Porcentagem.de.Memoria), ][1:5, ]
 
 # Instalando o pacote lubridate para manipulação de datas
 # DIAS
