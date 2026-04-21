@@ -9,21 +9,10 @@ azul3 <- "#192bc2"
 azul4 <- "#150578"
 azul5 <- "#0e0e52"
 
-# Ideias para adicionar
-# Análise de feriados e finais de semana (com pesquisas)
-# IOWAIT(Percentual do Tempo que a CPU fica esperando operações I/O) - Disco
-# Fontes, Considerações Finais e Análise
-# ggplot
-# variavel limite
-# coluna de incidentes
-# coluna custo
-# coluna data e hora de resolução do incidente
 # coluna com localização
 # coluna com o nome do servidor
 # coluna com ip
 # coluna com so
-# coluna status
-# nova kpi analista
 
 df_horus <- data.frame(sagitario)
 
@@ -72,7 +61,7 @@ df_horus$memory_percent <- round((df_horus$memory_available_gb * 100) / memoria_
 # Criando uma coluna de memoria usada em % de forma aproximada 
 df_horus$memory_used <- 100 - df_horus$memory_percent
 
-# Média, Mediana e Desvio Padrão dos Componentes
+# Média, Mediana e Desvio Padrão
 media_cpu <- mean(df_horus$cpu_percent)
 mediana_cpu <- median(df_horus$cpu_percent)
 desvio_cpu <- sd(df_horus$cpu_percent)
@@ -80,16 +69,6 @@ desvio_cpu <- sd(df_horus$cpu_percent)
 media_memoria <- mean(df_horus$memory_used)
 mediana_memoria <- median(df_horus$memory_used)
 desvio_memoria <- sd(df_horus$memory_used)
-
-media_disco <- mean(df_horus$disk_usage_percent)
-mediana_disco <- median(df_horus$disk_usage_percent)
-desvio_disco <- sd(df_horus$disk_usage_percent)
-
-# media_bytes_env <- mean(df_horus$net_bytes_sent)
-# media_bytes_recv <- mean(df_horus$net_bytes_recv)
-media_latencia <- mean(df_horus$latency_ms) 
-# media_processos <- mean(df_horus$active_processes) 
-# media_iowait <- mean(df_horus$iowait_percent)  
 
 # Classificação das Colunas 
 # Qualitativa Nominal: dia_semana
@@ -99,10 +78,23 @@ media_latencia <- mean(df_horus$latency_ms)
 
 # Analisando o comportamento e distribuição de CPU, RAM e DISCO
 
+# giu
 # DESVIO PADRÃO
-# 23 - 30 (CPU, Latência, Disco) / aumento de outliers
+# Regressão - Summary
+# Swap e Memória
 
-# CPU 
+# Incidente: RAM, SWAP, CPU, Latência, Quantidade de Processos Ativos
+# Quando a RAM ficou pressionada → sistema começou a usar swap → acesso ficou mais lento → IOWAIT aumentou
+
+# 23 - 30 (Latência, Disco, CPU, IOWAIT)
+
+df_horus$periodo <- ifelse(df_horus$timestamp < as.POSIXct("2026-03-16"),
+                           "Antes",
+                           ifelse(df_horus$timestamp < as.POSIXct("2026-03-16 11:00:00"),
+                                  "Durante", "Depois"))
+df_horus$periodo <- factor(df_horus$periodo, levels = c("Antes", "Durante", "Depois"))
+
+# CPU
 
 cores <- ifelse(
   df_horus$periodo == "Durante",
@@ -143,10 +135,10 @@ legend("topleft",
 # ao seu comportamento usual logo em seguida. Ademais, vale destacar que 
 # a média e a mediana do uso da cpu durante o mês de março possuem valor 
 # aproximado, o que indica simetria e equilibrio na distribuição dos dados durante
-# o período de análise. 
+# a maior parte do período de análise. Vale destacar também, que durante a semana 
+# do dia 23 ao dia 30, o uso percentual de processamento teve um leve aumento quando
+# comparado ao seu comportamento usual, além de apresentar maior número de outliers.
 
-
-# IOWAIT
 # RAM
 
 hist(df_horus$memory_used,
@@ -181,16 +173,47 @@ df_antesIncidente <- subset(df_horus,
 cor(as.numeric(df_antesIncidente$timestamp),
     df_antesIncidente$memory_used)
 
+regressao <- lm(memory_used ~ as.numeric(timestamp), data = df_antesIncidente)
+summary(regressao)
+
 ggplot(data = df_antesIncidente, aes(timestamp, memory_used)) + 
-  geom_point() +
-  geom_smooth(method = "lm",
-              se = FALSE) + theme_gray()
+  geom_point(color = azul3, size = 2) +
+  geom_smooth(method = "lm", se = FALSE, color = "red") +
+  labs(
+    title = "Crescimento da Memória RAM Antes do Incidente",
+    x = "Tempo",
+    y = "RAM(%)"
+  ) +
+  theme_gray()
+
+# Buscando compreender melhor as causas para o incidente, foi feita a análise do
+# uso de memória durante o mês. Com isso, por meio do histograma, conseguimos observar
+# que o uso da RAM ficou na faixa de 30% a 50%, apresentando média e mediana com valores 
+# aproximados. Apesar da simetria constante na maior parte dos dados, é notório casos específicos,
+# onde o percentual de memória usada chegou no casa dos 90%. Essa discrepância fica ainda
+# mais evidente no plot entre o uso da RAM durante os dias do mês de março. Por meio dele,
+# nota-se que a partir do dia 11 até o dia 15, o percentual de ram usado teve um crescimento
+# linear contínuo com altíssimo coeficiente de correlação (0.99), indicando um comportamento anômalo 
+# consistente, o que ocasionou no seu ápice no dia 16 de março (durante às 00:00 até 10:00),
+# até a resolução do incidente. Por meio desta análise, fica evidente a importância do 
+# monitoramento do uso de memória, uma vez que mediante este comportamento previsível 
+# seria possivel antecipar o ocorrido, evitando conflitos e prejuízos.
+
+inicio <- as.POSIXct("2026-03-10")
+fim    <- as.POSIXct("2026-03-17 00:00:00")
+df_semana <- subset(df_horus, timestamp >= inicio & timestamp <= fim)
 
 plot(df_semana$timestamp, df_semana$memory_used, type = "l",
-     main = "Uso de Memória RAM na semana do incidente",
+     main = "Variação do Uso de Memória RAM na Semana do Incidente",
      xlab = "Tempo", ylab = "RAM(%)",
      col = (azul3),
-     lwd = 2)
+     lwd = 2, xaxt = "n")
+
+axis.POSIXct(1,
+             at = seq(min(df_semana$timestamp),
+                      max(df_semana$timestamp),
+                      by = "1 day"),
+             format = "%d/%m")
 
 plot(df_horus$active_processes, df_horus$memory_used,
      col = cores,
@@ -220,26 +243,40 @@ hist(df_horus$swap_percent,
      ylab = "Frequência",
      col = c(azul3))
 
-df_horus$periodo <- ifelse(df_horus$timestamp < as.POSIXct("2026-03-16"),
-                           "Antes",
-                    ifelse(df_horus$timestamp < as.POSIXct("2026-03-16 11:00:00"),
-                           "Durante", "Depois"))
-df_horus$periodo <- factor(df_horus$periodo, levels = c("Antes", "Durante", "Depois"))
-
 boxplot(swap_percent ~ periodo, data = df_horus,
         col = (azul1),
         main = "Swap Antes, Durante e Depois do Incidente",
         xlab = "",
         ylab = "SWAP(%)")
 
-# relação entre swap e memória
+# Assim, "o gráfico de variação do uso de memória durante a semana do incidente" permite uma
+# melhor observação do comportamento do componente, evidenciando seu crescimento e seu ápice
+# de forma clara. Dessa forma, tendo como base o plot sobre a relação entre a quantidade de processos
+# ativos e a memória ram, é possível identificar que durante o período do uso extremo de armazenamento, 
+# a quantidade de processos ativos chegou a 300 e ultrapassou o número de 400 em determinados momentos. 
+# Além disso, foi realizada a observação do uso da memória swap ao longo do mês, na qual é possível notar
+# o crescimento lento e contínuo, até chegar no dia 16 de março, onde ocorreu um salto
+# abrupto, representando um evento (incidente) no servidor. Após isso, o uso de swap 
+# permaneceu em 100%, não retornando ao comportamento anterior. A diferença de comportamento
+# da memória swap pode ser analisada também por meio de um boxplot, que indica a variação entre
+# antes, durante e depois do dia 16. Antes: o intervalo da swap teve um crescimento no intervalo de 5% a
+# 23%, apresentando baixa variabilidade (caixa pequena), tendo um valor máximo por volta dos 25%, sem 
+# outliers, demonstrando estabilidade e previsibilidade. Durante: em um intervalo de 7 horas o uso de swap 
+# foi de 37% até 100%, apresentando alta variação entre os dados (caixa grande). Depois: permanence 
+# neste valor até o final da análise não tendo variação, o que pode ser observado por meio da caixa 
+# "achatada". Entre uma das explicações, podemos citar o fato de que a memória swap não é "auto limpante", 
+# ou seja, ela só é liberada quando os processos terminam ou quando os dados armazenados sejam necessários 
+# para algum processo. Caso o contrário, eles permanecem na swap ocupando espaço. 
+
+# relação entre swap e memória ram
 # df_horus$swap_faixa <- cut(df_horus$swap_percent, breaks = c(0, 20, 40, 80, 100))
 # boxplot(memory_used ~ swap_faixa, data = df_horus)
+# cor(df_horus$swap_percent, df_horus$memory_percent)
 
 # latência
 
 plot(df_horus$timestamp, df_horus$latency_ms,
-     main = "Distribuição da latência em ms durante o mês",
+     main = "Distribuição da Latência em ms Durante o Mês",
      ylab = "Latência(ms)",
      xlab = "Dias do Mês",
      col = cores)
@@ -254,6 +291,17 @@ plot(df_horus$timestamp, df_horus$latency_ms, type = "l",
      xlab = "Tempo", ylab = "Latência (ms)",
      col = (azul2))
 
+# Outra métrica que foi afetada pelo incidente foi a latência, a qual possuiu aumento
+# significativo durante o ocorrido, chegando até o limite de quase 1 segundo de tempo
+# de resposta, tendo impacto direto no desempenho do servidor. Além disso, é importante observar 
+# que mesmo após do incidente, a latência apresentou um leve crescimento quando comparado ao
+# seu comportamento antes do ocorrido. Buscando compreender isso, podemos identificar que
+# embora o uso de memória RAM tenha retornado ao comportamento normal após o incidente, 
+# a utilização de swap permaneceu em 100%, indicando que parte dos dados permaneceu alocada 
+# em memória secundária. Esse estado pode gerar latências adicionais no acesso à memória, 
+# explicando o leve aumento observado na latência mesmo após a recuperação aparente do sistema 
+# Também vale ressaltar que, assim como a CPU, durante o dia 23 ao dia 30 o tempo de resposta 
+# apresentou outro leve aumento, além de conter maior concentração de outliers nesse mesmo período.
 
 boxplot(latency_ms ~ periodo, data = df_horus,
         main = "Latência antes, durante e depois do incidente",
@@ -274,11 +322,10 @@ legend("topleft",
        pch = 16)
 
 dia_escolhido <- as.Date("2026-03-16")
-
 df_dia <- subset(df_horus, as.Date(timestamp) == dia_escolhido)
 
 plot(df_dia$timestamp, df_dia$latency_ms, type = "l",
-     main = "Latência no dia 16",
+     main = "Latência no Dia 16",
      xlab = "Tempo", ylab = "Latência (ms)",
      col = (azul3),
      lwd = 3, xaxt = "n")
@@ -289,15 +336,12 @@ axis.POSIXct(1,
                       by = "1 hour"),
              format = "%H:%M")
 
-inicio <- as.POSIXct("2026-03-10")
-fim    <- as.POSIXct("2026-03-17 00:00:00")
-df_semana <- subset(df_horus, timestamp >= inicio & timestamp <= fim)
-
 plot(df_semana$timestamp, df_semana$latency_ms, type = "l",
-     main = "Latência na semana do incidente",
+     main = "Latência na Semana do Incidente",
      xlab = "Tempo", ylab = "Latência (ms)",
      col = (azul1),
      lwd = 2, xaxt = "n")
+
 
 axis.POSIXct(1,
              at = seq(min(df_semana$timestamp),
@@ -309,7 +353,6 @@ dia_antes   <- as.Date("2026-03-10")
 dia_depois  <- as.Date("2026-03-20")
 
 df_antes   <- df_horus[as.Date(df_horus$timestamp) == dia_antes, ]
-df_durante <- df_horus[as.Date(df_horus$timestamp) == dia_durante, ]
 df_depois  <- df_horus[as.Date(df_horus$timestamp) == dia_depois, ]
 
 df_antes$hora   <- format(df_antes$timestamp, "%H:%M")
@@ -340,90 +383,87 @@ legend("topright",
        lty = 1,
        lwd = 2)
 
+# Através do boxplot sobre a latência antes, durante e depois do incidente, podemos
+# ter maior compreensão sobre o comportamento dessa métrica. Antes: pouca variação 
+# (caixa pequena) e presença de alguns outliers. Durante: alta variação em um curto 
+# espaço de tempo (caixa grande), uma vez que durante o intervalo de 10h a latência 
+# teve um limite mínimo de 300ms e máximo de 687ms, além e ter um pico de 984ms
+# representado pelo outlier. Depois: pouca variação, porém levemente maior quando
+# comparada com o "Antes". Também cabe destacar o aumento significativo de outliers,
+# o que demonstra como o sistema foi afetado após o ocorrido. Por meio do plot sobre a
+# relação entre RAM e latência, conseguimos identificar como as duas métricas estão 
+# relacionadas, uma vez que o aumento brusco de armazenamento teve impacto direto no tempo
+# de reposta durante o incidente. Assim, para melhor visualização, foi feito três gráficos
+# de linhas, os quais demonstram respectivamente a variação da latência no dia no incidente,
+# durante a semana que antecedeu o ocorrido e também uma comparação entre antes, durante e 
+# depois. Através deles, fica claro como a latência foi impactada, deixando marcas mesmo
+# após a resolução da anomalia.
 
-# Buscando compreender melhor as causas para o incidente, foi feita a análise do
-# uso de memória durante o mês. Com isso, por meio do histograma, conseguimos observar
-# que o uso da RAM ficou na faixa de 30% a 50%, apresentando média e mediana com valores 
-# aproximados. Apesar da simetria constante na maior parte dos dados, é notório casos específicos,
-# onde o percentual de memória usada chegou no casa dos 90%. Essa discrepância fica ainda
-# mais evidente no plot entre o uso da RAM durante os dias do mês de março. Por meio dele,
-# nota-se que a partir do dia 11 até o dia 15, o percentual de ram usado teve um crescimento
-# contínuo, o que ocasionou no seu ápice no dia 16 de março (durante às 00:00 até 10:00),
-# até a resolução do incidente. Dessa forma, tendo como base o segundo plot, é possível 
-# identificar que durante o período do uso extremo de RAM, a quantidade de processos ativos
-# ficou entre 300 e ultrapassou o número de 400 em determinados momentos. Além disso, foi
-# realizada a observação do uso da memória swap ao longo do mês, na qual é possível notar
-# o crescimento lento e contínuo, até chegar no dia 16 de março, onde ocorreu um salto
-# abrupto, representando um evento (incidente) no servidor. Após isso, o uso de swap 
-# permaneceu em 100%, não retornando ao comportamento anterior. A diferença de comportamento
-# da memória swap pode ser analisada também por meio de um boxplot, que indica a variação entre
-# antes, durante e depois do dia 16. Antes: o intervalo da swap teve um crescimento no intervalo de 5% a
-# 23%, apresentando baixa variabilidade (caixa pequena), tendo um valor máximo por volta dos 25%, sem 
-# outliers, demonstrando estabilidade e previsibilidade. Durante: em um intervalo de 7 horas o uso de swap 
-# foi de 37% até 100%, apresentando alta variação entre os dados (caixa grande). Depois: permanence 
-# neste valor até o final da análise não tendo variação, o que pode ser observado por meio da caixa 
-# "achatada". Entre uma das explicações, podemos citar o fato de que a memória swap não é "auto limpante", 
-# ou seja, ela só é liberada quando os processos terminam ou quando os dados armazenados sejam necessários 
-# para algum processo. Caso o contrário, eles permanecem na swap ocupando espaço. 
-
-# Relação entre memória swap e memória ram. 
-# Latência
-
-# Assim, ressalta-se
-# a importância do monitoramento contínuo do uso da memória, sendo essencial para identificar
-# anomalias, evitando possíveis conflitos e prejuízos.
-
-
-# DISCO (23 - 30)
-hist(df_horus$disk_usage_percent,
-     main = c("Relação entre Uso de Disco durante o Mês"),
-     col = (azul3),
-     xlab = "Disco(%)",
-     ylab = "Frequência")
-abline(v = media_disco, col = azul1, lwd = 2)
-
-plot(df_horus$timestamp, df_horus$disk_usage_percent,
-     main = "Distribuição do Uso de CPU Durante o Mês",
-     ylab = "CPU(%)",
+plot(df_horus$timestamp, df_horus$net_bytes_sent,
+     main = "Distribuição da Quantidade de KiloBytes Enviados Durante o Mês",
+     ylab = "KiloBytes(KB)",
      xlab = "Dias do Mês",
-     col = (azul2))
+     col = cores)
+
+legend("topleft",
+       legend = c("Normal", "Incidente"),
+       col = c(azul2, "red"),
+       pch = 16)
+
+plot(df_horus$timestamp, df_horus$net_bytes_recv,
+     main = "Distribuição da Quantidade de KiloBytes Recebidos Durante o Mês",
+     ylab = "KiloBytes(KB)",
+     xlab = "Dias do Mês",
+     col = cores)
+
+legend("topleft",
+       legend = c("Normal", "Incidente"),
+       col = c(azul2, "red"),
+       pch = 16)
+
+# Durante o incidente, observou-se um aumento expressivo tanto na quantidade de dados 
+# enviados quanto recebidos, caracterizando um pico de tráfego de rede. Esse comportamento 
+# anômalo indica sobrecarga no sistema e está relacionado com o aumento de latência e 
+# uso de recursos observado no mesmo período.
+
+
+# DISCO
+plot(df_horus$timestamp, df_horus$disk_usage_percent, type = "l",
+     main = "Distribuição do Uso de Disco Durante o Mês",
+     ylab = "Disco(%)",
+     xlab = "Dias do Mês",
+     col = (azul4), lwd = 2)
+
+# O uso de disco apresentou crescimento contínuo ao longo do mês, sendo mais lento 
+# até o dia 22 e apresentando uma inclinação significativa do dia 23 em diante, 
+# o que indica o aumento na geração ou retenção de dados. 
+# Como não houve alteração durante o incidente do dia 16, podemos interpretar que o disco 
+# não foi um fator contribuinte direto para a falha.
 
 plot(df_horus$timestamp, df_horus$iowait_percent,
-     main = "Distribuição do Uso de CPU Durante o Mês",
-     ylab = "CPU(%)",
+     main = "Distribuição do Uso de IOWAIT Durante o Mês",
+     ylab = "IOWAIT(%)",
      xlab = "Dias do Mês",
-     col = (azul2))
+     col = cores)
 
-hist(df_horus$iowait_percent,
-     main = c("Distribuição de I/O Wait (%) durante o Mês"),
-     col = (azul5),
-     xlab = "I/O Wait (%)",
-     ylab = "Frequência")
-abline(v = media_iowait, col = azul1, lwd = 2)
+legend("topleft",
+       legend = c("Normal", "Incidente"),
+       col = c(azul2, "red"),
+       pch = 16)
 
+# Embora o uso de disco não tenha apresentado variações significativas durante o incidente,
+# pode-se observar um aumento expressivo no IOWAIT, indicando que o sistema passou a aguardar 
+# mais tempo por operações de entrada e saída. Esse comportamento está ligado com o alto uso 
+# de memória e utilização total de swap após o incidente, o que sugere uma degradação no acesso 
+# a dados. Após a recuperação, o sistema retornou ao comportamento normal. Entretanto, também é 
+# possível notar que o IOWAIT permaneceu em níveis mais elevados após dia 23, indicando o surgimento 
+# de um novo padrão de carga ou possível degradação.
 
-
-
-# ================================================================================
-
-# Outros Graficos
-
-hist(df_horus$net_bytes_sent,
-     main = c("Distribuição da Quantidade de Bytes Enviados Durante o Mês"),
-     col = (azul1),
-     xlab = "KiloBytes(KB)",
-     ylab = "Frequência")
-abline(v = media_bytes_env, col = azul5, lwd = 2)
-
-hist(df_horus$net_bytes_recv,
-     main = c("Distribuição da Quantidade de Bytes Recebidos Durante o Mês"),
-     col = (azul2),
-     xlab = "KiloBytes(KB)",
-     ylab = "Frequência")
-abline(v = media_bytes_recv, col = azul4, lwd = 2)
-
-# Ordena os dados e captura os 5 processos com maior uso de memória
-top5 <- processos[order(processos$Porcentagem.de.Memoria), ][1:5, ]
+cor(df_horus$disk_usage_percent, df_horus$iowait_percent)
+# Foi identificada uma correlação positiva forte (0.7) entre o uso de disco e o IOWAIT, 
+# indicando que o aumento na utilização de armazenamento está associado a maiores tempos
+# de espera por operações de entrada e saída. Esse comportamento reforça a hipótese de aumento 
+# na atividade de I/O a partir do dia 23.
 
 # Instalando o pacote lubridate para manipulação de datas
 # DIAS
@@ -433,3 +473,20 @@ library(lubridate)
 # Adicionando coluna do dia da semana de acordo com a data
 df_horus$dia_semana <- wday(df_horus$timestamp, label = TRUE, abbr = TRUE)
 
+limite <- 70
+componente <- 'RAM'
+
+df_horus$status <- ifelse(df_horus$memory_used == 0, "offline",
+                       ifelse(df_horus$memory_used >= 0.9 * limite, "crítico",
+                           ifelse(df_horus$memory_used >= 0.8 * limite, "atenção",
+                                  ifelse(df_horus$memory_used >= 0.7 * limite, "online",
+                                         "normal"))))
+
+df_horus$severidade <- ifelse(df_horus$memory_used == 0, "crítica",
+                          ifelse(df_horus$memory_used >= limite, "crítica",
+                              ifelse(df_horus$memory_used >= 0.9 * limite, "alta",
+                                 ifelse(df_horus$memory_used >= 0.8 * limite, "média",
+                                        ifelse(df_horus$memory_used >= 0.7 * limite, "baixa",
+                                               "normal")))))
+
+df_horus$gerarIncidente <- ifelse(df_horus$status == "normal", "não", "sim")  
