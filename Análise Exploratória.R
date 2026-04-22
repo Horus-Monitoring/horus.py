@@ -80,8 +80,8 @@ desvio_memoria <- sd(df_horus$memory_used)
 
 # giu
 # DESVIO PADRÃO
-# Regressão - Summary
 # Swap e Memória
+# Regressão Summary
 
 # Incidente: RAM, SWAP, CPU, Latência, Quantidade de Processos Ativos
 # Quando a RAM ficou pressionada → sistema começou a usar swap → acesso ficou mais lento → IOWAIT aumentou
@@ -488,5 +488,11 @@ df_horus$severidade <- ifelse(df_horus$memory_used == 0, "crítica",
                                  ifelse(df_horus$memory_used >= 0.8 * limite, "média",
                                         ifelse(df_horus$memory_used >= 0.7 * limite, "baixa",
                                                "normal")))))
+df_horus$severidade <- factor(df_horus$severidade, levels = c("Normal", "Baixa", "Média", "Crítica"))
 
-df_horus$gerarIncidente <- ifelse(df_horus$status == "normal", "não", "sim")  
+df_horus$gerarIncidente <- ifelse(df_horus$status == "normal", "não", "sim")
+
+table(df_horus$severidade)
+barplot(table(df_horus$severidade), 
+        main = "Distribuição dos Níveis de Severidade dos Incidentes")
+
