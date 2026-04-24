@@ -9,11 +9,6 @@ azul3 <- "#192bc2"
 azul4 <- "#150578"
 azul5 <- "#0e0e52"
 
-# coluna com localização
-# coluna com o nome do servidor
-# coluna com ip
-# coluna com so
-
 df_horus <- data.frame(sagitario)
 
 # Tratamento de Dados 
@@ -36,18 +31,10 @@ df_horus$proc_correlation_cpu <- gsub("\\%", "", df_horus$proc_correlation_cpu)
 # remover o símbolo '%' da coluna 'proc_db_cpu'
 df_horus$proc_db_cpu <- gsub("\\%", "", df_horus$proc_db_cpu)
 
-# Removendo colunas que não serão utilizadas
-df_horus$proc_asm_cpu <- NULL
-df_horus$proc_correlation_cpu <- NULL
-df_horus$proc_db_cpu <- NULL
-
 # transformando as colunas para tipo numérico
 df_horus$cpu_percent <- as.numeric(df_horus$cpu_percent)
 df_horus$memory_available_gb <- as.numeric(df_horus$memory_available_gb)
 df_horus$disk_usage_percent <- as.numeric(df_horus$disk_usage_percent)
-df_horus$proc_asm_cpu <- as.numeric(df_horus$proc_asm_cpu)
-df_horus$proc_correlation_cpu <- as.numeric(df_horus$proc_correlation_cpu)
-df_horus$proc_db_cpu <- as.numeric(df_horus$proc_db_cpu)
 
 # Transformando Bytes para KiloBytes
 df_horus$net_bytes_sent <- df_horus$net_bytes_sent/1000
@@ -61,27 +48,21 @@ df_horus$memory_percent <- round((df_horus$memory_available_gb * 100) / memoria_
 # Criando uma coluna de memoria usada em % de forma aproximada 
 df_horus$memory_used <- 100 - df_horus$memory_percent
 
-# Média, Mediana e Desvio Padrão
+# Removendo colunas que não serão utilizadas
+df_horus$proc_asm_cpu <- NULL
+df_horus$proc_correlation_cpu <- NULL
+df_horus$proc_db_cpu <- NULL
+df_horus$memory_available_gb <- NULL
+df_horus$memory_percent <- NULL
+
+# Média e Mediana
 media_cpu <- mean(df_horus$cpu_percent)
 mediana_cpu <- median(df_horus$cpu_percent)
-desvio_cpu <- sd(df_horus$cpu_percent)
 
 media_memoria <- mean(df_horus$memory_used)
 mediana_memoria <- median(df_horus$memory_used)
-desvio_memoria <- sd(df_horus$memory_used)
-
-# Classificação das Colunas 
-# Qualitativa Nominal: dia_semana
-# Quantitativa Contínua: cpu_percent, memory_available_gb, disk_usage_percent,
-# latency_ms, iowait_percent, swap_percent, memory_percent 
-# Quantitativa Discreta: net_bytes_sent, net_bytes_recv, active_processes
 
 # Analisando o comportamento e distribuição de CPU, RAM e DISCO
-
-# giu
-# DESVIO PADRÃO
-# Swap e Memória
-# Regressão Summary
 
 # Incidente: RAM, SWAP, CPU, Latência, Quantidade de Processos Ativos
 # Quando a RAM ficou pressionada → sistema começou a usar swap → acesso ficou mais lento → IOWAIT aumentou
@@ -101,7 +82,7 @@ cores <- ifelse(
   "red", azul2)
 
 hist(df_horus$cpu_percent,
-     main = c("Relação entre Uso de CPU durante o Mês"),
+     main = c("Frequência do Uso de CPU durante o Mês"),
      col = (azul1),
      xlab = "CPU(%)",
      ylab = "Frequência")
@@ -109,7 +90,6 @@ abline(v = media_cpu, col = azul5, lwd = 2)
 
 print(paste("Média CPU:", round(media_cpu, 1)))
 print(paste("Mediana CPU:", round(mediana_cpu, 1)))
-print(paste("Desvio CPU:", round(desvio_cpu, 1)))
 
 # Convertendo a coluna timestamp para um formato de data e hora, possibilitando a manipulação de datas
 df_horus$timestamp <- as.POSIXct(
@@ -142,16 +122,15 @@ legend("topleft",
 # RAM
 
 hist(df_horus$memory_used,
-     main = c("Distribuição do Uso de Memória durante o Mês"),
+     main = c("Frequência do Uso de Memória RAM durante o Mês"),
      col = (azul1),
-     xlab = "Memória(%)",
+     xlab = "RAM(%)",
      ylab = "Frequência",
      xlim = c(20,100))
 abline(v = media_memoria, col = azul5, lwd = 2)
 
 print(paste("Média RAM:", round(media_memoria, 1)))
 print(paste("Mediana RAM:", round(mediana_memoria, 1)))
-print(paste("Desvio RAM:", round(desvio_memoria, 1)))
 
 plot(df_horus$timestamp, df_horus$memory_used,
      main = "Distribuição do Uso de RAM Durante o Mês",
@@ -177,8 +156,8 @@ regressao <- lm(memory_used ~ as.numeric(timestamp), data = df_antesIncidente)
 summary(regressao)
 
 ggplot(data = df_antesIncidente, aes(timestamp, memory_used)) + 
-  geom_point(color = azul3, size = 2) +
-  geom_smooth(method = "lm", se = FALSE, color = "red") +
+  geom_point(color = azul2, size = 2) +
+  geom_smooth(method = "lm", se = FALSE, color = azul5) +
   labs(
     title = "Crescimento da Memória RAM Antes do Incidente",
     x = "Tempo",
@@ -465,34 +444,37 @@ cor(df_horus$disk_usage_percent, df_horus$iowait_percent)
 # de espera por operações de entrada e saída. Esse comportamento reforça a hipótese de aumento 
 # na atividade de I/O a partir do dia 23.
 
-# Instalando o pacote lubridate para manipulação de datas
-# DIAS
-install.packages("lubridate")
-library(lubridate)
-
-# Adicionando coluna do dia da semana de acordo com a data
-df_horus$dia_semana <- wday(df_horus$timestamp, label = TRUE, abbr = TRUE)
-
 limite <- 70
 componente <- 'RAM'
 
-df_horus$status <- ifelse(df_horus$memory_used == 0, "offline",
-                       ifelse(df_horus$memory_used >= 0.9 * limite, "crítico",
-                           ifelse(df_horus$memory_used >= 0.8 * limite, "atenção",
-                                  ifelse(df_horus$memory_used >= 0.7 * limite, "online",
-                                         "normal"))))
+df_horus$status <- ifelse(df_horus$memory_used == 0, "Offline",
+                       ifelse(df_horus$memory_used >= 0.9 * limite, "Crítico",
+                           ifelse(df_horus$memory_used >= 0.8 * limite, "Atenção",
+                                  ifelse(df_horus$memory_used >= 0.7 * limite, "Online",
+                                         "Normal"))))
 
-df_horus$severidade <- ifelse(df_horus$memory_used == 0, "crítica",
-                          ifelse(df_horus$memory_used >= limite, "crítica",
-                              ifelse(df_horus$memory_used >= 0.9 * limite, "alta",
-                                 ifelse(df_horus$memory_used >= 0.8 * limite, "média",
-                                        ifelse(df_horus$memory_used >= 0.7 * limite, "baixa",
-                                               "normal")))))
+df_horus$severidade <- ifelse(df_horus$memory_used == 0, "Crítica",
+                          ifelse(df_horus$memory_used >= limite, "Crítica",
+                              ifelse(df_horus$memory_used >= 0.9 * limite, "Alta",
+                                 ifelse(df_horus$memory_used >= 0.8 * limite, "Média",
+                                        ifelse(df_horus$memory_used >= 0.7 * limite, "Baixa",
+                                               "Normal")))))
 df_horus$severidade <- factor(df_horus$severidade, levels = c("Normal", "Baixa", "Média", "Crítica"))
 
-df_horus$gerarIncidente <- ifelse(df_horus$status == "normal", "não", "sim")
+df_horus$gerarIncidente <- ifelse(df_horus$status == "Normal", "Não", "Sim")
 
-table(df_horus$severidade)
-barplot(table(df_horus$severidade), 
-        main = "Distribuição dos Níveis de Severidade dos Incidentes")
+df_incidentes <- subset(df_horus, severidade != "Normal")
+df_incidentes$severidade <- droplevels(df_incidentes$severidade)
+
+table(df_incidentes$severidade)
+barplot(table(df_incidentes$severidade), 
+        main = "Distribuição dos Níveis de Severidade dos Incidentes",
+        col = c("#FFDE21", "#FFA500", "#CD1C18"))
+legend("topright",
+       legend = c("70% - 79%", "80% - 89%", "90% - 100%"),
+       col = c("#FFDE21", "#FFA500", "#CD1C18"),
+       pch = 16, title = "Limite")
+
+#
+
 

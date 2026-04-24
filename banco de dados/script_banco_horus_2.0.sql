@@ -33,10 +33,12 @@ CREATE TABLE funcionario (
 );
 
 CREATE TABLE acesso_servidor(
-fk_funcionario INT,
-fk_servidor INT,
-FOREIGN KEY (fk_funcionario) REFERENCES funcionario(id_funcionario),
-FOREIGN KEY (fk_servidor) REFERENCES servidor(id_servidor)
+	fk_funcionario INT,
+	fk_servidor INT,
+	FOREIGN KEY (fk_funcionario) REFERENCES funcionario(id_funcionario),
+	FOREIGN KEY (fk_servidor) REFERENCES servidor(id_servidor),
+	data_concessao DATETIME DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (fk_funcionario, fk_servidor)
 );
 
 CREATE TABLE componente (
