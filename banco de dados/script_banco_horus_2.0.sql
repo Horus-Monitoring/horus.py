@@ -11,10 +11,10 @@ CREATE TABLE empresa (
 CREATE TABLE servidor (
     id_servidor INT PRIMARY KEY AUTO_INCREMENT,
     hostname VARCHAR(100) NOT NULL UNIQUE,
-    ip VARCHAR(45),
+    endereco_ip VARCHAR(45),
     localizacao VARCHAR(100),
     sistema_operacional VARCHAR(50),
-    status_inicial ENUM('Operacional', 'Atenção', 'Crítico') DEFAULT 'Operacional',
+    status_servidor ENUM('Online', 'Offline', 'Atenção', 'Critico') DEFAULT 'Online',
     data_instalacao DATETIME DEFAULT CURRENT_TIMESTAMP,
     fk_empresa INT,
     FOREIGN KEY (fk_empresa) REFERENCES empresa(id_empresa)
@@ -43,33 +43,43 @@ CREATE TABLE acesso_servidor(
 
 CREATE TABLE componente (
     id_componente INT PRIMARY KEY AUTO_INCREMENT,
-    nome VARCHAR(50) NOT NULL UNIQUE,
-    unidade VARCHAR(20)
+    tipo VARCHAR(50) NOT NULL UNIQUE
 );
 
-INSERT INTO componente (nome, unidade) VALUES
-('CPU', '%'),
-('RAM', '%'),
-('DISCO', '%'),
-('REDE_RX', 'bytes/s'),
-('REDE_TX', 'bytes/s'),
-('PROCESSOS', 'qtd');
+INSERT INTO componente (tipo) VALUES
+('CPU'),
+('RAM'),
+('DISCO'),
+('REDE_RX'),
+('REDE_TX'),
+('PROCESSOS');
 
 CREATE TABLE servidor_componente (
-    id_servidor_componente INT PRIMARY KEY AUTO_INCREMENT,
     fk_servidor INT,
     fk_componente INT,
+    unidade_medida VARCHAR(45),
     limite DECIMAL(10,2),
-    ativo BOOLEAN DEFAULT TRUE,
     FOREIGN KEY (fk_servidor) REFERENCES servidor(id_servidor),
-    FOREIGN KEY (fk_componente) REFERENCES componente(id_componente)
+    FOREIGN KEY (fk_componente) REFERENCES componente(id_componente),
+    PRIMARY KEY (fk_servidor, fk_componente)
+);
+
+CREATE TABLE registro_alerta(
+	id_registro_alerta INT PRIMARY KEY AUTO_INCREMENT,
+    data_alerta DATETIME DEFAULT CURRENT_TIMESTAMP,
+    criticidade ENUM("Baixa", "Media", "Alta", "Critica"),
+    status_alerta ENUM("Ativo", "Resolvido"),
+    fk_servidor INT,
+    fk_componente INT,
+    FOREIGN KEY (fk_servidor, fk_componente)
+		REFERENCES servidor_componente(fk_servidor, fk_componente)
 );
 
 CREATE TABLE contato (
     id_contato INT PRIMARY KEY AUTO_INCREMENT,
-    nome VARCHAR(50),
-    sobrenome VARCHAR(50),
+    nome VARCHAR(100),
     email VARCHAR(100),
+    titulo_mensagem VARCHAR(100),
     mensagem VARCHAR(255)
 );
 
@@ -78,7 +88,7 @@ VALUES ('Empresa Monitoramento', '12345678000199', '11999999999');
 
 INSERT INTO servidor (
     hostname,
-    ip,
+    endereco_ip,
     localizacao,
     sistema_operacional,
     fk_empresa
@@ -92,19 +102,19 @@ VALUES (
 );
 
 INSERT INTO servidor_componente (fk_servidor, fk_componente, limite)
-VALUES (1, (SELECT id_componente FROM componente WHERE nome = 'CPU'), 10);
+VALUES (1, (SELECT id_componente FROM componente WHERE tipo = 'CPU'), 10);
 
 INSERT INTO servidor_componente (fk_servidor, fk_componente, limite)
-VALUES (1, (SELECT id_componente FROM componente WHERE nome = 'RAM'), 10);
+VALUES (1, (SELECT id_componente FROM componente WHERE tipo = 'RAM'), 10);
 
 INSERT INTO servidor_componente (fk_servidor, fk_componente, limite)
-VALUES (1, (SELECT id_componente FROM componente WHERE nome = 'DISCO'), 10);
+VALUES (1, (SELECT id_componente FROM componente WHERE tipo = 'DISCO'), 10);
 
 INSERT INTO servidor_componente (fk_servidor, fk_componente, limite)
-VALUES (1, (SELECT id_componente FROM componente WHERE nome = 'REDE_RX'), 0);
+VALUES (1, (SELECT id_componente FROM componente WHERE tipo = 'REDE_RX'), 0);
 
 INSERT INTO servidor_componente (fk_servidor, fk_componente, limite)
-VALUES (1, (SELECT id_componente FROM componente WHERE nome = 'REDE_TX'), 0);
+VALUES (1, (SELECT id_componente FROM componente WHERE tipo = 'REDE_TX'), 0);
 
 INSERT INTO servidor_componente (fk_servidor, fk_componente, limite)
-VALUES (1, (SELECT id_componente FROM componente WHERE nome = 'PROCESSOS'), 0);
+VALUES (1, (SELECT id_componente FROM componente WHERE tipo = 'PROCESSOS'), 0);
