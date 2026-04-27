@@ -14,8 +14,8 @@ AWS_CONFIG = {
 }
 
 DB_CONFIG = {
-    "host": "localhost",
-    "user": "root",
+    "host": "",
+    "user": "",
     "password": "",
     "database": ""
 }
@@ -51,7 +51,7 @@ def obter_limites(servidor_id):
     cursor = conn.cursor()
 
     cursor.execute("""
-        SELECT c.nome, sc.limite
+        SELECT c.tipo, sc.limite
         FROM servidor_componente sc
         JOIN componente c ON sc.fk_componente = c.id_componente
         WHERE sc.fk_servidor = %s
@@ -64,37 +64,52 @@ def obter_limites(servidor_id):
 
     return limites
 
-def atualizar_status_servidor(servidor_id, status):
+def atualizar_status_servidor(servidor_id, novo_status):
     conn = mysql.connector.connect(**DB_CONFIG)
     cursor = conn.cursor()
 
     cursor.execute("""
-        UPDATE servidor
-        SET status_inicial = %s
-        WHERE id_servidor = %s
-    """, (status, servidor_id))
+        SELECT status_servidor FROM servidor WHERE id_servidor = %s
+    """, (servidor_id,))
+    
+    atual = cursor.fetchone()
 
-    conn.commit()
+    if atual and atual[0] != novo_status:
+        cursor.execute("""
+            UPDATE servidor
+            SET status_servidor = %s,
+                data_status = CURRENT_TIMESTAMP
+            WHERE id_servidor = %s
+        """, (novo_status, servidor_id))
+
+        conn.commit()
+        print(f"Status atualizado: {atual[0]} -> {novo_status}")
+    else:
+        print("Status não mudou")
+
     cursor.close()
     conn.close()
 
 def classificar_metrica(valor, limite):
-    if valor == 0:
-        return "offline", "crítica"
+
+    if limite == 0:
+        return "Online", "normal"
+    if valor == 0 and limite > 0:
+        return "Offline", "crítico"
     if valor >= limite:
-        return "crítico", "crítica"
+        return "Crítico", "crítico"
     elif valor >= 0.9 * limite:
-        return "crítico", "alta"
+        return "Crítico", "alta"
     elif valor >= 0.8 * limite:
-        return "atenção", "média"
+        return "Atenção", "média"
     elif valor >= 0.7 * limite:
-        return "online", "baixa"
+        return "Online", "baixa"
     else:
-        return "normal", "normal"
+        return "Online", "normal"
 
 def determinar_status_servidor(severidades):
     prioridade = {
-        "crítica": 5,
+        "crítico": 5,
         "alta": 4,
         "média": 3,
         "baixa": 2,
@@ -102,17 +117,21 @@ def determinar_status_servidor(severidades):
     }
 
     if not severidades:
-        return "Operacional"
+        return "Online"
 
     pior = max(severidades, key=lambda s: prioridade.get(s, 0))
 
-    if pior in ["crítica", "alta"]:
+    if pior == "crítico":
+        return "Crítico"
+    elif pior == "alta":
         return "Crítico"
     elif pior == "média":
         return "Atenção"
+    elif pior == "baixa":
+        return "Online"
     else:
-        return "Operacional"
-
+        return "Online"
+    
 def processar():
     arquivos = listar_raw()
 

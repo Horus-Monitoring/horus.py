@@ -8,19 +8,19 @@ import os
 from datetime import datetime
 from botocore.exceptions import ClientError
 
-DB_CONFIG = {
-    "host": "localhost",
-    "user": "root",
-    "password": "",
-    "database": ""
-}
-    
 AWS_CONFIG = {
     "aws_access_key_id": "",
     "aws_secret_access_key": "",
     "aws_session_token": "",
     "region_name": "",
     "bucket_name": ""
+}
+
+DB_CONFIG = {
+    "host": "",
+    "user": "",
+    "password": "",
+    "database": ""
 }
 
 INTERVALO = 10
@@ -73,7 +73,7 @@ def obter_componentes_servidor(servidor_id):
     cursor = conn.cursor()
 
     cursor.execute("""
-        SELECT c.nome
+        SELECT c.tipo
         FROM servidor_componente sc
         JOIN componente c ON sc.fk_componente = c.id_componente
         WHERE sc.fk_servidor = %s

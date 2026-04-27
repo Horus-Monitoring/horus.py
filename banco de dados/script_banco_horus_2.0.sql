@@ -14,8 +14,9 @@ CREATE TABLE servidor (
     endereco_ip VARCHAR(45),
     localizacao VARCHAR(100),
     sistema_operacional VARCHAR(50),
-    status_servidor ENUM('Online', 'Offline', 'Atenção', 'Critico') DEFAULT 'Online',
+    status_servidor ENUM('Online', 'Offline', 'Atenção', 'Crítico') DEFAULT 'Online',
     data_instalacao DATETIME DEFAULT CURRENT_TIMESTAMP,
+	data_status DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     fk_empresa INT,
     FOREIGN KEY (fk_empresa) REFERENCES empresa(id_empresa)
 );
@@ -45,14 +46,6 @@ CREATE TABLE componente (
     id_componente INT PRIMARY KEY AUTO_INCREMENT,
     tipo VARCHAR(50) NOT NULL UNIQUE
 );
-
-INSERT INTO componente (tipo) VALUES
-('CPU'),
-('RAM'),
-('DISCO'),
-('REDE_RX'),
-('REDE_TX'),
-('PROCESSOS');
 
 CREATE TABLE servidor_componente (
     fk_servidor INT,
@@ -84,7 +77,15 @@ CREATE TABLE contato (
 );
 
 INSERT INTO empresa (razao_social, cnpj, telefone_empresa)
-VALUES ('Empresa Monitoramento', '12345678000199', '11999999999');
+VALUES ('Horus Tech', '12345678000199', '11999999999');
+
+INSERT INTO componente (tipo) VALUES
+('CPU'),
+('RAM'),
+('DISCO'),
+('REDE_RX'),
+('REDE_TX'),
+('PROCESSOS');
 
 INSERT INTO servidor (
     hostname,
@@ -94,27 +95,21 @@ INSERT INTO servidor (
     fk_empresa
 )
 VALUES (
-    'Nathan',
+    'NeithaNitro',
     '192.168.0.10',
-    'São Paulo',
-    'Windows/Linux',
+    'Data Center SP',
+    'Linux/Windows',
     1
 );
 
-INSERT INTO servidor_componente (fk_servidor, fk_componente, limite)
-VALUES (1, (SELECT id_componente FROM componente WHERE tipo = 'CPU'), 10);
+INSERT INTO servidor_componente VALUES (1, 1, '%', 30);
 
-INSERT INTO servidor_componente (fk_servidor, fk_componente, limite)
-VALUES (1, (SELECT id_componente FROM componente WHERE tipo = 'RAM'), 10);
+INSERT INTO servidor_componente VALUES (1, 2, '%', 25);
 
-INSERT INTO servidor_componente (fk_servidor, fk_componente, limite)
-VALUES (1, (SELECT id_componente FROM componente WHERE tipo = 'DISCO'), 10);
+INSERT INTO servidor_componente VALUES (1, 3, '%', 20);
 
-INSERT INTO servidor_componente (fk_servidor, fk_componente, limite)
-VALUES (1, (SELECT id_componente FROM componente WHERE tipo = 'REDE_RX'), 0);
+INSERT INTO servidor_componente VALUES (1, 4, 'bytes/s', 0);
 
-INSERT INTO servidor_componente (fk_servidor, fk_componente, limite)
-VALUES (1, (SELECT id_componente FROM componente WHERE tipo = 'REDE_TX'), 0);
+INSERT INTO servidor_componente VALUES (1, 5, 'bytes/s', 0);
 
-INSERT INTO servidor_componente (fk_servidor, fk_componente, limite)
-VALUES (1, (SELECT id_componente FROM componente WHERE tipo = 'PROCESSOS'), 0);
+INSERT INTO servidor_componente VALUES (1, 6, 'qtd', 0);
