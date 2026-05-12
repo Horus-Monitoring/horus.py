@@ -81,3 +81,15 @@ def coletar_banda_processos(total_aeronaves):
         "bd_mbps": round(total_aeronaves * random.uniform(0.2,0.6),2),
         "sync_service_mbps": round(total_aeronaves * random.uniform(0.15,0.5),2)
     }
+
+def perda_pacotes_componentes():
+
+    return {
+        "rastreamento_loss": round(random.expovariate(3),2),
+        "correlacao_loss": round(random.expovariate(3),2),
+        "rotas_loss": round(random.expovariate(3),2),
+        "api_loss": round(random.expovariate(3),2),
+        "bd_loss": round(random.expovariate(3),2),
+        "sync_loss": round(random.expovariate(3),2)
+    }
+    #Uso de variação exponencial para tornar a perda mais próxima de 1%
