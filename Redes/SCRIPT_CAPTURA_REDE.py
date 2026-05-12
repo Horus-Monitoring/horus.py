@@ -1,4 +1,5 @@
 import psutil 
+import random
 import time
 from datetime import datetime
 from getmac import get_mac_adress #Função específica para MAC Adress
@@ -60,3 +61,13 @@ def coletar_latencia():
     else:
         print("Erro ao capturar o tempo de latência.")
         return None
+    
+def coletar_latencia_componentes(): #simulação da latencia entre os diferentes componentes do SAGITARIO
+    return {
+        "lat_adsb_rastreamento": round(random.uniform(20,50),2),
+        "lat_rastreamento_correlacao": round(random.uniform(30,80),2),
+        "lat_correlacao_rotas": round(random.uniform(40,100),2),
+        "lat_rotas_api": round(random.uniform(10,40),2),
+        "lat_api_bd": round(random.uniform(50,150),2),
+        "lat_bd_sync": round(random.uniform(30,90),2)
+    }
