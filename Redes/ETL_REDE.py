@@ -32,5 +32,14 @@ def coletar_banda_processos(total_aeronaves):
         "sync_service_mbps": round(total_aeronaves * random.uniform(0.15,0.5),2)
     }
 
-banda = opensky_timestamp(dados_opensky())
+def contato_adsb(response_json):
+    tempo_atual = response_json["time"]
+    atualizacao = []
+    for r in response_json["states"]:
+        if r[2] == "Brazil" or r[2] == "Brasil" or r[2] == "BR":
+            ultima_atualizacao = r[4]
+            atualizacao.append(tempo_atual - ultima_atualizacao)
+    return atualizacao 
+
+banda = contato_adsb(dados_opensky())
 print(banda)

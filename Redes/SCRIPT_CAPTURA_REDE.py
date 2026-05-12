@@ -91,7 +91,16 @@ def opensky_aeronaves(response_json):
     for r in response_json["states"]:
         if r[2] == "Brazil" or r[2] == "Brasil" or r[2] == "BR":
             total_flights += 1
-    return total_flights    
+    return total_flights
+
+def contato_adsb(response_json):
+    tempo_atual = response_json["time"]
+    atualizacao = []
+    for r in response_json["states"]:
+        if r[2] == "Brazil" or r[2] == "Brasil" or r[2] == "BR":
+            ultima_atualizacao = r[4]
+            atualizacao.append(tempo_atual - ultima_atualizacao)
+    return atualizacao   
 
 def coletar_banda_processos(total_aeronaves):
     return {
