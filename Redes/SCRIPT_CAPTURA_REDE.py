@@ -71,3 +71,13 @@ def coletar_latencia_componentes(): #simulação da latencia entre os diferentes
         "lat_api_bd": round(random.uniform(50,150),2),
         "lat_bd_sync": round(random.uniform(30,90),2)
     }
+
+def coletar_banda_processos(total_aeronaves):
+    return {
+        "rastreamento_mbps": round(total_aeronaves * random.uniform(0.4,0.8),2),
+        "rotas_mbps": round(total_aeronaves * random.uniform(0.2,0.5),2),
+        "correlacao_mbps": round(total_aeronaves * random.uniform(0.3,0.7),2),
+        "api_gateway_mbps": round(total_aeronaves * random.uniform(0.1,0.4),2),
+        "bd_mbps": round(total_aeronaves * random.uniform(0.2,0.6),2),
+        "sync_service_mbps": round(total_aeronaves * random.uniform(0.15,0.5),2)
+    }
