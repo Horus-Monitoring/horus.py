@@ -465,15 +465,15 @@ df_horus$gerarIncidente <- ifelse(df_horus$status == "Normal", "Não", "Sim")
 
 df_incidentes <- subset(df_horus, severidade != "Normal")
 df_incidentes$severidade <- droplevels(df_incidentes$severidade)
-
 table(df_incidentes$severidade)
+
 barplot(table(df_incidentes$severidade), 
         main = "Distribuição dos Níveis de Severidade dos Incidentes",
-        col = c("#FFDE21", "#FFA500", "#CD1C18"))
+        col = c("#FFDE21", "#FFA500", "darkred"))
 legend("topright",
-       legend = c("70% - 79%", "80% - 89%", "90% - 100%"),
-       col = c("#FFDE21", "#FFA500", "#CD1C18"),
-       pch = 16, title = "Limite")
+       legend = c("Baixo: 70% - 79%", "Médio: 80% - 89%", "Alto: 90% - 99%", "Crítico: Acima de 100%"),
+       col = c("#FFDE21", "#FFA500", "#CD1C18", "darkred"),
+       pch = 16, title = "Porcentagem com base no limite")
 
 #
 

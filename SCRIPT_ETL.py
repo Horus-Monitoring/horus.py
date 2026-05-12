@@ -9,13 +9,13 @@ AWS_CONFIG = {
     "aws_access_key_id": "",
     "aws_secret_access_key": "",
     "aws_session_token": "",
-    "region_name": "",
-    "bucket_name": ""
+    "region_name": "us-east-1",
+    "bucket_name": "horus-monitoring"
 }
 
 DB_CONFIG = {
-    "host": "",
-    "user": "",
+    "host": "localhost",
+    "user": "root",
     "password": "",
     "database": ""
 }
