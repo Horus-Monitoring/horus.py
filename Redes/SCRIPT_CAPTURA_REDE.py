@@ -5,6 +5,7 @@ from datetime import datetime
 from getmac import get_mac_adress #Função específica para MAC Adress
 import subprocess #Permite executar comandos no sistema operacional
 import re #Manipulação de strings
+import requests #Fazer requisições para APIs
 
 def tempo_atual(): #Coleta a data-hora
     return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -72,7 +73,7 @@ def coletar_latencia_componentes(): #simulação da latencia entre os diferentes
         "lat_bd_sync": round(random.uniform(30,90),2)
     }
 
-def coletar_banda_processos(total_aeronaves):
+def coletar_banda_processos(total_aeronaves = dados_opensky()):
     return {
         "rastreamento_mbps": round(total_aeronaves * random.uniform(0.4,0.8),2),
         "rotas_mbps": round(total_aeronaves * random.uniform(0.2,0.5),2),
@@ -93,3 +94,19 @@ def perda_pacotes_componentes():
         "sync_loss": round(random.expovariate(3),2)
     }
     #Uso de variação exponencial para tornar a perda mais próxima de 1%
+
+def dados_opensky():
+    url = "https://opensky-network.org/api/states/all"
+    response = requests.get(url) #Response é um objeto HTTP
+
+    if response.status_code == 200: #Requisição bem sucedida
+        response_json = response.json()
+        total_flights = 0
+        for r in response_json["states"]:
+            if r[2] == "Brazil" or r[2] == "Brasil" or r[2] == "BR":
+                print (r)
+                total_flights += 1
+        return total_flights
+    else:
+        print("Erro na requisição à API OpenSky Network.")
+        return None
