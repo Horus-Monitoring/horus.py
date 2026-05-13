@@ -2,7 +2,7 @@ import psutil
 import random
 import time
 from datetime import datetime
-from getmac import get_mac_adress #Função específica para MAC Adress
+from getmac import get_mac_address #Função específica para MAC Adress
 import subprocess #Permite executar comandos no sistema operacional
 import re #Manipulação de strings
 import requests #Fazer requisições para APIs
@@ -10,8 +10,8 @@ import requests #Fazer requisições para APIs
 def tempo_atual(): #Coleta a data-hora
     return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-def coletar_mac_adress(): #Coleta o MAC Adress
-    return get_mac_adress()
+def coletar_mac_address(): #Coleta o MAC Adress
+    return get_mac_address()
 
 def coletar_dados_rede(): #Coleta dados para métricas de fluxo de rede e pacotes
     network = psutil.net_io_counters();
@@ -38,8 +38,7 @@ def ping_shell():
         print("Erro ao executar o comando.")
         return None
 
-def coletar_pacotes():
-    saida = ping_shell()
+def coletar_pacotes(saida):
     
     padrao = r"\((\d+)% de perda\)" #Verificar a saída padrão no ubuntu para modificar
     #Manipulando string onde \d+ recebe qualquer número, \(\) busca por parênteses e \s considera quebra de linha 
@@ -51,8 +50,7 @@ def coletar_pacotes():
     else:
         return None
         
-def coletar_latencia():
-    saida = ping_shell()
+def coletar_latencia(saida):
 
     padrao_tempo = r"tempo=(\d+)ms" 
     tempos = re.findall(padrao_tempo, saida)
@@ -89,7 +87,7 @@ def opensky_timestamp(response_json):
 def opensky_aeronaves(response_json):
     total_flights = 0
     for r in response_json["states"]:
-        if r[2] == "Brazil" or r[2] == "Brasil" or r[2] == "BR":
+        if r[2] and r[2] == "Brazil" or r[2] == "Brasil" or r[2] == "BR":
             total_flights += 1
     return total_flights
 
