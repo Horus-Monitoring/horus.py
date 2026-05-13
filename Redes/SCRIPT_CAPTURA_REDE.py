@@ -1,11 +1,31 @@
 import psutil 
 import random
 import time
+import boto3
+import mysql.connector
+import csv
 from datetime import datetime
 from getmac import get_mac_address #Função específica para MAC Adress
 import subprocess #Permite executar comandos no sistema operacional
 import re #Manipulação de strings
 import requests #Fazer requisições para APIs
+
+AWS_CONFIG = {
+    "aws_access_key_id": "",
+    "aws_secret_access_key": "",
+    "aws_session_token": "",
+    "region_name": "us-east-1",
+    "bucket_name": "horus-monitoring"
+}
+
+DB_CONFIG = {
+    "host": "localhost",
+    "user": "root",
+    "password": "",
+    "database": ""
+}
+
+INTERVALO = 1800
 
 def tempo_atual(): #Coleta a data-hora
     return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
