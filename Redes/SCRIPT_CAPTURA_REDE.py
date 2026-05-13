@@ -33,7 +33,7 @@ INTERVALO = 1800
 def dados_aviationstack():
     
     params = {
-    'access_key': '',
+    'access_key': '', #chave da API - limite de 6/100 requisições
     'dep_iata': 'GRU',
     'limit': 100
     }
@@ -43,7 +43,7 @@ def dados_aviationstack():
     data = response.json()
     data_aviationstack = data['data']
     data_api = [["Número do voo", "Status", "Origem", "Destino", "Delay de Partida", "Delay de Chegada"]]
-
+    #Matriz para transformação em CSV e armazenamento do histórico de voos
 
     for voo in data_aviationstack:
         numero_voo = voo.get('flight', {}).get('iata') #IATA é um código composto pela companhia + numero do voo
@@ -231,24 +231,86 @@ def perda_pacotes_componentes():
     }
     #Uso de variação exponencial para tornar a perda mais próxima de 1%
 
-def atualizar_csv_local(hostname, servidor_id, empresa_id, dados, existe):
+def atualizar_csv_local(
+    hostname,
+    servidor_id,
+    empresa_id,
+    mac_address,
+    rede,
+    packet_loss,
+    latencia,
+    lat_componentes,
+    banda_processos,
+    perda_componentes,
+    opensky_data,
+    total_aeronaves,
+    avg_adsb_update,
+    total_voos,
+    voos_atrasados,
+    voos_sem_atualizacao,
+    rotas_sem_atualizacao,
+    existe
+):
+
     mode = 'a' if existe else 'w'
 
-    with open("temp.csv", mode, newline='') as file:
+    with open("temp.csv", mode, newline='', encoding="utf-8") as file:
         writer = csv.writer(file)
 
         if mode == 'w':
             writer.writerow([
-                "data_hora",
+                "timestamp",
                 "hostname",
-                "id_empresa",
+                "empresa_id",
                 "servidor_id",
-                "cpu",
-                "ram",
-                "disco",
-                "rede_rx",
-                "rede_tx",
-                "processos"
+                "mac_address",
+
+                # rede real
+                "bytes_recv",
+                "bytes_sent",
+                "pack_recv",
+                "pack_sent",
+                "packet_loss_internet",
+
+                # latência internet
+                "latency_min_ms",
+                "latency_avg_ms",
+                "latency_max_ms",
+
+                # latência componentes
+                "lat_adsb_rastreamento",
+                "lat_rastreamento_correlacao",
+                "lat_correlacao_rotas",
+                "lat_rotas_api",
+                "lat_api_bd",
+                "lat_bd_sync",
+
+                # banda
+                "rastreamento_mbps",
+                "rotas_mbps",
+                "correlacao_mbps",
+                "api_gateway_mbps",
+                "bd_mbps",
+                "sync_service_mbps",
+
+                # perda componentes
+                "rastreamento_loss",
+                "correlacao_loss",
+                "rotas_loss",
+                "api_loss",
+                "bd_loss",
+                "sync_loss",
+
+                # opensky
+                "opensky_timestamp",
+                "total_aeronaves",
+                "avg_adsb_update_seconds",
+
+                # aviationstack
+                "total_voos",
+                "voos_atrasados",
+                "voos_sem_atualizacao",
+                "rotas_sem_atualizacao"
             ])
 
         writer.writerow([
@@ -256,10 +318,58 @@ def atualizar_csv_local(hostname, servidor_id, empresa_id, dados, existe):
             hostname,
             empresa_id,
             servidor_id,
-            dados.get('cpu'),
-            dados.get('ram'),
-            dados.get('disco'),
-            dados.get('rede_rx'),
-            dados.get('rede_tx'),
-            dados.get('processos')
+            mac_address,
+
+            # rede
+            rede["bytes_recv"],
+            rede["bytes_sent"],
+            rede["pack_recv"],
+            rede["pack_sent"],
+            packet_loss,
+
+            # latência internet
+            min(latencia) if latencia else None,
+            sum(latencia)/len(latencia) if latencia else None,
+            max(latencia) if latencia else None,
+
+            # latência componentes
+            lat_componentes["lat_adsb_rastreamento"],
+            lat_componentes["lat_rastreamento_correlacao"],
+            lat_componentes["lat_correlacao_rotas"],
+            lat_componentes["lat_rotas_api"],
+            lat_componentes["lat_api_bd"],
+            lat_componentes["lat_bd_sync"],
+
+            # banda processos
+            banda_processos["rastreamento_mbps"],
+            banda_processos["rotas_mbps"],
+            banda_processos["correlacao_mbps"],
+            banda_processos["api_gateway_mbps"],
+            banda_processos["bd_mbps"],
+            banda_processos["sync_service_mbps"],
+
+            # perda componentes
+            perda_componentes["rastreamento_loss"],
+            perda_componentes["correlacao_loss"],
+            perda_componentes["rotas_loss"],
+            perda_componentes["api_loss"],
+            perda_componentes["bd_loss"],
+            perda_componentes["sync_loss"],
+
+            # opensky
+            opensky_timestamp(opensky_data),
+            total_aeronaves,
+            avg_adsb_update,
+
+            # aviationstack
+            total_voos,
+            voos_atrasados,
+            voos_sem_atualizacao,
+            rotas_sem_atualizacao
         ])
+
+
+#Abstrair voos sem atualização com base no histórico coletado pelo Aviation Stack 
+# (voos com o mesmo status estão desatualizados)
+#Rotas sem atualização com base na contagem entre origem e destino
+# (mesma quantidade de aeronaves = sem atualização)
