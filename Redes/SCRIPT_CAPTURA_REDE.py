@@ -9,6 +9,7 @@ from getmac import get_mac_address #Função específica para MAC Adress
 import subprocess #Permite executar comandos no sistema operacional
 import re #Manipulação de strings
 import requests #Fazer requisições para APIs
+from botocore.exceptions import ClientError
 
 AWS_CONFIG = {
     "aws_access_key_id": "",
@@ -26,6 +27,49 @@ DB_CONFIG = {
 }
 
 INTERVALO = 1800
+
+def conectar_s3():
+    return boto3.client(
+        's3',
+        aws_access_key_id=AWS_CONFIG["aws_access_key_id"],
+        aws_secret_access_key=AWS_CONFIG["aws_secret_access_key"],
+        aws_session_token=AWS_CONFIG["aws_session_token"],
+        region_name=AWS_CONFIG["region_name"]
+    )
+
+def gerar_chave_s3(empresa_id, macadress):
+    return f"raw/empresa_{empresa_id}/{macadress}/metricas.csv"
+
+def arquivo_existe_s3(s3, key):
+    try:
+        s3.head_object(Bucket=AWS_CONFIG["bucket_name"], Key=key)
+        return True
+    except ClientError:
+        return False
+
+def baixar_csv_s3(s3, key):
+    s3.download_file(AWS_CONFIG["bucket_name"], key, "temp.csv")
+
+def enviar_csv_s3(s3, key):
+    s3.upload_file("temp.csv", AWS_CONFIG["bucket_name"], key)
+
+def obter_servidor_info(macadress):
+    conn = mysql.connector.connect(**DB_CONFIG)
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        SELECT id_servidor, fk_empresa
+        FROM servidor
+        WHERE macadress = %s
+    """, (macadress,)) #alterar para MAC Adress
+
+    result = cursor.fetchone()
+    cursor.close()
+    conn.close()
+
+    if result:
+        return {"servidor_id": result[0], "empresa_id": result[1]}
+    return None
 
 def tempo_atual(): #Coleta a data-hora
     return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
