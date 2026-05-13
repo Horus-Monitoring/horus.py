@@ -71,6 +71,23 @@ def obter_servidor_info(macadress):
         return {"servidor_id": result[0], "empresa_id": result[1]}
     return None
 
+def obter_componentes_servidor(servidor_id):
+    conn = mysql.connector.connect(**DB_CONFIG)
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        SELECT c.tipo
+        FROM servidor_componente sc
+        JOIN componente c ON sc.fk_componente = c.id_componente
+        WHERE sc.fk_servidor = %s
+    """, (servidor_id,))
+
+    dados = [r[0] for r in cursor.fetchall()]
+    cursor.close()
+    conn.close()
+
+    return dados
+
 def tempo_atual(): #Coleta a data-hora
     return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
@@ -186,4 +203,35 @@ def perda_pacotes_componentes():
     }
     #Uso de variação exponencial para tornar a perda mais próxima de 1%
 
+def atualizar_csv_local(hostname, servidor_id, empresa_id, dados, existe):
+    mode = 'a' if existe else 'w'
 
+    with open("temp.csv", mode, newline='') as file:
+        writer = csv.writer(file)
+
+        if mode == 'w':
+            writer.writerow([
+                "data_hora",
+                "hostname",
+                "id_empresa",
+                "servidor_id",
+                "cpu",
+                "ram",
+                "disco",
+                "rede_rx",
+                "rede_tx",
+                "processos"
+            ])
+
+        writer.writerow([
+            datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            hostname,
+            empresa_id,
+            servidor_id,
+            dados.get('cpu'),
+            dados.get('ram'),
+            dados.get('disco'),
+            dados.get('rede_rx'),
+            dados.get('rede_tx'),
+            dados.get('processos')
+        ])
