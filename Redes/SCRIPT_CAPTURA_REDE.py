@@ -10,6 +10,7 @@ import subprocess #Permite executar comandos no sistema operacional
 import re #Manipulação de strings
 import requests #Fazer requisições para APIs
 from botocore.exceptions import ClientError
+import os
 
 AWS_CONFIG = {
     "aws_access_key_id": "",
@@ -40,20 +41,27 @@ def dados_aviationstack():
 
     response = requests.get('https://api.aviationstack.com/v1/flights', params = params)
 
+    if response.status_code != 200:
+        print("Erro AviationStack")
+        return []
+    
     data = response.json()
     data_aviationstack = data['data']
-    data_api = [["Número do voo", "Status", "Origem", "Destino", "Delay de Partida", "Delay de Chegada"]]
+    data_api = []
     #Matriz para transformação em CSV e armazenamento do histórico de voos
 
     for voo in data_aviationstack:
-        numero_voo = voo.get('flight', {}).get('iata') #IATA é um código composto pela companhia + numero do voo
-        status = voo.get('flight_status') 
-        origem = voo.get('departure', {}).get('airport')
-        destino = voo.get('arrival', {}).get('airport')
-        delay_origem = voo.get('departure', {}).get('delay')
-        delay_destino = voo.get('arrival', {}).get('delay')
-        data_api.append([numero_voo, status, origem, destino, delay_origem, delay_destino])
-
+        registro = {
+            "timestamp_coleta": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            "numero_voo": voo.get('flight', {}).get('iata'), #IATA é um código composto pela companhia + numero do voo
+            "status": voo.get('flight_status'),
+            "origem": voo.get('departure', {}).get('airport'),
+            "destino": voo.get('arrival', {}).get('airport'),
+            "delay_origem": voo.get('departure', {}).get('delay'),
+            "delay_destino": voo.get('arrival', {}).get('delay') 
+        }
+        data_api.append(registro)
+    
     return(data_api)
 
 def conectar_s3():
@@ -367,6 +375,32 @@ def atualizar_csv_local(
             voos_sem_atualizacao,
             rotas_sem_atualizacao
         ])
+
+def salvar_voos_csv(voos): #Conselho da Profa. Giu 
+    
+    arquivo = "flights_raw.csv"
+    existe = os.path.exists(arquivo)
+
+    with open(arquivo, mode="a", newline="", encoding="utf-8") as file:
+
+        writer = csv.DictWriter(
+            file,
+            fieldnames=[
+                "timestamp_coleta",
+                "numero_voo",
+                "status",
+                "origem",
+                "destino",
+                "delay_origem",
+                "delay_destino"
+            ]
+        )
+
+        if not existe:
+            writer.writeheader()
+
+        for voo in voos:
+            writer.writerow(voo)
 
 
 #Abstrair voos sem atualização com base no histórico coletado pelo Aviation Stack 
