@@ -253,10 +253,6 @@ def atualizar_csv_local(
     opensky_data,
     total_aeronaves,
     avg_adsb_update,
-    total_voos,
-    voos_atrasados,
-    voos_sem_atualizacao,
-    rotas_sem_atualizacao,
     existe
 ):
 
@@ -313,12 +309,6 @@ def atualizar_csv_local(
                 "opensky_timestamp",
                 "total_aeronaves",
                 "avg_adsb_update_seconds",
-
-                # aviationstack
-                "total_voos",
-                "voos_atrasados",
-                "voos_sem_atualizacao",
-                "rotas_sem_atualizacao"
             ])
 
         writer.writerow([
@@ -367,13 +357,7 @@ def atualizar_csv_local(
             # opensky
             opensky_timestamp(opensky_data),
             total_aeronaves,
-            avg_adsb_update,
-
-            # aviationstack
-            total_voos,
-            voos_atrasados,
-            voos_sem_atualizacao,
-            rotas_sem_atualizacao
+            avg_adsb_update
         ])
 
 def salvar_voos_csv(voos): #Conselho da Profa. Giu 
