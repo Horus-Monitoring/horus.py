@@ -420,6 +420,9 @@ def salvar_voos_csv(voos): #Conselho da Profa. Giu
 
 
 def main():
+
+    ultima_execucao_aviation = 0
+    INTERVALO_AVIATION = 14400  
     
     print("Iniciando coleta local...")
     os.makedirs("raw", exist_ok=True)
@@ -427,6 +430,7 @@ def main():
     while True:
         try:
             # Identificação local
+            tempo_atual_loop = time.time()
             hostname = socket.gethostname()
             mac_address = coletar_mac_address()
 
@@ -480,13 +484,16 @@ def main():
             perda_componentes = perda_pacotes_componentes()
 
             # AviationStack
-            print("Consultando AviationStack...")
+            if tempo_atual_loop - ultima_execucao_aviation >= INTERVALO_AVIATION:
+                print("Consultando AviationStack...")
 
-            voos = dados_aviationstack()
+                voos = dados_aviationstack()
 
-            if voos:
-                salvar_voos_csv(voos)
-                print(f"{len(voos)} voos salvos em flights_raw.csv")
+                if voos:
+                    salvar_voos_csv(voos)
+                    print(f"{len(voos)} voos salvos em flights_raw.csv")
+                
+                ultima_execucao_aviation = tempo_atual_loop
 
             # Network CSV
             existe = os.path.exists("raw/network_raw.csv")
