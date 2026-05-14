@@ -4,6 +4,7 @@ import json
 import mysql.connector
 from datetime import datetime
 from io import StringIO
+import pandas
 
 AWS_CONFIG = {
     "aws_access_key_id": "",
@@ -36,8 +37,15 @@ def verificar_csv():
     return [obj["Key"] for obj in response.get("Contents", []) if obj["Key"].endswith(".csv")]
 
 def ler_csv_s3(key):
-    obj = s3.get_object(Bucket=AWS_CONFIG["bucket_name"], Key=key)
-    return obj['Body'].read().decode('utf-8')
+    obj = s3.get_object(Bucket=AWS_CONFIG["bucket_name"],
+                         Key=key)
+    
+    conteudo = obj['Body'].read().decode('utf-8')
+
+    df = pandas.read_csv(StringIO(conteudo))
+    print(df)
+    print(df.total_aeronaves)
+    return df
 
 def salvar_s3(conteudo, key):
     s3.put_object(
@@ -97,3 +105,5 @@ def determinar_status_servidor(severidades):
     else:
         return "Online"
 
+
+ler_csv_s3("raw/empresa_1/c0:35:32:c7:0b:59/network_raw.csv")
