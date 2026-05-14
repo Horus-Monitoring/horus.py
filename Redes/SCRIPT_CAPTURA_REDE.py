@@ -11,6 +11,7 @@ import re #Manipulação de strings
 import requests #Fazer requisições para APIs
 from botocore.exceptions import ClientError
 import os
+import socket
 
 AWS_CONFIG = {
     "aws_access_key_id": "",
@@ -32,37 +33,46 @@ INTERVALO = 1800
 #Aviationstack
 
 def dados_aviationstack():
-    
-    params = {
-    'access_key': '', #chave da API - limite de 6/100 requisições
-    'dep_iata': 'GRU',
-    'limit': 100
-    }
-
-    response = requests.get('https://api.aviationstack.com/v1/flights', params = params)
-
-    if response.status_code != 200:
-        print("Erro AviationStack")
-        return []
-    
-    data = response.json()
-    data_aviationstack = data['data']
-    data_api = []
-    #Matriz para transformação em CSV e armazenamento do histórico de voos
-
-    for voo in data_aviationstack:
-        registro = {
-            "timestamp_coleta": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-            "numero_voo": voo.get('flight', {}).get('iata'), #IATA é um código composto pela companhia + numero do voo
-            "status": voo.get('flight_status'),
-            "origem": voo.get('departure', {}).get('airport'),
-            "destino": voo.get('arrival', {}).get('airport'),
-            "delay_origem": voo.get('departure', {}).get('delay'),
-            "delay_destino": voo.get('arrival', {}).get('delay') 
+   try: 
+        params = {
+        'access_key': 'e2326bc56d7d29aab7be45590b9c1aa1', #chave da API - limite de 6/100 requisições
+        'dep_iata': 'GRU',
+        'limit': 100
         }
-        data_api.append(registro)
-    
-    return(data_api)
+
+        response = requests.get('https://api.aviationstack.com/v1/flights', params = params, timeout=10)
+
+        if response.status_code != 200:
+            print("Erro AviationStack")
+            return []
+        
+        data = response.json()
+
+        if "data" not in data:
+                return []
+        
+        data_aviationstack = data['data']
+        data_api = []
+        #JSON para transformação em CSV e armazenamento do histórico de voos
+
+        for voo in data_aviationstack:
+            registro = {
+                "timestamp_coleta": tempo_atual(),
+                "numero_voo": voo.get('flight', {}).get('iata'), #IATA é um código composto pela companhia + numero do voo
+                "status": voo.get('flight_status'),
+                "origem": voo.get('departure', {}).get('airport'),
+                "destino": voo.get('arrival', {}).get('airport'),
+                "delay_origem": voo.get('departure', {}).get('delay'),
+                "delay_destino": voo.get('arrival', {}).get('delay') 
+            }
+            data_api.append(registro)
+        
+        return(data_api)
+   
+   except Exception as e:
+       print(f"Erro na API AviationStack: {e}")
+       return []
+       
 
 def conectar_s3():
     return boto3.client(
@@ -190,12 +200,18 @@ def coletar_latencia_componentes(): #simulação da latencia entre os diferentes
 
 def dados_opensky():
     url = "https://opensky-network.org/api/states/all"
-    response = requests.get(url) #Response é um objeto HTTP
-    response_json = response.json()
-    if response.status_code == 200: #Requisição bem sucedida
-        return response_json
-    else:
-        print("Erro na requisição à API OpenSky Network.")
+
+    try:
+        response = requests.get(url, timeout=10)
+
+        if response.status_code == 200:
+            return response.json()
+
+        print("Erro OpenSky:", response.status_code)
+        return None
+
+    except Exception as e:
+        print(f"Erro OpenSky: {e}")
         return None
 
 def opensky_timestamp(response_json):
@@ -203,19 +219,27 @@ def opensky_timestamp(response_json):
 
 def opensky_aeronaves(response_json):
     total_flights = 0
-    for r in response_json["states"]:
-        if r[2] and r[2] == "Brazil" or r[2] == "Brasil" or r[2] == "BR":
+
+    for r in response_json.get("states", []):
+        if r[2] in ["Brazil", "Brasil", "BR"]:
             total_flights += 1
+
     return total_flights
 
 def contato_adsb(response_json):
     tempo_atual = response_json["time"]
     atualizacao = []
-    for r in response_json["states"]:
-        if r[2] == "Brazil" or r[2] == "Brasil" or r[2] == "BR":
+
+    for r in response_json.get("states", []):
+        if r[2] in ["Brazil", "Brasil", "BR"]:
             ultima_atualizacao = r[4]
-            atualizacao.append(tempo_atual - ultima_atualizacao)
-    return atualizacao   
+
+            if ultima_atualizacao:
+                atualizacao.append(
+                    tempo_atual - ultima_atualizacao
+                )
+
+    return atualizacao  
 
 def coletar_banda_processos(total_aeronaves):
     return {
@@ -256,9 +280,13 @@ def atualizar_csv_local(
     existe
 ):
 
+    os.makedirs("raw", exist_ok=True)
+
     mode = 'a' if existe else 'w'
 
-    with open("temp.csv", mode, newline='', encoding="utf-8") as file:
+    arquivo = "raw/network_raw.csv"
+
+    with open(arquivo, mode, newline='', encoding="utf-8") as file:
         writer = csv.writer(file)
 
         if mode == 'w':
@@ -362,7 +390,9 @@ def atualizar_csv_local(
 
 def salvar_voos_csv(voos): #Conselho da Profa. Giu 
     
-    arquivo = "flights_raw.csv"
+    os.makedirs("raw", exist_ok=True)
+
+    arquivo = "raw/flights_raw.csv"
     existe = os.path.exists(arquivo)
 
     with open(arquivo, mode="a", newline="", encoding="utf-8") as file:
@@ -386,6 +416,110 @@ def salvar_voos_csv(voos): #Conselho da Profa. Giu
         for voo in voos:
             writer.writerow(voo)
 
+
+
+
+def main():
+    
+    print("Iniciando coleta local...")
+    os.makedirs("raw", exist_ok=True)
+    
+    while True:
+        try:
+            # Identificação local
+            hostname = socket.gethostname()
+            mac_address = coletar_mac_address()
+
+            # mock temporário até integrar MySQL
+            servidor_id = 1
+            empresa_id = 1
+
+            print("Coletando dados de rede...")
+
+            # Ping
+            saida_ping = ping_shell()
+
+            if saida_ping:
+                packet_loss = coletar_pacotes(saida_ping)
+                latencia = coletar_latencia(saida_ping)
+
+                if latencia:
+                    latencia = [int(x) for x in latencia]
+            else:
+                packet_loss = None
+                latencia = None
+
+            # Rede local
+            rede = coletar_dados_rede()
+
+            # OpenSky
+            print("Consultando OpenSky...")
+
+            opensky_data = dados_opensky()
+
+            if opensky_data:
+                total_aeronaves = opensky_aeronaves(opensky_data)
+
+                adsb_updates = contato_adsb(opensky_data)
+
+                avg_adsb_update = (
+                    sum(adsb_updates) / len(adsb_updates)
+                    if adsb_updates else None
+                )
+            else:
+                total_aeronaves = None
+                avg_adsb_update = None
+
+            # Simulação componentes
+            lat_componentes = coletar_latencia_componentes()
+
+            banda_processos = coletar_banda_processos(
+                total_aeronaves if total_aeronaves else 0
+            )
+
+            perda_componentes = perda_pacotes_componentes()
+
+            # AviationStack
+            print("Consultando AviationStack...")
+
+            voos = dados_aviationstack()
+
+            if voos:
+                salvar_voos_csv(voos)
+                print(f"{len(voos)} voos salvos em flights_raw.csv")
+
+            # Network CSV
+            existe = os.path.exists("raw/network_raw.csv")
+
+            atualizar_csv_local(
+                hostname=hostname,
+                servidor_id=servidor_id,
+                empresa_id=empresa_id,
+                mac_address=mac_address,
+                rede=rede,
+                packet_loss=packet_loss,
+                latencia=latencia,
+                lat_componentes=lat_componentes,
+                banda_processos=banda_processos,
+                perda_componentes=perda_componentes,
+                opensky_data=opensky_data,
+                total_aeronaves=total_aeronaves,
+                avg_adsb_update=avg_adsb_update,
+                existe=existe
+            )
+
+            print("network_raw salvo com sucesso.")
+            print("Aguardando próxima coleta...\n")
+
+        except Exception as e:
+            print(f"Erro geral na coleta: {e}")
+
+        # intervalo de teste
+        time.sleep(60)
+
+
+if __name__ == "__main__":
+    main()
 
 #Abstrair voos sem atualização com base no histórico coletado pelo Aviation Stack 
 # (voos com o mesmo status estão desatualizados)
