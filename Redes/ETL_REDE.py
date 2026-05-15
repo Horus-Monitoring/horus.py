@@ -274,4 +274,14 @@ def taxa_transferencia(df):
 
     return df["taxa_total_mb"].mean()
 
+def consumo_banda_servico(df):
+    return {
+        "rastreamento": df["rastreamento_mbps"].mean(),
+        "rotas": df["rotas_mbps"].mean(),
+        "correlacao": df["correlacao_mbps"].mean(),
+        "api_gateway": df["api_gateway_mbps"].mean(),
+        "banco_dados": df["bd_mbps"].mean(),
+        "sync": df["sync_service_mbps"].mean()
+    }
+
 ler_csv_s3("raw/empresa_1/c0:35:32:c7:0b:59/network_raw.csv")
