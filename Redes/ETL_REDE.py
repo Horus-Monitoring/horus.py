@@ -47,6 +47,48 @@ def ler_csv_s3(key):
     print(df.total_aeronaves)
     return df
 
+def limpar_dados(df):
+    colunas_numericas = [
+        "bytes_recv",
+        "bytes_sent",
+        "pack_recv",
+        "pack_sent",
+        "packet_loss_internet",
+        "internet",
+        "latency_min_ms",
+        "latency_avg_ms",
+        "latency_max_ms",
+        "lat_adsb_rastreamento",
+        "lat_rastreamento_correlacao",
+        "lat_correlacao_rotas",
+        "lat_rotas_api",
+        "lat_api_bd",
+        "lat_bd_sync",
+        "rastreamento_mbps",
+        "rotas_mbps",
+        "correlacao_mbps",
+        "api_gateway_mbps",
+        "bd_mbps",
+        "sync_service_mbps",
+        "rastreamento_loss",
+        "correlacao_loss",
+        "rotas_loss",
+        "api_loss",
+        "bd_loss",
+        "sync_loss",
+        "total_aeronaves",
+        "avg_adsb_update_seconds"
+    ]
+
+    for coluna in colunas_numericas:
+       df[coluna] = pandas.to_numeric(df[coluna], errors="coerce")
+
+    df["timestamp"] = pandas.to_datetime(df["timestamp"])
+    df["opensky_timestamp"] = pandas.to_datetime(df["opensky_timestamp"])
+    df = df.fillna(0)
+
+    return df
+
 def salvar_s3(conteudo, key):
     s3.put_object(
         Bucket=AWS_CONFIG["bucket_name"],
@@ -105,5 +147,75 @@ def determinar_status_servidor(severidades):
     else:
         return "Online"
 
+def classificar_latencia(valor):
+    valor = float(valor)
+
+    if valor > 250:
+        return "critico"
+    elif valor > 200:
+        return "alto"
+    elif valor > 150:
+        return "medio"
+    elif valor > 100:
+        return "baixo"
+    else:
+        return "normal"
+    
+def severidade_servidor_latencia(linha):
+    status = [
+        linha["status_latency_avg"],
+        linha["status_adsb"],
+        linha["status_api_bd"],
+        linha["status_bd_sync"]
+    ]
+
+    prioridade = {
+        "critico": 4,
+        "alto": 3,
+        "medio": 2,
+        "baixo": 1,
+        "normal": 0
+    }
+
+    pior_status = max(status, key=lambda x: prioridade[x])
+
+    return pior_status
+
+def classificar_pacotes(valor):
+    valor = float(valor)
+
+    if valor > 20:
+        return "critico"
+    elif valor > 15:
+        return "alto"
+    elif valor > 10:
+        return "medio"
+    elif valor > 5:
+        return "baixo"
+    else:
+        return "normal"
+
+def severidade_servidor_pacotes(linha):
+    status = [
+        linha["packet_loss"],
+        linha["rastreamento_loss"],
+        linha["correlacao_loss"],
+        linha["rotas_loss"],
+        linha["api_loss"],
+        linha["bd_loss"],
+        linha["sync_loss"]
+    ]
+
+    prioridade = {
+        "critico": 4,
+        "alto": 3,
+        "medio": 2,
+        "baixo": 1,
+        "normal": 0
+    }
+
+    pior_status = max(status, key=lambda x: prioridade[x])
+
+    return pior_status
 
 ler_csv_s3("raw/empresa_1/c0:35:32:c7:0b:59/network_raw.csv")

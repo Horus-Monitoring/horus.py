@@ -29,7 +29,7 @@ DB_CONFIG = {
 }
 
 API_CONFIG = {
-    "acess-key": "", #Aviation Stack
+    "access_key": "", #Aviation Stack
     "client_id": "", #OpenSky
     "secret":"" #OpenSky
 }
@@ -41,8 +41,8 @@ INTERVALO = 1800
 def dados_aviationstack():
    try: 
         params = {
-        'access_key': API_CONFIG["acess_key"], #chave da API - limite de 6/100 requisições
-        'dep_iata': 'GRU',
+        'access_key': API_CONFIG["access_key"], #chave da API - limite de 6/100 requisições
+        'dep_iata': 'GRU',  
         'limit': 100
         }
 
@@ -605,8 +605,24 @@ def main():
             print(f"Erro geral na coleta: {e}")
 
         # intervalo de teste
-        print(f"Nova coleta em {INTERVALO/60} minutos....")
-        time.sleep(INTERVALO)
+        minutos_total = INTERVALO // 60
+       
+        print(f"Nova coleta em {minutos_total} minutos....")
+
+        for minuto in range(1, minutos_total + 1):
+            time.sleep(60)
+
+            barra = "|" * minuto
+            restante = "." * (minutos_total - minuto)
+
+            print(
+                f"\rAguardando próxima coleta: [{barra}{restante}] "
+                f"{minuto}/{minutos_total} min",
+                end="",
+                flush=True
+            )
+
+        print()
 
 
 if __name__ == "__main__":

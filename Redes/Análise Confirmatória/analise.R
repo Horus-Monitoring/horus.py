@@ -1,6 +1,10 @@
 #Análise de Dados - Horus
 
-df <- read.csv("C:/Users/ricar/Documents/SP Tech/CCO/2 Semestre/Projeto/horus_full_2months.csv")
+library(tidyverse)
+library(plotly)
+library(ggplot2)
+
+df <- read.csv("C:/Users/ricar/Documents/SP Tech/CCO/2 Semestre/Projeto/Cap-Dados/Redes/Análise Confirmatória/horus_full_2months.csv")
 
 #Tratamento do formado DATETIME
 Sys.setlocale("LC_TIME", "C") 
@@ -11,14 +15,14 @@ Sys.setlocale("LC_TIME", "C")
   
 df$estimated_revenue_loss_brl <- df$estimated_revenue_loss_brl/10^6
 
-library(ggplot2)
+
   
 hist(df$cpu_percent)
 hist(df$memory_available_gb)
 hist(df$latency_ms)
 ggplot(df, aes(x = timestamp, y = latency_ms)) +
       geom_point(color = "blue", size = 1) +  
-      labels(
+      labs(
          title = "Latência ao longo do tempo",
          x = "Data",
          y = "Latência (ms)")
@@ -128,13 +132,13 @@ adsb_cons
 #numero de aeronaves conectadas
 ggplot(df, aes(x = cpu_percent, y = aircraft_connected)) +
     geom_point(color = "red", size = 1) +
-    labels(
+    labs(
       title = "Relação entre uso de CPU e Aeronaves Conectadas",
       x = "Uso de CPU (%)",
       y = "Aeronaves conectadas"
     )
 
-library(plotly)
+
 lat_rotas <- plot_ly(df,
               x = ~routes_without_update,
               y = ~timestamp,
