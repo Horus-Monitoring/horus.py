@@ -218,4 +218,17 @@ def severidade_servidor_pacotes(linha):
 
     return pior_status
 
+def kpi_perda_media(df):
+    colunas = [
+        "packet_loss_internet",
+        "rastreamento_loss",
+        "correlacao_loss",
+        "rotas_loss",
+        "api_loss",
+        "bd_loss",
+        "sync_loss"
+    ]
+
+    return df[colunas].mean().mean()
+
 ler_csv_s3("raw/empresa_1/c0:35:32:c7:0b:59/network_raw.csv")
