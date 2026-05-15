@@ -284,4 +284,23 @@ def consumo_banda_servico(df):
         "sync": df["sync_service_mbps"].mean()
     }
 
+def enriquecer_dados(df): #classifica cada dado e acrescenta uma coluna extra ao df
+
+    df["status_latency_avg"] = df["latency_avg_ms"].apply(classificar_latencia)
+
+    df["status_adsb"] = df["lat_adsb_rastreamento"].apply(classificar_latencia)
+
+    df["status_api_bd"] = df["lat_api_bd"].apply(classificar_latencia)
+
+    df["status_bd_sync"] = df["lat_bd_sync"].apply(classificar_latencia)
+
+    df["status_packet_loss"] = df["packet_loss_internet"].apply(classificar_pacotes)
+
+    df["status_servidor_latencia"] = df.apply(
+        severidade_servidor_latencia,
+        axis=1
+    )
+
+    return df
+
 ler_csv_s3("raw/empresa_1/c0:35:32:c7:0b:59/network_raw.csv")
