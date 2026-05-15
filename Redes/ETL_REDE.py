@@ -267,4 +267,11 @@ def rotas_sem_atualizacao(df_voos):
 
     return len(rotas_paradas)
 
+def taxa_transferencia(df):
+    df["taxa_total_mb"] = (
+        df["bytes_recv"] + df["bytes_sent"]
+    ) / (1024 * 1024) #Byte para MegaByte
+
+    return df["taxa_total_mb"].mean()
+
 ler_csv_s3("raw/empresa_1/c0:35:32:c7:0b:59/network_raw.csv")
