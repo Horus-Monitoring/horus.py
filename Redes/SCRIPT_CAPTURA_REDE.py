@@ -369,6 +369,7 @@ def atualizar_csv_local(
                 "total_aeronaves",
                 "avg_adsb_update_seconds",
             ])
+        
 
         writer.writerow([
             datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
@@ -419,6 +420,9 @@ def atualizar_csv_local(
             avg_adsb_update
         ])
 
+        file.flush()
+        os.fsync(file.fileno())
+
 def salvar_voos_csv(voos): #Conselho da Profa. Giu 
     
     os.makedirs("raw", exist_ok=True)
@@ -446,6 +450,9 @@ def salvar_voos_csv(voos): #Conselho da Profa. Giu
 
         for voo in voos:
             writer.writerow(voo)
+        
+        file.flush()
+        os.fsync(file.fileno())
 
 
 

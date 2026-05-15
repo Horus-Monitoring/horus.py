@@ -1,5 +1,4 @@
 import boto3
-import csv
 import json
 import mysql.connector
 from datetime import datetime
@@ -44,7 +43,7 @@ def ler_csv_s3(key):
     
     conteudo = obj['Body'].read().decode('utf-8')
 
-    df = pandas.read_csv(StringIO(conteudo))
+    df = pandas.read_csv(StringIO(conteudo), on_bad_lines='skip')
     return df
 
 def salvar_s3(conteudo, key):
@@ -226,13 +225,13 @@ def classificar_pacotes(valor):
 
 def severidade_servidor_pacotes(linha):
     status = [
-        linha["packet_loss_internet"],
-        linha["rastreamento_loss"],
-        linha["correlacao_loss"],
-        linha["rotas_loss"],
-        linha["api_loss"],
-        linha["bd_loss"],
-        linha["sync_loss"]
+        linha["status_packet_loss"],
+        linha["status_rastreamento_loss"],
+        linha["status_correlacao_loss"],
+        linha["status_rotas_loss"],
+        linha["status_api_loss"],
+        linha["status_bd_loss"],
+        linha["status_sync_loss"]
     ]
 
     prioridade = {
@@ -243,9 +242,24 @@ def severidade_servidor_pacotes(linha):
         "normal": 0
     }
 
-    pior_status = max(status, key=lambda x: prioridade[x])
+    return max(status, key=lambda x: prioridade[x])
 
-    return pior_status
+def enriquecer_dados(df): #classifica cada dado e acrescenta uma coluna extra ao df
+
+    df["status_packet_loss"] = df["packet_loss_internet"].apply(classificar_pacotes)
+    df["status_rastreamento_loss"] = df["rastreamento_loss"].apply(classificar_pacotes)
+    df["status_correlacao_loss"] = df["correlacao_loss"].apply(classificar_pacotes)
+    df["status_rotas_loss"] = df["rotas_loss"].apply(classificar_pacotes)
+    df["status_api_loss"] = df["api_loss"].apply(classificar_pacotes)
+    df["status_bd_loss"] = df["bd_loss"].apply(classificar_pacotes)
+    df["status_sync_loss"] = df["sync_loss"].apply(classificar_pacotes)
+
+    df["status_servidor_pacotes"] = df.apply(
+    severidade_servidor_pacotes,
+    axis=1
+    )
+
+    return df
 
 #KPIs
 def kpi_perda_media(df):
@@ -312,6 +326,7 @@ def consumo_banda_servico(df):
         "sync": df["sync_service_mbps"].mean()
     }
 
+#Geração de JSON para o Client
 def gerar_json_dashboard(df_network, df_flights):
 
     dashboard = {
@@ -340,4 +355,60 @@ def gerar_json_dashboard(df_network, df_flights):
 
     return dashboard
 
-ler_csv_s3("raw/empresa_1/c0:35:32:c7:0b:59/network_raw.csv")
+def salvar_trusted(df, key):
+    csv_buffer = StringIO()
+    df.to_csv(csv_buffer, index=False)
+
+    salvar_s3(
+        csv_buffer.getvalue(),
+        key
+    )
+
+def salvar_json_dashboard(dashboard, key):
+    salvar_s3(
+        json.dumps(dashboard, indent=4),
+        key
+    )
+
+def main():
+
+    network_key = "raw/empresa_1/c0:35:32:c7:0b:59/network_raw.csv"
+    flights_key = "raw/empresa_1/c0:35:32:c7:0b:59/flights_raw.csv"
+
+    print("Lendo arquivos raw...")
+    df_network = ler_csv_s3(network_key)
+    df_flights = ler_csv_s3(flights_key)
+
+    print("Limpando dados...")
+    df_network = limpar_dados(df_network)
+    df_flights = limpar_voos(df_flights)
+
+    print("Enriquecendo dados...")
+    df_network = enriquecer_dados(df_network)
+
+    print("Salvando trusted...")
+    salvar_trusted(
+        df_network,
+        "trusted/empresa_1/c0:35:32:c7:0b:59/network_trusted.csv"
+    )
+
+    salvar_trusted(
+        df_flights,
+        "trusted/empresa_1/c0:35:32:c7:0b:59/flights_trusted.csv"
+    )
+
+    print("Gerando JSON dashboard...")
+    dashboard = gerar_json_dashboard(
+        df_network,
+        df_flights
+    )
+
+    salvar_json_dashboard(
+        dashboard,
+        "client/empresa_1/c0:35:32:c7:0b:59/dashboard.json"
+    )
+
+    print("Pipeline executado com sucesso.")
+
+if __name__ == "__main__":
+    main()

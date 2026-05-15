@@ -164,5 +164,3 @@ lat_rotas <- lat_rotas %>%
       )
 lat_rotas
 
-
-
