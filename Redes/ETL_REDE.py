@@ -231,4 +231,17 @@ def kpi_perda_media(df):
 
     return df[colunas].mean().mean()
 
+def kpi_latencia_media(df):
+    colunas = [
+        "latency_avg_ms",
+        "lat_adsb_rastreamento",
+        "lat_rastreamento_correlacao",
+        "lat_correlacao_rotas",
+        "lat_rotas_api",
+        "lat_api_bd",
+        "lat_bd_sync"
+    ]
+
+    return df[colunas].mean().mean()
+
 ler_csv_s3("raw/empresa_1/c0:35:32:c7:0b:59/network_raw.csv")
