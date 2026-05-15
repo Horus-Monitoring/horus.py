@@ -43,8 +43,6 @@ def ler_csv_s3(key):
     conteudo = obj['Body'].read().decode('utf-8')
 
     df = pandas.read_csv(StringIO(conteudo))
-    print(df)
-    print(df.total_aeronaves)
     return df
 
 def limpar_dados(df):
@@ -54,7 +52,6 @@ def limpar_dados(df):
         "pack_recv",
         "pack_sent",
         "packet_loss_internet",
-        "internet",
         "latency_min_ms",
         "latency_avg_ms",
         "latency_max_ms",
@@ -197,7 +194,7 @@ def classificar_pacotes(valor):
 
 def severidade_servidor_pacotes(linha):
     status = [
-        linha["packet_loss"],
+        linha["packet_loss_internet"],
         linha["rastreamento_loss"],
         linha["correlacao_loss"],
         linha["rotas_loss"],
@@ -259,9 +256,7 @@ def kpi_adsb_update(df):
         return 10    # crítico
 
 def rotas_sem_atualizacao(df_voos):
-    agrupado = df_voos.groupby(
-        ["numero_voo", "status"]
-    ).size()
+    agrupado = df_voos.groupby(["numero_voo", "origem", "destino", "status"]).size()
 
     rotas_paradas = agrupado[agrupado >= 3]
 
@@ -302,5 +297,33 @@ def enriquecer_dados(df): #classifica cada dado e acrescenta uma coluna extra ao
     )
 
     return df
+
+def gerar_json_dashboard(df_network, df_flights):
+
+    dashboard = {
+        "kpis": {
+            "perda_pacotes": kpi_perda_media(df_network),
+            "latencia_media": kpi_latencia_media(df_network),
+            "adsb_update": kpi_adsb_update(df_network),
+            "rotas_sem_atualizacao": rotas_sem_atualizacao(df_flights)
+        },
+
+        "grafico_transferencia": {
+            "timestamps": df_network["timestamp"].astype(str).tolist(),
+            "rastreamento": df_network["rastreamento_mbps"].tolist(),
+            "rotas": df_network["rotas_mbps"].tolist(),
+            "correlacao": df_network["correlacao_mbps"].tolist()
+        },
+
+        "grafico_latencia_componentes": {
+            "adsb": df_network["lat_adsb_rastreamento"].mean(),
+            "correlacao": df_network["lat_rastreamento_correlacao"].mean(),
+            "bd": df_network["lat_api_bd"].mean()
+        },
+
+        "consumo_banda": consumo_banda_servico(df_network)
+    }
+
+    return dashboard
 
 ler_csv_s3("raw/empresa_1/c0:35:32:c7:0b:59/network_raw.csv")
