@@ -257,5 +257,14 @@ def kpi_adsb_update(df):
         return 40    # alto
     else:
         return 10    # crítico
-    
+
+def rotas_sem_atualizacao(df_voos):
+    agrupado = df_voos.groupby(
+        ["numero_voo", "status"]
+    ).size()
+
+    rotas_paradas = agrupado[agrupado >= 3]
+
+    return len(rotas_paradas)
+
 ler_csv_s3("raw/empresa_1/c0:35:32:c7:0b:59/network_raw.csv")
