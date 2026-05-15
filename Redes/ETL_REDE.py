@@ -244,4 +244,18 @@ def kpi_latencia_media(df):
 
     return df[colunas].mean().mean()
 
+def kpi_adsb_update(df):
+    media = df["avg_adsb_update_seconds"].mean()
+
+    if media <= 2:
+        return 100   # excelente
+    elif media <= 5:
+        return 85    # baixo
+    elif media <= 10:
+        return 70    # medio
+    elif media <= 30:
+        return 40    # alto
+    else:
+        return 10    # crítico
+    
 ler_csv_s3("raw/empresa_1/c0:35:32:c7:0b:59/network_raw.csv")
