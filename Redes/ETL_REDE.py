@@ -21,6 +21,8 @@ DB_CONFIG = {
     "database": ""
 }
 
+
+#Informações da S3
 s3 = boto3.client(
     's3',
     aws_access_key_id=AWS_CONFIG["aws_access_key_id"],
@@ -45,6 +47,15 @@ def ler_csv_s3(key):
     df = pandas.read_csv(StringIO(conteudo))
     return df
 
+def salvar_s3(conteudo, key):
+    s3.put_object(
+        Bucket=AWS_CONFIG["bucket_name"],
+        Key=key,
+        Body=conteudo
+    )
+
+
+#Limpeza de Dados para o Trusted
 def limpar_dados(df):
     colunas_numericas = [
         "bytes_recv",
@@ -86,13 +97,58 @@ def limpar_dados(df):
 
     return df
 
-def salvar_s3(conteudo, key):
-    s3.put_object(
-        Bucket=AWS_CONFIG["bucket_name"],
-        Key=key,
-        Body=conteudo
+def limpar_voos(df):
+
+    df["timestamp_coleta"] = pandas.to_datetime(
+        df["timestamp_coleta"]
     )
 
+    df["delay_origem"] = pandas.to_numeric(
+        df["delay_origem"],
+        errors="coerce"
+    )
+
+    df["delay_destino"] = pandas.to_numeric(
+        df["delay_destino"],
+        errors="coerce"
+    )
+
+    df["delay_origem"] = df["delay_origem"].fillna(0)
+    df["delay_destino"] = df["delay_destino"].fillna(0)
+
+    df["origem"] = df["origem"].str.strip()  #Remover quebra de linha
+    df["destino"] = df["destino"].str.strip()
+
+    df = df.dropna(subset=["numero_voo"])
+
+    return df
+
+#Atualização de Status no Banco de Dados
+def determinar_status_servidor(severidades):
+    prioridade = {
+        "crítico": 5,
+        "alta": 4,
+        "média": 3,
+        "baixa": 2,
+        "normal": 1
+    }
+
+    if not severidades:
+        return "Online"
+
+    pior = max(severidades, key=lambda s: prioridade.get(s, 0))
+
+    if pior == "crítico":
+        return "Crítico"
+    elif pior == "alta":
+        return "Crítico"
+    elif pior == "média":
+        return "Atenção"
+    elif pior == "baixa":
+        return "Online"
+    else:
+        return "Online"
+    
 def atualizar_status_servidor(servidor_id, novo_status):
     conn = mysql.connector.connect(**DB_CONFIG)
     cursor = conn.cursor()
@@ -119,31 +175,7 @@ def atualizar_status_servidor(servidor_id, novo_status):
     cursor.close()
     conn.close()
 
-def determinar_status_servidor(severidades):
-    prioridade = {
-        "crítico": 5,
-        "alta": 4,
-        "média": 3,
-        "baixa": 2,
-        "normal": 1
-    }
-
-    if not severidades:
-        return "Online"
-
-    pior = max(severidades, key=lambda s: prioridade.get(s, 0))
-
-    if pior == "crítico":
-        return "Crítico"
-    elif pior == "alta":
-        return "Crítico"
-    elif pior == "média":
-        return "Atenção"
-    elif pior == "baixa":
-        return "Online"
-    else:
-        return "Online"
-
+#Classificação e tratamento de dados
 def classificar_latencia(valor):
     valor = float(valor)
 
@@ -215,6 +247,7 @@ def severidade_servidor_pacotes(linha):
 
     return pior_status
 
+#KPIs
 def kpi_perda_media(df):
     colunas = [
         "packet_loss_internet",
@@ -278,25 +311,6 @@ def consumo_banda_servico(df):
         "banco_dados": df["bd_mbps"].mean(),
         "sync": df["sync_service_mbps"].mean()
     }
-
-def enriquecer_dados(df): #classifica cada dado e acrescenta uma coluna extra ao df
-
-    df["status_latency_avg"] = df["latency_avg_ms"].apply(classificar_latencia)
-
-    df["status_adsb"] = df["lat_adsb_rastreamento"].apply(classificar_latencia)
-
-    df["status_api_bd"] = df["lat_api_bd"].apply(classificar_latencia)
-
-    df["status_bd_sync"] = df["lat_bd_sync"].apply(classificar_latencia)
-
-    df["status_packet_loss"] = df["packet_loss_internet"].apply(classificar_pacotes)
-
-    df["status_servidor_latencia"] = df.apply(
-        severidade_servidor_latencia,
-        axis=1
-    )
-
-    return df
 
 def gerar_json_dashboard(df_network, df_flights):
 
