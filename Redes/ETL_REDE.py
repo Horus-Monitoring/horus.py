@@ -4,6 +4,7 @@ import mysql.connector
 from datetime import datetime
 from io import StringIO
 import pandas
+import math
 
 AWS_CONFIG = {
     "aws_access_key_id": "",
@@ -91,7 +92,10 @@ def limpar_dados(df):
        df[coluna] = pandas.to_numeric(df[coluna], errors="coerce")
 
     df["timestamp"] = pandas.to_datetime(df["timestamp"])
-    df["opensky_timestamp"] = pandas.to_datetime(df["opensky_timestamp"])
+    df["label_24h"] = df["timestamp"].dt.strftime("%H:%M")
+    df["label_3d"] = df["timestamp"].dt.strftime("%d/%m %Hh")
+    df["label_7d"] = df["timestamp"].dt.strftime("%d/%m")
+    df["opensky_timestamp"] = pandas.to_datetime(df["opensky_timestamp"]) 
     df = df.fillna(0)
 
     return df
@@ -253,6 +257,15 @@ def enriquecer_dados(df): #classifica cada dado e acrescenta uma coluna extra ao
     df["status_api_loss"] = df["api_loss"].apply(classificar_pacotes)
     df["status_bd_loss"] = df["bd_loss"].apply(classificar_pacotes)
     df["status_sync_loss"] = df["sync_loss"].apply(classificar_pacotes)
+    df["media_loss_servicos"] = df[
+                                    [
+                                        "rastreamento_loss",
+                                        "correlacao_loss",
+                                        "rotas_loss",
+                                        "api_loss",
+                                        "bd_loss",
+                                        "sync_loss"
+                                    ]].mean(axis=1)
 
     df["status_servidor_pacotes"] = df.apply(
     severidade_servidor_pacotes,
@@ -262,6 +275,16 @@ def enriquecer_dados(df): #classifica cada dado e acrescenta uma coluna extra ao
     return df
 
 #KPIs
+def perda_pacotes_servico(df):
+    return {
+        "Rastreamento": round(df["rastreamento_loss"].mean(), 2),
+        "Rotas": round(df["rotas_loss"].mean(), 2),
+        "Correlação": round(df["correlacao_loss"].mean(), 2),
+        "API Gateway": round(df["api_loss"].mean(), 2),
+        "Banco de Dados": round(df["bd_loss"].mean(), 2),
+        "Sync Service": round(df["sync_loss"].mean(), 2)
+    }
+
 def kpi_perda_media(df):
     colunas = [
         "packet_loss_internet",
@@ -292,15 +315,11 @@ def kpi_adsb_update(df):
     media = df["avg_adsb_update_seconds"].mean()
 
     if media <= 2:
-        return 100   # excelente
-    elif media <= 5:
-        return 85    # baixo
-    elif media <= 10:
-        return 70    # medio
-    elif media <= 30:
-        return 40    # alto
-    else:
-        return 10    # crítico
+        return round(100 - media * 2, 1)  #2s é tolerável e alcança no mínimo 96%
+
+    indice = 96 * math.exp(-(media-2)/20) #Degradação exponencial a partir de 96%. 
+
+    return round(max(indice, 0), 1) #max impede números negativos ao retornar o número maior entre indice e 0
 
 def rotas_sem_atualizacao(df_voos):
     agrupado = df_voos.groupby(["numero_voo", "origem", "destino", "status"]).size()
@@ -318,12 +337,12 @@ def taxa_transferencia(df):
 
 def consumo_banda_servico(df):
     return {
-        "rastreamento": df["rastreamento_mbps"].mean(),
-        "rotas": df["rotas_mbps"].mean(),
-        "correlacao": df["correlacao_mbps"].mean(),
-        "api_gateway": df["api_gateway_mbps"].mean(),
-        "banco_dados": df["bd_mbps"].mean(),
-        "sync": df["sync_service_mbps"].mean()
+        "Rastreamento": df["rastreamento_mbps"].mean(),
+        "Rotas": df["rotas_mbps"].mean(),
+        "Correlacao": df["correlacao_mbps"].mean(),
+        "API Gateway": df["api_gateway_mbps"].mean(),
+        "Banco de Dados": df["bd_mbps"].mean(),
+        "Sync Service": df["sync_service_mbps"].mean()
     }
 
 #Geração de JSON para o Client
@@ -331,26 +350,31 @@ def gerar_json_dashboard(df_network, df_flights):
 
     dashboard = {
         "kpis": {
-            "perda_pacotes": kpi_perda_media(df_network),
-            "latencia_media": kpi_latencia_media(df_network),
+            "perda_pacotes": round(kpi_perda_media(df_network) ,2),
+            "latencia_media": round(kpi_latencia_media(df_network)),
             "adsb_update": kpi_adsb_update(df_network),
             "rotas_sem_atualizacao": rotas_sem_atualizacao(df_flights)
         },
 
         "grafico_transferencia": {
-            "timestamps": df_network["timestamp"].astype(str).tolist(),
+            "hora": df_network["label_24h"].astype(str).tolist(),
             "rastreamento": df_network["rastreamento_mbps"].tolist(),
             "rotas": df_network["rotas_mbps"].tolist(),
             "correlacao": df_network["correlacao_mbps"].tolist()
         },
 
         "grafico_latencia_componentes": {
-            "adsb": df_network["lat_adsb_rastreamento"].mean(),
-            "correlacao": df_network["lat_rastreamento_correlacao"].mean(),
-            "bd": df_network["lat_api_bd"].mean()
+            "ADS-B": df_network["lat_adsb_rastreamento"].mean(),
+            "Correlação": df_network["lat_rastreamento_correlacao"].mean(),
+            "Banco de Dados": df_network["lat_api_bd"].mean(),
+            "Rotas": round(df_network["lat_rotas_api"].mean(), 2),
+            "Banco de Dados": round(df_network["lat_api_bd"].mean(), 2),
+            "Sync Service": round(df_network["lat_bd_sync"].mean(), 2)
         },
 
-        "consumo_banda": consumo_banda_servico(df_network)
+        "consumo_banda": consumo_banda_servico(df_network),
+
+        "perda_pacotes_servico": perda_pacotes_servico(df_network)
     }
 
     return dashboard
