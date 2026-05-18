@@ -25,7 +25,7 @@ DB_CONFIG = {
     "host": "localhost",
     "user": "root",
     "password": "",
-    "database": ""
+    "database": "horus_db2"
 }
 
 API_CONFIG = {

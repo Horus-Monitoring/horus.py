@@ -274,6 +274,80 @@ def enriquecer_dados(df): #classifica cada dado e acrescenta uma coluna extra ao
 
     return df
 
+def agrupar_periodo(df, periodo):
+
+    df = df.copy()
+
+    if periodo == "24h":
+
+        df["grupo"] = df["timestamp"].dt.strftime("%H:%M")
+
+        agrupado = df.groupby("grupo").agg({
+            "rastreamento_mbps": "mean",
+            "rotas_mbps": "mean",
+            "correlacao_mbps": "mean",
+            "lat_adsb_rastreamento": "mean",
+            "lat_rastreamento_correlacao": "mean",
+            "lat_rotas_api": "mean",
+            "lat_api_bd": "mean",
+            "lat_bd_sync": "mean",
+            "packet_loss_internet": "mean",
+            "rastreamento_loss": "mean",
+            "rotas_loss": "mean",
+            "correlacao_loss": "mean",
+            "api_loss": "mean",
+            "bd_loss": "mean",
+            "sync_loss": "mean",
+            "avg_adsb_update_seconds": "mean"
+        }).reset_index()
+
+    elif periodo == "3d":
+
+        df["grupo"] = df["timestamp"].dt.strftime("%d/%m %Hh")
+
+        agrupado = df.groupby("grupo").agg({
+            "rastreamento_mbps": "mean",
+            "rotas_mbps": "mean",
+            "correlacao_mbps": "mean",
+            "lat_adsb_rastreamento": "mean",
+            "lat_rastreamento_correlacao": "mean",
+            "lat_rotas_api": "mean",
+            "lat_api_bd": "mean",
+            "lat_bd_sync": "mean",
+            "packet_loss_internet": "mean",
+            "rastreamento_loss": "mean",
+            "rotas_loss": "mean",
+            "correlacao_loss": "mean",
+            "api_loss": "mean",
+            "bd_loss": "mean",
+            "sync_loss": "mean",
+            "avg_adsb_update_seconds": "mean"
+        }).reset_index()
+
+    else:
+
+        df["grupo"] = df["timestamp"].dt.strftime("%d/%m")
+
+        agrupado = df.groupby("grupo").agg({
+            "rastreamento_mbps": "mean",
+            "rotas_mbps": "mean",
+            "correlacao_mbps": "mean",
+            "lat_adsb_rastreamento": "mean",
+            "lat_rastreamento_correlacao": "mean",
+            "lat_rotas_api": "mean",
+            "lat_api_bd": "mean",
+            "lat_bd_sync": "mean",
+            "packet_loss_internet": "mean",
+            "rastreamento_loss": "mean",
+            "rotas_loss": "mean",
+            "correlacao_loss": "mean",
+            "api_loss": "mean",
+            "bd_loss": "mean",
+            "sync_loss": "mean",
+            "avg_adsb_update_seconds": "mean"
+        }).reset_index()
+
+    return agrupado
 #KPIs
 def perda_pacotes_servico(df):
     return {
