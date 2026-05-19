@@ -5,6 +5,9 @@ from io import StringIO
 import boto3
 import json
 
+# =========================
+# CONFIGURAÇÕES AWS
+# =========================
 
 AWS_CONFIG = {
     "aws_access_key_id": "",
@@ -14,17 +17,13 @@ AWS_CONFIG = {
     "bucket_name": "horus-monitoring"
 }
 
-DB_CONFIG = {
-    "host": "localhost",
-    "user": "root",
-    "password": "",
-    "database": ""
-}
 
+# =========================
+# CLIENTE S3
+# =========================
 
-#Informações da S3
 s3 = boto3.client(
-    's3',
+    "s3",
     aws_access_key_id=AWS_CONFIG["aws_access_key_id"],
     aws_secret_access_key=AWS_CONFIG["aws_secret_access_key"],
     aws_session_token=AWS_CONFIG["aws_session_token"],
@@ -32,16 +31,61 @@ s3 = boto3.client(
 )
 
 
+# =========================
+# LIMITES
+# =========================
+
 CPU_CRITICA = 80
 CPU_ALERTA = 50
 
 RAM_CRITICA_PERCENT = 20
 RAM_ALERTA_PERCENT = 10
 
-# definir valores
 LATENCIA_CRITICA = 100
 LATENCIA_ALERTA = 50
 
+def verificar_csv():
+
+    response = s3.list_objects_v2(
+        Bucket=AWS_CONFIG["bucket_name"],
+        Prefix="raw/"
+    )
+
+    return [
+        obj["Key"]
+        for obj in response.get("Contents", [])
+        if obj["Key"].endswith(".csv")
+    ]
+
+
+def ler_csv_s3(key):
+
+    obj = s3.get_object(
+        Bucket=AWS_CONFIG["bucket_name"],
+        Key=key
+    )
+
+    conteudo = obj['Body'].read().decode('utf-8')
+
+    df = pandas.read_csv(
+        StringIO(conteudo),
+        on_bad_lines='skip'
+    )
+
+    return df
+
+
+def salvar_s3(conteudo, key):
+
+    s3.put_object(
+        Bucket=AWS_CONFIG["bucket_name"],
+        Key=key,
+        Body=conteudo
+    )
+
+    print(f"Arquivo enviado: {key}")
+
+#--------------------------------#
 
 def processos_criticidade(cpu, ram_percent, latencia):
 
@@ -230,7 +274,7 @@ def maior_latencia():
     }
 
     print(
-        f"O maior valor é: {maior_latencia['latencia']} ms"
+        f"O maior valor é: {maior_latencia['latencia_ms']} ms"
     )
 
     print(
@@ -323,72 +367,152 @@ def contar_criticos(processos_tratados):
 
     return criticos_count
 
+# =========================
+# JSON PROCESSOS
+# =========================
+
+def salvar_json_processos(df, key):
+
+    processos_json = df.to_dict(
+        orient="records"
+    )
+
+    salvar_s3(
+        json.dumps(
+            processos_json,
+            indent=4,
+            ensure_ascii=False
+        ),
+        key
+    )
+
+
+# =========================
+# JSON KPIs
+# =========================
+
+def salvar_json_dashboard(dashboard, key):
+
+    salvar_s3(
+        json.dumps(
+            dashboard,
+            indent=4,
+            ensure_ascii=False
+        ),
+        key
+    )
+
+
+# =========================
+# MAIN
+# =========================
 
 def main():
-    dfProcessos = processos_tratados() # unico csv
-    # df_resultado = pd.concat([df1, df2])
-    print(dfProcessos)
 
-    # dfKPI = pandas.DataFrame()
-    # dfKPI = pd
-    kpis = {}
+    arquivos = verificar_csv()
 
-    kpis.update(top5cpu(dfProcessos))
-    kpis.update(top5ram(dfProcessos))
-    kpis.update(processos_criticos(dfProcessos))
-    kpis.update(maior_latencia())
-    kpis.update(limite(dfProcessos))
-    kpis.update(contar_status(dfProcessos))
-    kpis.update(contar_criticos(dfProcessos))
-    #print("--------------------------")
-    #print(kpis)
+    if len(arquivos) == 0:
+        print("Nenhum CSV encontrado.")
+        return
 
-    dfKPI = pandas.DataFrame([kpis])
+    for arquivo in arquivos:
 
-    #print(dfKPI)
+        print(f"Processando arquivo: {arquivo}")
 
-    
+        key = "raw/empresa_1/c0:35:32:c7:0b:59/raw_processos.csv"
+
+        # =========================
+        # LEITURA RAW S3
+        # =========================
+
+        dfRaw = ler_csv_s3(key)
+
+        # =========================
+        # SALVA CSV TEMPORÁRIO
+        # (mantendo sua lógica original)
+        # =========================
+
+        dfRaw.to_csv(
+            "raw_processos.csv",
+            index=False
+        )
+
+        # =========================
+        # PROCESSAMENTO
+        # =========================
+
+        dfProcessos = processos_tratados()
+
+        print(dfProcessos)
+
+        # =========================
+        # KPIs
+        # =========================
+
+        kpis = {}
+
+        kpis.update(
+            top5cpu(dfProcessos)
+        )
+
+        kpis.update(
+            top5ram(dfProcessos)
+        )
+
+        kpis.update(
+            processos_criticos(dfProcessos)
+        )
+
+        kpis.update(
+            maior_latencia()
+        )
+
+        kpis.update(
+            limite(dfProcessos)
+        )
+
+        kpis.update(
+            contar_status(dfProcessos)
+        )
+
+        kpis.update(
+            contar_criticos(dfProcessos)
+        )
+
+        # =========================
+        # NOME DOS ARQUIVOS
+        # =========================
+
+        nome_base = (
+            arquivo
+            .split("/")[-1]
+            .replace(".csv", "")
+        )
+
+        key_processos = (
+            f"client/processos/{nome_base}.json"
+        )
+
+        key_kpis = (
+            f"client/kpis/{nome_base}_kpis.json"
+        )
+
+        # =========================
+        # ENVIO S3
+        # =========================
+
+        salvar_json_processos(
+            dfProcessos,
+            key_processos
+        )
+
+        salvar_json_dashboard(
+            kpis,
+            key_kpis
+        )
+
+        print("ETL finalizada.")
+
 
 if __name__ == "__main__":
     main()
-
-
-
-def verificar_csv():
-    response = s3.list_objects_v2(
-        Bucket=AWS_CONFIG["bucket_name"],
-        Prefix="raw/"
-    )
-    return [obj["Key"] for obj in response.get("Contents", []) if obj["Key"].endswith(".csv")]
-
-def ler_csv_s3(key):
-    obj = s3.get_object(Bucket=AWS_CONFIG["bucket_name"],
-                         Key=key)
-    
-    conteudo = obj['Body'].read().decode('utf-8')
-
-    df = pandas.read_csv(StringIO(conteudo), on_bad_lines='skip')
-    return df
-
-def salvar_s3(conteudo, key):
-    s3.put_object(
-        Bucket=AWS_CONFIG["bucket_name"],
-        Key=key,
-        Body=conteudo
-    )
-
-
-def salvar_trusted(df, key):
-    csv_buffer = StringIO()
-    df.to_csv(csv_buffer, index=False)
-
-    salvar_s3(
-        csv_buffer.getvalue(),
-        key
-    )
-
-def salvar_json_dashboard(dashboard, key):
-    salvar_s3(
-        json.dumps(dashboard, indent=4),
-        key
-    )
