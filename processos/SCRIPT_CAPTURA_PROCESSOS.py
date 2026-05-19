@@ -1,6 +1,8 @@
 import psutil
 from datetime import datetime
 import time
+import csv
+import os
 
 def capturar_processos(): 
 
@@ -16,7 +18,7 @@ def capturar_processos():
         try:
             cpu = proc.cpu_percent(interval=0.1)
             ram_percent = proc.memory_percent()
-            ram_mb = proc.memory_info().rss / 1024 / 1024
+            ram_mb = proc.memory_info().rss / 1024 / 1024 # transforma bytes para KB e depois para MB
             tempo_execucao = (
                 datetime.now() -
                 datetime.fromtimestamp(proc.create_time())
@@ -27,7 +29,10 @@ def capturar_processos():
             fim = time.perf_counter()
             latencia = (fim - inicio) * 1000
 
+            timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
             processo = {
+                "timestamp": timestamp,
                 "pid": proc.info['pid'],
                 "nome": proc.info['name'],
                 "usuario": proc.info['username'],
@@ -44,4 +49,30 @@ def capturar_processos():
 
         except Exception as e:
             print(e)
+    
+    return processos
+
+
+def salvar_csv(processos):
+
+    arquivo_existe = os.path.isfile("raw_processos.csv")
+    with open("raw_processos.csv", "a", newline="", encoding="utf-8") as arquivo:
+
+        colunas = processos[0].keys()
+
+        writer = csv.DictWriter(
+            arquivo,
+            fieldnames=colunas
+        )
+
+        if not arquivo_existe:
+            writer.writeheader()
+
+        writer.writerows(processos)
+
+    print("\nCSV gerado com sucesso!")
+
+
+processos = capturar_processos()
+salvar_csv(processos)
 
