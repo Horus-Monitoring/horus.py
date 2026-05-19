@@ -1,5 +1,8 @@
 import requests
 
+
+
+
 def dados_aviationstack():
     
     params = {

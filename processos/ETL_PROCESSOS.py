@@ -1,7 +1,36 @@
 import csv
 import os
-import pandas
+import pandas 
 from io import StringIO
+import boto3
+import json
+
+
+AWS_CONFIG = {
+    "aws_access_key_id": "",
+    "aws_secret_access_key": "",
+    "aws_session_token": "",
+    "region_name": "us-east-1",
+    "bucket_name": "horus-monitoring"
+}
+
+DB_CONFIG = {
+    "host": "localhost",
+    "user": "root",
+    "password": "",
+    "database": ""
+}
+
+
+#Informações da S3
+s3 = boto3.client(
+    's3',
+    aws_access_key_id=AWS_CONFIG["aws_access_key_id"],
+    aws_secret_access_key=AWS_CONFIG["aws_secret_access_key"],
+    aws_session_token=AWS_CONFIG["aws_session_token"],
+    region_name=AWS_CONFIG["region_name"]
+)
+
 
 CPU_CRITICA = 80
 CPU_ALERTA = 50
@@ -124,12 +153,22 @@ def top5cpu(dfProcessos):
     print("teste cpu!")
 
     # print(dfTop5.nlargest(5, 'cpu'))
-    print(dfTop5.head())
+    # print(dfTop5.head())
 
-    return dfTop5
+    cpu5 = {}
+
+    for i in range (5):
+        cpu5[f"nome-{i+1}"] = dfTop5["nome"].iloc[i]
+        cpu5[f"cpu-{i+1}"] = float(dfTop5["cpu"].iloc[i])
+
+    print(cpu5)
+    return cpu5
 
 
 def top5ram(dfProcessos):
+
+    # arrumar cpu nucleos
+    # top5 = sorted(processos_tratados, key=lambda x: x['cpu'], reverse=True)[:5]
 
     dfTop5 = dfProcessos.sort_values(
         'ram_percent',
@@ -139,22 +178,23 @@ def top5ram(dfProcessos):
     # print(dfTop5)
     print("teste ram!")
 
-    # print(dfTop5.nlargest(5, 'cpu'))
-    print(dfTop5.head())
+    # print(dfTop5.nlargest(5, 'ram'))
+    # print(dfTop5.head())
 
-    return dfTop5
+    ram5 = {}
+
+    for i in range (5):
+        ram5[f"nome-{i+1}"] = dfTop5["nome"].iloc[i]
+        ram5[f"ram-{i+1}"] = float(dfTop5["ram_percent"].iloc[i])
+
+    print(ram5)
+    return ram5
 
 
-def processos_criticos(processos_tratados):
-
-    totalCriticos = 0
-
-    for processo in processos_tratados:
-
-        if processo.criticidade == "Crítico":
-            totalCriticos + 1
-
-    return totalCriticos
+def processos_criticos(df_processos):
+    # Como True vale 1 e False vale 0, a soma dá o total de acertos
+    total_criticos = (df_processos['criticidade'] == 'Crítico').sum()
+    return {"totalCriticos": int(total_criticos)}
 
 
 def maior_latencia():
@@ -180,13 +220,13 @@ def maior_latencia():
                 or valor_atual > maior_valor
             ):
                 maior_valor = valor_atual
-
-    print(f"O maior valor é: {maior_valor}")
+                nome = linha["nome"]
+                pid = linha["pid"]
 
     maior_latencia = {
-        "nome": linha['nome'],
-        "latencia": valor_atual,
-        "pid": linha['pid']
+        "nome": nome,
+        "latencia": maior_valor,
+        "pid": pid
     }
 
     print(
@@ -212,7 +252,7 @@ def limite(processos_tratados):
 
     limite_30 = total_processos * 0.30
 
-    return limite_30
+    return {"limite": limite_30}
 
 
 def contar_status(processos_tratados):
@@ -249,6 +289,7 @@ def contar_criticos(processos_tratados):
         "latencia": 0,
         "cpu": 0,
         "ram": 0,
+        "total": 0
     }
 
     while i < len(processos_tratados):
@@ -260,18 +301,21 @@ def contar_criticos(processos_tratados):
                 print("Entrei no for.")
                 if processos["cpu"] >= CPU_CRITICA:
                     criticos_count["cpu"] += 1
+                    criticos_count["total"] += 1
 
                 if (
                     processos["ram_percent"]
                     > RAM_CRITICA_PERCENT
                 ):
                     criticos_count["ram"] += 1
+                    criticos_count["total"] += 1
 
                 if (
                     processos["latencia_ms"]
                     > LATENCIA_CRITICA
                 ):
                     criticos_count["latencia"] += 1
+                    criticos_count["total"] += 1
                 
                 print(criticos_count)
             
@@ -280,18 +324,71 @@ def contar_criticos(processos_tratados):
     return criticos_count
 
 
-#def main():
-dfProcessos = processos_tratados()
+def main():
+    dfProcessos = processos_tratados() # unico csv
+    # df_resultado = pd.concat([df1, df2])
+    print(dfProcessos)
 
-df5cpu = top5cpu(dfProcessos)
+    # dfKPI = pandas.DataFrame()
+    # dfKPI = pd
+    kpis = {}
 
-df5ram = top5ram(dfProcessos)
+    kpis.update(top5cpu(dfProcessos))
+    kpis.update(top5ram(dfProcessos))
+    kpis.update(processos_criticos(dfProcessos))
+    kpis.update(maior_latencia())
+    kpis.update(limite(dfProcessos))
+    kpis.update(contar_status(dfProcessos))
+    kpis.update(contar_criticos(dfProcessos))
+    #print("--------------------------")
+    #print(kpis)
 
-dfLatencia = maior_latencia()
+    dfKPI = pandas.DataFrame([kpis])
 
-limite = limite(dfProcessos)
-print(limite)
+    #print(dfKPI)
 
-dfStatus = contar_status(dfProcessos)
+    
 
-dfCriticos = contar_criticos(dfProcessos)
+if __name__ == "__main__":
+    main()
+
+
+
+def verificar_csv():
+    response = s3.list_objects_v2(
+        Bucket=AWS_CONFIG["bucket_name"],
+        Prefix="raw/"
+    )
+    return [obj["Key"] for obj in response.get("Contents", []) if obj["Key"].endswith(".csv")]
+
+def ler_csv_s3(key):
+    obj = s3.get_object(Bucket=AWS_CONFIG["bucket_name"],
+                         Key=key)
+    
+    conteudo = obj['Body'].read().decode('utf-8')
+
+    df = pandas.read_csv(StringIO(conteudo), on_bad_lines='skip')
+    return df
+
+def salvar_s3(conteudo, key):
+    s3.put_object(
+        Bucket=AWS_CONFIG["bucket_name"],
+        Key=key,
+        Body=conteudo
+    )
+
+
+def salvar_trusted(df, key):
+    csv_buffer = StringIO()
+    df.to_csv(csv_buffer, index=False)
+
+    salvar_s3(
+        csv_buffer.getvalue(),
+        key
+    )
+
+def salvar_json_dashboard(dashboard, key):
+    salvar_s3(
+        json.dumps(dashboard, indent=4),
+        key
+    )
