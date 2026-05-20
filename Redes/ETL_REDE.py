@@ -5,20 +5,25 @@ from datetime import datetime
 from io import StringIO
 import pandas
 import math
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+env = os.getenv
 
 AWS_CONFIG = {
-    "aws_access_key_id": "",
-    "aws_secret_access_key": "",
-    "aws_session_token": "",
-    "region_name": "us-east-1",
-    "bucket_name": "horus-monitoring"
+    "aws_access_key_id": env.AWS_ACCESS_KEY_ID,
+    "aws_secret_access_key": env.AWS_SECRET_ACCESS_KEY,
+    "aws_session_token": env.AWS_SESSION_TOKEN,
+    "region_name": env.AWS_REGION_NAME,
+    "bucket_name": env.AWS_BUCKET_NAME
 }
 
 DB_CONFIG = {
-    "host": "localhost",
-    "user": "root",
-    "password": "",
-    "database": ""
+    "host": env.DB_HOST,
+    "user": env.DB_USER,
+    "password": env.DB_PASSWORD,
+    "database": env.DB_DATABASE
 }
 
 
