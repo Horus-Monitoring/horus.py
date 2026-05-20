@@ -3,7 +3,7 @@ import requests
 def dados_aviationstack():
     
     params = {
-    'access_key': 'e2326bc56d7d29aab7be45590b9c1aa1',
+    'access_key': '',
     'dep_iata': 'GRU',
     'limit': 100
     }
