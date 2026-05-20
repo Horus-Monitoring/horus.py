@@ -697,8 +697,6 @@ def main():
                 continue
 
             dados = coletar_metricas(componentes)
-            print(dados)
-
 
             print("Coletando dados de processos...")
             processos = capturar_processos()
