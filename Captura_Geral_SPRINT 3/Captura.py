@@ -543,7 +543,6 @@ def capturar_processos():
             }
 
             processos.append(processo)
-            print(processo)
 
         except Exception as e:
             print(e)
