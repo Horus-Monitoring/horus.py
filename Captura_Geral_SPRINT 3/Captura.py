@@ -43,7 +43,6 @@ API_CONFIG = {
 
 INTERVALO = 600
 
-dados_tratados = [] #Dados de Processos
 
 
 def conectar_s3():
@@ -127,22 +126,24 @@ def coletar_dados_rede(): #Coleta dados para métricas de fluxo de rede e pacote
         "pack_sent": network.packets_sent
     }
 
+
 def ping_shell():
-    cmd = ["ping", "-n", "10", "8.8.8.8" ]
+    cmd = ["ping", "-n", "10", "8.8.8.8"]
 
     try:
-        cmd = ["ping", "-n", "10", "8.8.8.8" ] #-n para Windowns e -c para Ubuntu
+        resultado = subprocess.run(
+            cmd,
+            capture_output=True,
+            text=True,
+            check=True
+        )
 
-        resultado = subprocess.run(cmd, capture_output=True, text=True, check=True) #Executa o comando no shell
-        saida = resultado.stdout #Captura a saída (Standard Output)
-        
-        saida = " ".join(saida.split()) #remove quebras de linha para facilitar o regex
+        return resultado.stdout
 
-        return saida
-
-    except subprocess.CalledProcessError: #Chama uma "exception", como no Java
+    except subprocess.CalledProcessError:
         print("Erro ao executar o comando.")
         return None
+
 
 def coletar_pacotes(saida):
     
@@ -158,14 +159,14 @@ def coletar_pacotes(saida):
         
 def coletar_latencia(saida):
 
-    padrao_tempo = r"tempo=(\d+)ms" 
+    padrao_tempo = r'tempo[=<](\d+)ms'
     tempos = re.findall(padrao_tempo, saida)
 
     if tempos:
-        return tempos
-    else:
-        print("Erro ao capturar o tempo de latência.")
-        return None
+        return [int(x) for x in tempos]
+
+    print("Erro ao capturar o tempo de latência.")
+    return None
     
 def coletar_latencia_componentes(): #simulação da latencia entre os diferentes componentes do SAGITARIO
     return {
@@ -329,7 +330,7 @@ def atualizar_csv_local(
 
     mode = 'a' if existe else 'w'
 
-    arquivo = "raw.csv"
+    arquivo = "raw/raw.csv"
 
     with open(arquivo, mode, newline='', encoding="utf-8") as file:
         writer = csv.writer(file)
@@ -350,7 +351,7 @@ def atualizar_csv_local(
                 "health_score",
                 "status_cpu",
                 "status_ram",
-                "status_disco"
+                "status_disco",
 
                 # rede real
                 "bytes_recv",
@@ -392,16 +393,7 @@ def atualizar_csv_local(
                 "opensky_timestamp",
                 "total_aeronaves",
                 "avg_adsb_update_seconds",
-            ])
-
-        #dash processos
-        colunas = dados_tratados[0].keys()
-        writer = csv.DictWriter(
-            file,
-            fieldnames=colunas
-        )
-        writer.writeheader()
-        
+            ])      
 
         writer.writerow([
             datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
@@ -461,9 +453,6 @@ def atualizar_csv_local(
             total_aeronaves,
             avg_adsb_update
         ])
-
-        # Dash Processos
-        writer.writerows(dados_tratados)
 
         file.flush()
         os.fsync(file.fileno())
@@ -549,6 +538,38 @@ def capturar_processos():
     
     return processos
 
+def salvar_processos_csv(processos):
+
+    os.makedirs("raw", exist_ok=True)
+
+    arquivo = "raw/process_raw.csv"
+    existe = os.path.exists(arquivo)
+
+    with open(arquivo, mode="a", newline="", encoding="utf-8") as file:
+
+        writer = csv.DictWriter(
+            file,
+            fieldnames=[
+                "timestamp",
+                "pid",
+                "nome",
+                "usuario",
+                "cpu",
+                "ram_percent",
+                "ram_mb",
+                "status",
+                "tempo_execucao",
+                "latencia_ms"
+            ]
+        )
+
+        if not existe:
+            writer.writeheader()
+
+        writer.writerows(processos)
+
+        file.flush()
+        os.fsync(file.fileno())
 #==========================
 #Servidores
 #==========================
@@ -579,7 +600,7 @@ def coletar_metricas(componentes):
         dados['ram'] = psutil.virtual_memory().percent
 
     if 'DISCO' in componentes:
-        dados['disco'] = psutil.disk_usage('/').percent
+        dados['disco'] = psutil.disk_usage(os.path.abspath(os.sep)).percent
 
 
     cpu = dados.get('cpu', 0)
@@ -606,7 +627,6 @@ def coletar_metricas(componentes):
 #==========================
 
 def main():
-
     ultima_execucao_aviation = 0
     ultima_execucao_upload = 0
     INTERVALO_AVIATION = 14400
@@ -634,6 +654,7 @@ def main():
     empresa_id = info["empresa_id"]
 
     key = f"raw/empresa_{empresa_id}/{mac_address}/raw.csv"
+    process_key = f"raw/empresa_{empresa_id}/{mac_address}/process_raw.csv"
     flights_key = f"raw/empresa_{empresa_id}/{mac_address}/flights_raw.csv"
    
 
@@ -644,7 +665,7 @@ def main():
             "raw/raw.csv"
         )
     else:
-        print("Arquivo network não existe na S3. Será criado localmente.")
+        print("Arquivo raw não existe na S3. Será criado localmente.")
 
     if arquivo_existe_s3(s3, flights_key):
         baixar_csv_s3(
@@ -654,6 +675,11 @@ def main():
         )
     else:
         print("Arquivo flights não existe na S3. Será criado localmente.")
+
+    if arquivo_existe_s3(s3, process_key):
+        baixar_csv_s3(s3,process_key,"raw/process_raw.csv")
+    else:
+        print("Arquivo process não existe na S3. Será criado localmente.")
 
     while True:
         try:
@@ -671,11 +697,12 @@ def main():
                 continue
 
             dados = coletar_metricas(componentes)
+            print(dados)
 
 
             print("Coletando dados de processos...")
             processos = capturar_processos()
-                 
+            salvar_processos_csv(processos)
 
             print("Coletando dados de rede...")
 
@@ -716,7 +743,6 @@ def main():
 
             # Simulação componentes
             lat_componentes = coletar_latencia_componentes()
-
             banda_processos = coletar_banda_processos(
                 total_aeronaves if total_aeronaves else 0
             )
@@ -765,8 +791,11 @@ def main():
 
                 key = f"raw/empresa_{empresa_id}/{mac_address}/raw.csv"
                 flights_key = f"raw/empresa_{empresa_id}/{mac_address}/flights_raw.csv"
+                process_key = f"raw/empresa_{empresa_id}/{mac_address}/process_raw.csv"
 
                 enviar_csv_s3(s3, "raw/raw.csv", key)
+                if os.path.exists("raw/process_raw.csv"):
+                    enviar_csv_s3(s3,"raw/process_raw.csv", process_key)
 
                 if os.path.exists("raw/flights_raw.csv"):
                     enviar_csv_s3(s3, "raw/flights_raw.csv", flights_key)
