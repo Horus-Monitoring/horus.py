@@ -13,29 +13,32 @@ from botocore.exceptions import ClientError
 import os
 import socket
 from dotenv import load_dotenv
+from pathlib import Path
 
-load_dotenv()
-env = os.getenv
+atual = Path(__file__).resolve().parent
+pai = atual.parent
+load_dotenv(dotenv_path= pai / ".env")  #Buscando a .env
+
 
 AWS_CONFIG = {
-    "aws_access_key_id": env.AWS_ACCESS_KEY_ID,
-    "aws_secret_access_key": env.AWS_SECRET_ACCESS_KEY,
-    "aws_session_token": env.AWS_SESSION_TOKEN,
-    "region_name": env.AWS_REGION_NAME,
-    "bucket_name": env.AWS_BUCKET_NAME
+    "aws_access_key_id": os.getenv("AWS_ACCESS_KEY_ID"),
+    "aws_secret_access_key": os.getenv("AWS_SECRET_ACCESS_KEY"),
+    "aws_session_token": os.getenv("AWS_SESSION_TOKEN"),
+    "region_name": os.getenv("AWS_REGION_NAME"),
+    "bucket_name": os.getenv("AWS_BUCKET_NAME")
 }
 
 DB_CONFIG = {
-    "host": env.DB_HOST,
-    "user": env.DB_USER,
-    "password": env.DB_PASSWORD,
-    "database": env.DB_DATABASE
+    "host": os.getenv("DB_HOST", "localhost"),
+    "user": os.getenv("DB_USER"),
+    "password": os.getenv("DB_PASSWORD"),
+    "database": os.getenv("DB_DATABASE")
 }
 
 API_CONFIG = {
-    "access_key": env.AVIATIONSTAC_ACCESSS_KEY,
-    "client_id": env.OPENSKY_CLIENT_ID,
-    "secret": env.OPENSKY_SECRET
+    "access_key": os.getenv("AVIATIONSTACK_ACCESS_KEY"),
+    "client_id": os.getenv("OPENSKY_CLIENT_ID"),
+    "secret": os.getenv("OPENSKY_SECRET")
 }
 
 INTERVALO = 1800
