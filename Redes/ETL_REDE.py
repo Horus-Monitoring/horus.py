@@ -136,9 +136,9 @@ def limpar_voos(df):
 def determinar_status_servidor(severidades):
     prioridade = {
         "crítico": 5,
-        "alta": 4,
-        "média": 3,
-        "baixa": 2,
+        "alto": 4,
+        "médio": 3,
+        "baixo": 2,
         "normal": 1
     }
 
@@ -149,11 +149,11 @@ def determinar_status_servidor(severidades):
 
     if pior == "crítico":
         return "Crítico"
-    elif pior == "alta":
+    elif pior == "alto":
         return "Crítico"
-    elif pior == "média":
+    elif pior == "médio":
         return "Atenção"
-    elif pior == "baixa":
+    elif pior == "baixo":
         return "Online"
     else:
         return "Online"
