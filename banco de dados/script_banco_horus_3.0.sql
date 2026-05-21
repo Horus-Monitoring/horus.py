@@ -1,5 +1,6 @@
 CREATE DATABASE IF NOT EXISTS horus_db;
 USE horus_db;
+
 CREATE TABLE empresa (
     id_empresa INT PRIMARY KEY AUTO_INCREMENT,
     razao_social VARCHAR(100) NOT NULL,
@@ -151,7 +152,7 @@ INSERT INTO servidor (
 )
 VALUES
     ('NeithaNitro',
-    '80:30:49:0c:87:29',
+    '7C:8AE1:DA:FC:F7',
     '192.168.0.10',
     'Data Center SP',
     'Linux/Windows',
@@ -159,8 +160,8 @@ VALUES
     localtimestamp(),
     1),
     ('Jortieke',
+	'c0:35:32:c7:0b:59',
     '192.168.56.1',
-    'c0:35:32:c7:0b:59',
     'Data Center RJ',
     'Windows 11',
     'Crítico',
@@ -181,8 +182,21 @@ VALUES
     'Windows XP',
     'Online',
     localtimestamp(),
+    1),
+    ('Gustavo',
+    'A4:63:A1:05:B4:D5',
+    '192.168.35.2',
+    'Data Center RJ',
+    'Debian',
+    'Online',
+    localtimestamp(),
     1);
     
+USE horus_db;
+
+SELECT * FROM servidor;
+
+
 INSERT INTO acesso_servidor VALUES
 	(1,2, DEFAULT),
     (1,1, DEFAULT),
@@ -194,15 +208,18 @@ INSERT INTO acesso_servidor VALUES
     (3,2, DEFAULT),
     (3,3, DEFAULT),
     (3,4, DEFAULT),
+    (3,5, DEFAULT),
     (4,1, DEFAULT),
     (4,2, DEFAULT),
     (4,3, DEFAULT),
     (4,4, DEFAULT),
+    (4,5, DEFAULT),
     (5,4, DEFAULT),
     (5,2, DEFAULT),
     (6,2, DEFAULT),
     (6,3, DEFAULT);
 
+select * from acesso_servidor;
 INSERT INTO servidor_componente VALUES (1, 1, '%', 30), (2, 1, '%', 70), (3, 1, '%', 50), (4, 1, '%', 90);
 
 INSERT INTO servidor_componente VALUES (1, 2, '%', 25), (2, 2, '%', 45), (3, 2, '%', 65), (4, 2, '%', 95);
