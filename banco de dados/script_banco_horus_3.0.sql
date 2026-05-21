@@ -1,6 +1,5 @@
 CREATE DATABASE IF NOT EXISTS horus_db;
 USE horus_db;
-
 CREATE TABLE empresa (
     id_empresa INT PRIMARY KEY AUTO_INCREMENT,
     razao_social VARCHAR(100) NOT NULL,
@@ -139,6 +138,12 @@ insert into funcionario VALUES
     'Analista',
     1,
     localtimestamp());
+    
+SELECT id_servidor, fk_empresa, mac_address
+        FROM servidor
+        WHERE mac_address = "80:30:49:0c:87:29";
+
+SELECT * FROM servidor;
 
 INSERT INTO servidor (
     hostname,
@@ -152,8 +157,8 @@ INSERT INTO servidor (
 )
 VALUES
     ('NeithaNitro',
+    '80:30:49:0c:87:29',
     '192.168.0.10',
-    'c0:35:32:c7:0b:50',
     'Data Center SP',
     'Linux/Windows',
     'Online',

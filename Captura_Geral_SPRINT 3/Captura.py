@@ -41,9 +41,23 @@ API_CONFIG = {
     "secret": os.getenv("OPENSKY_SECRET")
 }
 
+API_CLIMA = {
+    "url_sensor" : os.getenv("URL"),
+    "api_key_clima" : os.getenv("API_KEY_CLIMA"),
+}
+
+CIDADE = "Sao Paulo"
+
+URL_CLIMA = (
+    f"https://api.openweathermap.org/data/2.5/weather"
+    f"?q={CIDADE}"
+    f"&appid={API_CLIMA["api_key_clima"]}"
+    f"&units=metric"
+    f"&lang=pt_br"
+)
+URL_SENSOR = "http://localhost:8085/data.json"
+TEMP_MAX_CPU = 90
 INTERVALO = 600
-
-
 
 def conectar_s3():
     return boto3.client(
@@ -111,7 +125,300 @@ def tempo_atual(): #Coleta a data-hora
 
 def coletar_mac_address(): #Coleta o MAC Adress
     mac = get_mac_address()
+    print(mac)
     return mac.lower().replace("-", ":")
+
+
+# CLASSIFICAÇÃO TEMPERATURA
+
+def classificar(temp_max):
+
+    if temp_max < 65:
+        return "normal"
+
+    elif temp_max < 75:
+        return "alert"
+
+    elif temp_max < 85:
+        return "medium"
+
+    return "critical"
+
+# MARGEM TÉRMICA
+
+def calcular_margem_termica(temp_max):
+
+    return round(
+        TEMP_MAX_CPU - temp_max,
+        1
+    )
+
+# STATUS MARGEM
+
+def classificar_margem(margem):
+
+    if margem > 30:
+        return "excelente"
+
+    elif margem > 20:
+        return "boa"
+
+    elif margem > 10:
+        return "atencao"
+
+    elif margem > 0:
+        return "critica"
+
+    return "throttling"
+
+# LATÊNCIA
+
+def obter_latencia():
+
+    try:
+
+        comando = subprocess.run(
+
+            ["ping", "-n", "1", "8.8.8.8"],
+
+            capture_output=True,
+
+            text=True
+
+        )
+
+        saida = comando.stdout
+
+        for linha in saida.split("\n"):
+
+            if "tempo=" in linha.lower():
+
+                valor = (
+                    linha
+                    .split("tempo=")[1]
+                    .split("ms")[0]
+                    .replace("<", "")
+                    .strip()
+                )
+
+                return int(valor)
+
+    except:
+        pass
+
+    return 0
+
+# THROTTLING
+
+def verificar_throttling(temp_max):
+
+    return "SIM" if temp_max >= 90 else "NAO"
+
+# CLIMA
+def obter_clima():
+    try:
+
+        response = requests.get(
+            URL_CLIMA,
+            timeout=10
+        )
+
+        data = response.json()
+
+        if "main" not in data:
+
+            print(
+                "Erro API clima:",
+                data
+            )
+
+            return {
+
+                "temperatura_ambiente": 0,
+
+                "descricao": "indisponivel",
+
+                "umidade": 0
+            }
+
+        return {
+
+            "temperatura_ambiente":
+                data["main"]["temp"],
+
+            "descricao":
+                data["weather"][0]["description"],
+
+            "umidade":
+                data["main"]["humidity"]
+        }
+
+    except Exception as erro:
+
+        print(
+            "Erro clima:",
+            erro
+        )
+
+        return {
+
+            "temperatura_ambiente": 0,
+
+            "descricao": "indisponivel",
+
+            "umidade": 0
+        }
+    
+# TEMPERATURAS CPU
+
+def buscar_temperaturas():
+
+    response = requests.get(URL_SENSOR)
+
+    data = response.json()
+
+    temperaturas = {}
+
+    cores_encontrados = set()
+
+    def percorrer(node):
+
+        if isinstance(node, dict):
+
+            texto = node.get("Text", "")
+
+            valor = node.get("Value", "")
+
+            if (
+                "Core #" in texto
+                and "°C" in valor
+            ):
+
+                try:
+
+                    numero_core = int(
+
+                        texto
+                        .split("#")[1]
+                        .split()[0]
+
+                    )
+
+                    if numero_core in cores_encontrados:
+                        return
+
+                    temperatura = float(
+
+                        valor
+                        .replace("°C", "")
+                        .replace(",", ".")
+                        .strip()
+
+                    )
+
+                    temperaturas[
+                        f"core_{numero_core}"
+                    ] = temperatura
+
+                    cores_encontrados.add(
+                        numero_core
+                    )
+
+                except:
+                    pass
+
+            for key in node:
+
+                percorrer(node[key])
+
+        elif isinstance(node, list):
+
+            for item in node:
+
+                percorrer(item)
+
+    percorrer(data)
+
+    return dict(
+        sorted(temperaturas.items())
+    )
+
+# COOLER RPM SIMULADO
+
+def simular_fan_cpu(temp_cpu):
+
+    if temp_cpu < 45:
+
+        rpm_base = 1800
+
+    elif temp_cpu < 55:
+
+        rpm_base = 2400
+
+    elif temp_cpu < 65:
+
+        rpm_base = 3200
+
+    elif temp_cpu < 75:
+
+        rpm_base = 4200
+
+    elif temp_cpu < 85:
+
+        rpm_base = 5200
+
+    else:
+
+        rpm_base = 6200
+
+    variacao = random.randint(
+        -150,
+        150
+    )
+
+    rpm_final = rpm_base + variacao
+
+    if rpm_final < 0:
+        rpm_final = 0
+
+    return rpm_final
+
+# ÍNDICE RESFRIAMENTO
+
+def calcular_ier(
+
+    rpm_fan,
+
+    temp_cpu,
+
+    temp_ambiente
+
+):
+
+    diferenca = (
+        temp_cpu - temp_ambiente
+    )
+
+    ier = rpm_fan / (
+        diferenca + 1
+    )
+
+    return round(ier, 1)
+
+# STATUS RESFRIAMENTO
+
+def classificar_ier(ier):
+
+    if ier > 80:
+        return "excelente"
+
+    elif ier > 50:
+        return "boa"
+
+    elif ier > 30:
+        return "atencao"
+
+    return "critica"
 
 #=========================
 #REDE
@@ -306,7 +613,6 @@ def perda_pacotes_componentes():
         "sync_loss": round(random.expovariate(3),2)
     }
     #Uso de variação exponencial para tornar a perda mais próxima de 1%
-
 def atualizar_csv_local(
     hostname,
     servidor_id,
@@ -323,19 +629,32 @@ def atualizar_csv_local(
     opensky_data,
     total_aeronaves,
     avg_adsb_update,
-    existe
+    metricas_temp
 ):
 
     os.makedirs("raw", exist_ok=True)
 
-    mode = 'a' if existe else 'w'
-
     arquivo = "raw/raw.csv"
 
-    with open(arquivo, mode, newline='', encoding="utf-8") as file:
+    existe = (
+        os.path.exists(arquivo)
+        and
+        os.path.getsize(arquivo) > 0
+    )
+
+    mode = 'a' if existe else 'w'
+
+    with open(
+        arquivo,
+        mode,
+        newline='',
+        encoding="utf-8"
+    ) as file:
+
         writer = csv.writer(file)
 
-        if mode == 'w':
+        if not existe:
+
             writer.writerow([
                 "timestamp",
                 "hostname",
@@ -343,7 +662,6 @@ def atualizar_csv_local(
                 "servidor_id",
                 "mac_address",
 
-                # dash servidores
                 "ip",
                 "cpu",
                 "ram",
@@ -353,19 +671,28 @@ def atualizar_csv_local(
                 "status_ram",
                 "status_disco",
 
-                # rede real
+                "temp_max_cpu",
+                "status_temperatura",
+                "margem_termica",
+                "status_margem",
+                "temperatura_ambiente",
+                "clima",
+                "umidade",
+                "fan_principal_rpm",
+                "indice_resfriamento",
+                "status_resfriamento",
+                "throttling",
+
                 "bytes_recv",
                 "bytes_sent",
                 "pack_recv",
                 "pack_sent",
                 "packet_loss_internet",
 
-                # latência internet
                 "latency_min_ms",
                 "latency_avg_ms",
                 "latency_max_ms",
 
-                # latência componentes
                 "lat_adsb_rastreamento",
                 "lat_rastreamento_correlacao",
                 "lat_correlacao_rotas",
@@ -373,7 +700,6 @@ def atualizar_csv_local(
                 "lat_api_bd",
                 "lat_bd_sync",
 
-                # banda
                 "rastreamento_mbps",
                 "rotas_mbps",
                 "correlacao_mbps",
@@ -381,7 +707,6 @@ def atualizar_csv_local(
                 "bd_mbps",
                 "sync_service_mbps",
 
-                # perda componentes
                 "rastreamento_loss",
                 "correlacao_loss",
                 "rotas_loss",
@@ -389,20 +714,21 @@ def atualizar_csv_local(
                 "bd_loss",
                 "sync_loss",
 
-                # opensky
                 "opensky_timestamp",
                 "total_aeronaves",
                 "avg_adsb_update_seconds",
-            ])      
+            ])
 
         writer.writerow([
-            datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            datetime.now().strftime(
+                "%Y-%m-%d %H:%M:%S"
+            ),
+
             hostname,
             empresa_id,
             servidor_id,
             mac_address,
 
-            # Dash Servidores
             dados.get('ip'),
             dados.get('cpu'),
             dados.get('ram'),
@@ -412,49 +738,116 @@ def atualizar_csv_local(
             dados.get('status_ram'),
             dados.get('status_disco'),
 
-            # rede
+            metricas_temp["temp_max"],
+            metricas_temp["status"],
+            metricas_temp["margem_termica"],
+            metricas_temp["status_margem"],
+            metricas_temp["temperatura_ambiente"],
+            metricas_temp["clima"],
+            metricas_temp["umidade"],
+            metricas_temp["fan_principal_rpm"],
+            metricas_temp["indice_resfriamento"],
+            metricas_temp["status_resfriamento"],
+            metricas_temp["throttling"],
+
             rede["bytes_recv"],
             rede["bytes_sent"],
             rede["pack_recv"],
             rede["pack_sent"],
+
             packet_loss,
 
-            # latência internet
-            min(latencia) if latencia else None,
-            sum(latencia)/len(latencia) if latencia else None,
-            max(latencia) if latencia else None,
+            min(latencia)
+            if latencia else None,
 
-            # latência componentes
-            lat_componentes["lat_adsb_rastreamento"],
-            lat_componentes["lat_rastreamento_correlacao"],
-            lat_componentes["lat_correlacao_rotas"],
-            lat_componentes["lat_rotas_api"],
-            lat_componentes["lat_api_bd"],
-            lat_componentes["lat_bd_sync"],
+            sum(latencia) / len(latencia)
+            if latencia else None,
 
-            # banda processos
-            banda_processos["rastreamento_mbps"],
-            banda_processos["rotas_mbps"],
-            banda_processos["correlacao_mbps"],
-            banda_processos["api_gateway_mbps"],
-            banda_processos["bd_mbps"],
-            banda_processos["sync_service_mbps"],
+            max(latencia)
+            if latencia else None,
 
-            # perda componentes
-            perda_componentes["rastreamento_loss"],
-            perda_componentes["correlacao_loss"],
-            perda_componentes["rotas_loss"],
-            perda_componentes["api_loss"],
-            perda_componentes["bd_loss"],
-            perda_componentes["sync_loss"],
+            lat_componentes[
+                "lat_adsb_rastreamento"
+            ],
 
-            # opensky
-            opensky_timestamp(opensky_data) if opensky_data else None,
+            lat_componentes[
+                "lat_rastreamento_correlacao"
+            ],
+
+            lat_componentes[
+                "lat_correlacao_rotas"
+            ],
+
+            lat_componentes[
+                "lat_rotas_api"
+            ],
+
+            lat_componentes[
+                "lat_api_bd"
+            ],
+
+            lat_componentes[
+                "lat_bd_sync"
+            ],
+
+            banda_processos[
+                "rastreamento_mbps"
+            ],
+
+            banda_processos[
+                "rotas_mbps"
+            ],
+
+            banda_processos[
+                "correlacao_mbps"
+            ],
+
+            banda_processos[
+                "api_gateway_mbps"
+            ],
+
+            banda_processos[
+                "bd_mbps"
+            ],
+
+            banda_processos[
+                "sync_service_mbps"
+            ],
+
+            perda_componentes[
+                "rastreamento_loss"
+            ],
+
+            perda_componentes[
+                "correlacao_loss"
+            ],
+
+            perda_componentes[
+                "rotas_loss"
+            ],
+
+            perda_componentes[
+                "api_loss"
+            ],
+
+            perda_componentes[
+                "bd_loss"
+            ],
+
+            perda_componentes[
+                "sync_loss"
+            ],
+
+            opensky_timestamp(opensky_data)
+            if opensky_data else None,
+
             total_aeronaves,
+
             avg_adsb_update
         ])
 
         file.flush()
+
         os.fsync(file.fileno())
 
 def salvar_voos_csv(voos): #Conselho da Profa. Giu 
@@ -627,197 +1020,564 @@ def coletar_metricas(componentes):
 #==========================
 
 def main():
+
     ultima_execucao_aviation = 0
     ultima_execucao_upload = 0
+
     INTERVALO_AVIATION = 14400
     INTERVALO_UPLOAD = 3600
-    
-    print("Iniciando coleta local...")
-    os.makedirs("raw", exist_ok=True)
-    
 
-    #AWS BUCKET
+    print("Iniciando coleta local...")
+
+    os.makedirs("raw", exist_ok=True)
+
+    # ==========================
+    # AWS
+    # ==========================
 
     s3 = conectar_s3()
 
+    # ==========================
+    # MAC ADDRESS
+    # ==========================
+
     mac_address = coletar_mac_address()
 
-    #MySQL
+    # ==========================
+    # MYSQL
+    # ==========================
+
     info = obter_servidor_info(mac_address)
 
     if not info:
+
         print("Servidor não encontrado!")
+
         time.sleep(INTERVALO)
+
         return
 
     servidor_id = info["servidor_id"]
     empresa_id = info["empresa_id"]
 
-    key = f"raw/empresa_{empresa_id}/{mac_address}/raw.csv"
-    process_key = f"raw/empresa_{empresa_id}/{mac_address}/process_raw.csv"
-    flights_key = f"raw/empresa_{empresa_id}/{mac_address}/flights_raw.csv"
-   
+    # ==========================
+    # KEYS S3
+    # ==========================
+
+    key = (
+        f"raw/empresa_{empresa_id}/"
+        f"{mac_address}/raw.csv"
+    )
+
+    process_key = (
+        f"raw/empresa_{empresa_id}/"
+        f"{mac_address}/process_raw.csv"
+    )
+
+    flights_key = (
+        f"raw/empresa_{empresa_id}/"
+        f"{mac_address}/flights_raw.csv"
+    )
+
+    # ==========================
+    # DOWNLOAD CSVs S3
+    # ==========================
 
     if arquivo_existe_s3(s3, key):
+
         baixar_csv_s3(
             s3,
             key,
             "raw/raw.csv"
         )
+
     else:
-        print("Arquivo raw não existe na S3. Será criado localmente.")
+
+        print(
+            "Arquivo raw não existe na S3."
+        )
 
     if arquivo_existe_s3(s3, flights_key):
+
         baixar_csv_s3(
             s3,
             flights_key,
             "raw/flights_raw.csv"
         )
+
     else:
-        print("Arquivo flights não existe na S3. Será criado localmente.")
+
+        print(
+            "Arquivo flights não existe na S3."
+        )
 
     if arquivo_existe_s3(s3, process_key):
-        baixar_csv_s3(s3,process_key,"raw/process_raw.csv")
+
+        baixar_csv_s3(
+            s3,
+            process_key,
+            "raw/process_raw.csv"
+        )
+
     else:
-        print("Arquivo process não existe na S3. Será criado localmente.")
+
+        print(
+            "Arquivo process não existe na S3."
+        )
+
+    # ==========================
+    # LOOP PRINCIPAL
+    # ==========================
 
     while True:
+
         try:
-            # Identificação local
+
             tempo_atual_loop = time.time()
+
             hostname = socket.gethostname()
 
-            print("Coletando dados de CPU/RAM/DISCO...")
-            componentes = obter_componentes_servidor(servidor_id)
+            # ==========================
+            # CPU / RAM / DISCO
+            # ==========================
+
+            print(
+                "Coletando dados de CPU/RAM/DISCO..."
+            )
+
+            componentes = obter_componentes_servidor(
+                servidor_id
+            )
 
             if not componentes:
-                print("Nenhum componente ativo!")
+
+                print(
+                    "Nenhum componente ativo!"
+                )
 
                 time.sleep(INTERVALO)
+
                 continue
 
-            dados = coletar_metricas(componentes)
+            dados = coletar_metricas(
+                componentes
+            )
 
-            print("Coletando dados de processos...")
+            # ==========================
+            # PROCESSOS
+            # ==========================
+
+            print(
+                "Coletando processos..."
+            )
+
             processos = capturar_processos()
-            salvar_processos_csv(processos)
 
-            print("Coletando dados de rede...")
+            salvar_processos_csv(
+                processos
+            )
 
-            # Ping
+            # ==========================
+            # REDE
+            # ==========================
+
+            print(
+                "Coletando rede..."
+            )
+
             saida_ping = ping_shell()
 
             if saida_ping:
-                packet_loss = coletar_pacotes(saida_ping)
-                latencia = coletar_latencia(saida_ping)
+
+                packet_loss = coletar_pacotes(
+                    saida_ping
+                )
+
+                latencia = coletar_latencia(
+                    saida_ping
+                )
 
                 if latencia:
-                    latencia = [int(x) for x in latencia]
+
+                    latencia = [
+                        int(x)
+                        for x in latencia
+                    ]
+
             else:
+
                 packet_loss = None
                 latencia = None
 
-            # Rede local
             rede = coletar_dados_rede()
 
-            # OpenSky
-            print("Consultando OpenSky...")
+            # ==========================
+            # OPENSKY
+            # ==========================
+
+            print(
+                "Consultando OpenSky..."
+            )
 
             opensky_data = dados_opensky()
 
             if opensky_data:
-                total_aeronaves = opensky_aeronaves(opensky_data)
 
-                adsb_updates = contato_adsb(opensky_data)
+                total_aeronaves = (
+                    opensky_aeronaves(
+                        opensky_data
+                    )
+                )
+
+                adsb_updates = contato_adsb(
+                    opensky_data
+                )
 
                 avg_adsb_update = (
-                    sum(adsb_updates) / len(adsb_updates)
-                    if adsb_updates else None
+
+                    sum(adsb_updates)
+                    / len(adsb_updates)
+
+                    if adsb_updates
+                    else None
                 )
+
             else:
+
                 opensky_data = None
                 total_aeronaves = None
                 avg_adsb_update = None
 
-            # Simulação componentes
-            lat_componentes = coletar_latencia_componentes()
-            banda_processos = coletar_banda_processos(
-                total_aeronaves if total_aeronaves else 0
+            # ==========================
+            # LATÊNCIA COMPONENTES
+            # ==========================
+
+            lat_componentes = (
+                coletar_latencia_componentes()
             )
 
-            perda_componentes = perda_pacotes_componentes()
+            # ==========================
+            # BANDA PROCESSOS
+            # ==========================
 
-            # AviationStack
-            if tempo_atual_loop - ultima_execucao_aviation >= INTERVALO_AVIATION:
-                print("Consultando AviationStack...")
+            banda_processos = (
+                coletar_banda_processos(
+                    total_aeronaves
+                    if total_aeronaves
+                    else 0
+                )
+            )
+
+            # ==========================
+            # PERDA COMPONENTES
+            # ==========================
+
+            perda_componentes = (
+                perda_pacotes_componentes()
+            )
+
+            # ==========================
+            # TEMPERATURA CPU
+            # ==========================
+
+            print(
+                "Coletando temperatura CPU..."
+            )
+
+            try:
+
+                temperaturas = (
+                    buscar_temperaturas()
+                )
+
+                if temperaturas:
+
+                    clima = obter_clima()
+
+                    temp_max = max(
+                        temperaturas.values()
+                    )
+
+                    fan_principal = (
+                        simular_fan_cpu(
+                            temp_max
+                        )
+                    )
+
+                    ier = calcular_ier(
+
+                        fan_principal,
+
+                        temp_max,
+
+                        clima[
+                            "temperatura_ambiente"
+                        ]
+                    )
+
+                    margem = (
+                        calcular_margem_termica(
+                            temp_max
+                        )
+                    )
+
+                    metricas_temp = {
+
+                        "temp_max":
+                            temp_max,
+
+                        "status":
+                            classificar(
+                                temp_max
+                            ),
+
+                        "margem_termica":
+                            margem,
+
+                        "status_margem":
+                            classificar_margem(
+                                margem
+                            ),
+
+                        "temperatura_ambiente":
+                            clima[
+                                "temperatura_ambiente"
+                            ],
+
+                        "clima":
+                            clima[
+                                "descricao"
+                            ],
+
+                        "umidade":
+                            clima[
+                                "umidade"
+                            ],
+
+                        "fan_principal_rpm":
+                            fan_principal,
+
+                        "indice_resfriamento":
+                            ier,
+
+                        "status_resfriamento":
+                            classificar_ier(
+                                ier
+                            ),
+
+                        "throttling":
+                            verificar_throttling(
+                                temp_max
+                            )
+                    }
+
+                else:
+
+                    metricas_temp = {
+
+                        "temp_max": None,
+                        "status": None,
+                        "margem_termica": None,
+                        "status_margem": None,
+                        "temperatura_ambiente": None,
+                        "clima": None,
+                        "umidade": None,
+                        "fan_principal_rpm": None,
+                        "indice_resfriamento": None,
+                        "status_resfriamento": None,
+                        "throttling": None
+                    }
+
+            except Exception as e:
+
+                print(
+                    f"Erro temperatura CPU: {e}"
+                )
+
+                metricas_temp = {
+
+                    "temp_max": None,
+                    "status": None,
+                    "margem_termica": None,
+                    "status_margem": None,
+                    "temperatura_ambiente": None,
+                    "clima": None,
+                    "umidade": None,
+                    "fan_principal_rpm": None,
+                    "indice_resfriamento": None,
+                    "status_resfriamento": None,
+                    "throttling": None
+                }
+
+            # ==========================
+            # AVIATIONSTACK
+            # ==========================
+
+            if (
+
+                tempo_atual_loop
+                - ultima_execucao_aviation
+
+                >= INTERVALO_AVIATION
+            ):
+
+                print(
+                    "Consultando AviationStack..."
+                )
 
                 voos = dados_aviationstack()
 
                 if voos:
-                    salvar_voos_csv(voos)
-                    print(f"{len(voos)} voos salvos em flights_raw.csv")
-                
-                ultima_execucao_aviation = tempo_atual_loop
 
-            # Network CSV           
-            existe = os.path.exists("raw/raw.csv")
+                    salvar_voos_csv(
+                        voos
+                    )
+
+                    print(
+                        f"{len(voos)} voos salvos."
+                    )
+
+                ultima_execucao_aviation = (
+                    tempo_atual_loop
+                )
+
+            # ==========================
+            # CSV
+            # ==========================
 
             atualizar_csv_local(
+
                 hostname=hostname,
+
                 servidor_id=servidor_id,
+
                 empresa_id=empresa_id,
+
                 mac_address=mac_address,
+
                 dados=dados,
+
                 processos=processos,
+
                 rede=rede,
+
                 packet_loss=packet_loss,
+
                 latencia=latencia,
+
                 lat_componentes=lat_componentes,
+
                 banda_processos=banda_processos,
+
                 perda_componentes=perda_componentes,
+
                 opensky_data=opensky_data,
+
                 total_aeronaves=total_aeronaves,
+
                 avg_adsb_update=avg_adsb_update,
-                existe=existe
+
+                metricas_temp=metricas_temp
             )
 
-            print("raw salvo com sucesso.")
-            print("Aguardando próxima coleta...\n")
+            print(
+                "raw salvo com sucesso."
+            )
 
-            if tempo_atual_loop - ultima_execucao_upload >= INTERVALO_UPLOAD:
-                print("Enviando CSVs para S3...")
+            print(
+                "Aguardando próxima coleta..."
+            )
 
-                key = f"raw/empresa_{empresa_id}/{mac_address}/raw.csv"
-                flights_key = f"raw/empresa_{empresa_id}/{mac_address}/flights_raw.csv"
-                process_key = f"raw/empresa_{empresa_id}/{mac_address}/process_raw.csv"
+            # ==========================
+            # UPLOAD S3
+            # ==========================
 
-                enviar_csv_s3(s3, "raw/raw.csv", key)
-                if os.path.exists("raw/process_raw.csv"):
-                    enviar_csv_s3(s3,"raw/process_raw.csv", process_key)
+            if (
 
-                if os.path.exists("raw/flights_raw.csv"):
-                    enviar_csv_s3(s3, "raw/flights_raw.csv", flights_key)
+                tempo_atual_loop
+                - ultima_execucao_upload
 
-                ultima_execucao_upload = tempo_atual_loop
-        
+                >= INTERVALO_UPLOAD
+            ):
+
+                print(
+                    "Enviando CSVs para S3..."
+                )
+
+                enviar_csv_s3(
+                    s3,
+                    "raw/raw.csv",
+                    key
+                )
+
+                if os.path.exists(
+                    "raw/process_raw.csv"
+                ):
+
+                    enviar_csv_s3(
+
+                        s3,
+
+                        "raw/process_raw.csv",
+
+                        process_key
+                    )
+
+                if os.path.exists(
+                    "raw/flights_raw.csv"
+                ):
+
+                    enviar_csv_s3(
+
+                        s3,
+
+                        "raw/flights_raw.csv",
+
+                        flights_key
+                    )
+
+                ultima_execucao_upload = (
+                    tempo_atual_loop
+                )
+
         except Exception as e:
-            print(f"Erro geral na coleta: {e}")
 
-        # intervalo de teste
+            print(
+                f"Erro geral na coleta: {e}"
+            )
+
+        # ==========================
+        # ESPERA
+        # ==========================
+
         minutos_total = INTERVALO // 60
-       
-        print(f"Nova coleta em {minutos_total} minutos....")
 
-        for minuto in range(1, minutos_total + 1):
+        print(
+            f"Nova coleta em "
+            f"{minutos_total} minutos..."
+        )
+
+        for minuto in range(
+            1,
+            minutos_total + 1
+        ):
+
             time.sleep(60)
 
             barra = "|" * minuto
-            restante = "." * (minutos_total - minuto)
+
+            restante = "." * (
+                minutos_total - minuto
+            )
 
             print(
-                f"\rAguardando próxima coleta: [{barra}{restante}] "
+
+                f"\rAguardando próxima coleta: "
+                f"[{barra}{restante}] "
                 f"{minuto}/{minutos_total} min",
+
                 end="",
+
                 flush=True
             )
 
@@ -825,5 +1585,5 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
 
+    main()
