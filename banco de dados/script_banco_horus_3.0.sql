@@ -138,12 +138,6 @@ insert into funcionario VALUES
     'Analista',
     1,
     localtimestamp());
-    
-SELECT id_servidor, fk_empresa, mac_address
-        FROM servidor
-        WHERE mac_address = "80:30:49:0c:87:29";
-
-SELECT * FROM servidor;
 
 INSERT INTO servidor (
     hostname,
