@@ -4,6 +4,8 @@ import json
 import mysql.connector
 from datetime import datetime
 from io import StringIO
+import pandas
+import os
 
 AWS_CONFIG = {
     "aws_access_key_id": "",
@@ -15,9 +17,9 @@ AWS_CONFIG = {
 
 DB_CONFIG = {
     "host": "localhost",
-    "user": "root",
-    "password": "",
-    "database": ""
+    "user": "horus",
+    "password": "Horus123456",
+    "database": "horus_db3"
 }
 
 s3 = boto3.client(
@@ -34,6 +36,12 @@ def listar_raw():
         Prefix="raw/"
     )
     return [obj["Key"] for obj in response.get("Contents", []) if obj["Key"].endswith(".csv")]
+
+def ler_raw():
+    caminho_arquivo = os.path.join("raw", "raw.csv")
+    print(caminho_arquivo)
+
+    return pandas.read_csv(caminho_arquivo)
 
 def ler_csv_s3(key):
     obj = s3.get_object(Bucket=AWS_CONFIG["bucket_name"], Key=key)
@@ -243,5 +251,192 @@ def processar():
         status_final = determinar_status_servidor(severidades_detectadas)
         atualizar_status_servidor(servidor_id, status_final)
 
-if __name__ == "__main__":
-    processar()
+#if __name__ == "__main__":
+#    processar()
+
+import pandas as pd
+
+def calcular_penalidade(persistencia, peso_maximo):
+
+    if persistencia < 0.20:
+        percentual_penalidade = 0
+
+    elif persistencia < 0.40:
+        percentual_penalidade = 0.25
+
+    elif persistencia < 0.60:
+        percentual_penalidade = 0.50
+
+    elif persistencia < 0.80:
+        percentual_penalidade = 0.75
+
+    else:
+        percentual_penalidade = 1
+
+    return peso_maximo * percentual_penalidade
+
+def classificar_status(score):
+
+    if score >= 90:
+        return "Saudável"
+
+    elif score >= 80:
+        return "Atenção"
+
+    return "Crítico"
+
+
+def calcular_persistencia_alertas(df, hostname, coluna_tempo="timestamp"):
+
+    obter_limites_bd = obter_limites(1)
+
+    limite_cpu = obter_limites_bd.get("CPU")
+    limite_ram = obter_limites_bd.get("RAM")
+    limite_disco = obter_limites_bd.get("DISCO")
+    limite_adsb = 10
+
+    df = df.copy()
+
+    df[coluna_tempo] = pd.to_datetime(df[coluna_tempo])
+
+    if hostname is not None:
+        df = df[df["hostname"] == hostname]
+        print('estou no hostname')
+
+    agora = df[coluna_tempo].max()
+    print(agora)
+
+    periodos = {
+        "1h": pd.Timedelta(hours=1),
+        "12h": pd.Timedelta(hours=12),
+        "24h": pd.Timedelta(hours=24),
+        "7d": pd.Timedelta(days=7)
+    }
+
+    resultados = {}
+
+    for nome_periodo, delta in periodos.items():
+
+        inicio_periodo = agora - delta
+
+        df_periodo = df[
+            df[coluna_tempo] >= inicio_periodo
+        ]
+
+        total_coletas = len(df_periodo)
+
+        if total_coletas == 0:
+            resultados[nome_periodo] = {
+                "cpu": 0,
+                "ram": 0,
+                "disco": 0,
+                "adsb": 0
+            }
+
+
+        alertas_cpu = (
+            df_periodo["cpu"] > limite_cpu
+        ).sum()
+
+        alertas_ram = (
+            df_periodo["ram"] > limite_ram
+        ).sum()
+
+        alertas_disco = (
+            df_periodo["disco"] > limite_disco
+        ).sum()
+
+        alertas_adsb = (
+            df_periodo["avg_adsb_update_seconds"] > limite_adsb
+        ).sum()
+
+        if(total_coletas ==  0): continue
+
+        resultados[nome_periodo] = {
+            "total_coletas": total_coletas,
+
+            "cpu": {
+                "alertas": int(alertas_cpu),
+                "persistencia": float(round(
+                    alertas_cpu / total_coletas,
+                    2
+                ))
+            },
+
+            "ram": {
+                "alertas": int(alertas_ram),
+                "persistencia": float(round(
+                    alertas_ram / total_coletas,
+                    2
+                ))
+            },
+
+            "disco": {
+                "alertas": int(alertas_disco),
+                "persistencia": float(round(
+                    alertas_disco / total_coletas,
+                    2
+                ))
+            },
+
+            "adsb": {
+                "alertas": int(alertas_adsb),
+                "persistencia": float(round(
+                    alertas_adsb / total_coletas,
+                    2
+                ))
+            }
+        }
+    
+    return resultados
+
+
+def calcular_score_servidor(dados, hostname):
+
+    persistencias = calcular_persistencia_alertas(dados, hostname)
+
+    resultados_score = {}
+
+    for periodo, dados in persistencias.items():
+
+        persistencia_cpu = dados["cpu"]["persistencia"]
+        persistencia_ram = dados["ram"]["persistencia"]
+        persistencia_disco = dados["disco"]["persistencia"]
+        persistencia_adsb = dados["adsb"]["persistencia"]
+
+        penalidade_cpu = calcular_penalidade(persistencia_cpu, 30)
+
+        penalidade_ram = calcular_penalidade(persistencia_ram, 30)
+
+        penalidade_disco = calcular_penalidade(persistencia_disco, 15)
+
+        penalidade_adsb = calcular_penalidade(persistencia_adsb, 25)
+
+        score_final = (100 - penalidade_cpu - penalidade_ram - penalidade_disco - penalidade_adsb)
+
+        score_final = max(0, min(100, score_final))
+
+        resultados_score[periodo] = {
+
+            "score": round(score_final, 2),
+
+            "status": classificar_status(score_final),
+
+            "penalidades": {
+
+                "cpu": penalidade_cpu,
+                "ram": penalidade_ram,
+                "disco": penalidade_disco,
+                "adsb": penalidade_adsb
+            },
+
+            "persistencias": {
+
+                "cpu": persistencia_cpu,
+                "ram": persistencia_ram,
+                "disco": persistencia_disco,
+                "adsb": persistencia_adsb
+            }
+        }
+
+    return resultados_score
