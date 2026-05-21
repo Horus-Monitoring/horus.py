@@ -10,15 +10,16 @@ AWS_CONFIG = {
     "aws_secret_access_key": "",
     "aws_session_token": "",
     "region_name": "us-east-1",
-    "bucket_name": "horus-monitoring"
+    "bucket_name": "horus-monitoring-gustavo"
 }
 
 DB_CONFIG = {
     "host": "localhost",
     "user": "root",
-    "password": "",
-    "database": ""
+    "password": "Uhtred5236",
+    "database": "horus_db"
 }
+
 
 s3 = boto3.client(
     's3',
@@ -159,29 +160,84 @@ def processar():
             cpu = float(row["cpu"])
             ram = float(row["ram"])
             disco = float(row["disco"])
+            health_score = float(row["health_score"])
+            status_cpu = row["status_cpu"]
+            status_ram = row["status_ram"]
+            status_disco = row["status_disco"]
+
+            ip = row["ip"]
+            hostname = row["hostname"]
+
+            cpu = float(row["cpu"])
+            ram = float(row["ram"])
+            disco = float(row["disco"])
+
+            saude_cpu = 100 - cpu
+            saude_ram = 100 - ram
+            saude_disco = 100 - disco
+
+            health_score = (
+            saude_cpu * 0.40 +
+            saude_ram * 0.40 +
+            saude_disco * 0.20
+                )
+
+            criticos = sum(
+                1 for s in [saude_cpu, saude_ram, saude_disco]
+                if s < 40
+            )
+
+            if criticos == 1:
+                health_score -= 5
+            elif criticos == 2:
+                health_score -= 15
+            elif criticos == 3:
+                health_score -= 25
+
+            health_score = round(max(0, min(100, health_score)), 2)
+            
+            if health_score >= 70:
+                status_health = "estavel"
+            elif health_score >= 40:
+                status_health = "atencao"
+            else:
+                status_health = "critico"
+
+
 
             row_trusted = row.copy()
             row_trusted["cpu"] = f"{cpu}%"
             row_trusted["ram"] = f"{ram}%"
             row_trusted["disco"] = f"{disco}%"
+            row_trusted["health_score"] = f"{health_score}%"
+            row_trusted["status_health"] = f"{status_health}"
 
             if writer is None:
                 writer = csv.DictWriter(trusted_output, fieldnames=row_trusted.keys())
                 writer.writeheader()
 
-            writer.writerow(row_trusted)
+
+
+                writer.writerow(row_trusted)
 
             client_json.append({
                 "data_hora": row["data_hora"],
                 "empresa_id": empresa_id,
                 "servidor_id": servidor_id,
+                "hostname": hostname,
+                "ip": ip,
+
                 "metricas": {
                     "cpu": cpu,
                     "ram": ram,
                     "disco": disco,
-                    "rede_rx": row.get("rede_rx"),
-                    "rede_tx": row.get("rede_tx"),
-                    "processos": row.get("processos")
+                    "health_score": health_score,
+                    "status_health": status_health
+                },
+                "status_componentes":{
+                    "cpu": status_cpu,
+                    "ram": status_ram,
+                    "disco": status_disco
                 }
             })
 

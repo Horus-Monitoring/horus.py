@@ -28,6 +28,12 @@ DB_CONFIG = {
     "database": ""
 }
 
+API_CONFIG = {
+    "acess-key": "", #Aviation Stack
+    "client_id": "", #OpenSky
+    "secret":"" #OpenSky
+}
+
 INTERVALO = 1800
 
 #Aviationstack
@@ -35,7 +41,7 @@ INTERVALO = 1800
 def dados_aviationstack():
    try: 
         params = {
-        'access_key': 'e2326bc56d7d29aab7be45590b9c1aa1', #chave da API - limite de 6/100 requisições
+        'access_key': API_CONFIG["acess_key"], #chave da API - limite de 6/100 requisições
         'dep_iata': 'GRU',
         'limit': 100
         }
@@ -83,9 +89,6 @@ def conectar_s3():
         region_name=AWS_CONFIG["region_name"]
     )
 
-def gerar_chave_s3(empresa_id, macadress):
-    return f"raw/empresa_{empresa_id}/{macadress}/metricas.csv"
-
 def arquivo_existe_s3(s3, key):
     try:
         s3.head_object(Bucket=AWS_CONFIG["bucket_name"], Key=key)
@@ -93,21 +96,25 @@ def arquivo_existe_s3(s3, key):
     except ClientError:
         return False
 
-def baixar_csv_s3(s3, key):
-    s3.download_file(AWS_CONFIG["bucket_name"], key, "temp.csv")
+def baixar_csv_s3(s3, key_s3, arquivo_local):
+    s3.download_file(
+        AWS_CONFIG["bucket_name"],
+        key_s3,
+        arquivo_local
+    )
 
-def enviar_csv_s3(s3, key):
-    s3.upload_file("temp.csv", AWS_CONFIG["bucket_name"], key)
+def enviar_csv_s3(s3, arquivo_local, key):
+    s3.upload_file(arquivo_local, AWS_CONFIG["bucket_name"], key)
 
-def obter_servidor_info(macadress):
+def obter_servidor_info(mac_address):
     conn = mysql.connector.connect(**DB_CONFIG)
     cursor = conn.cursor()
 
     cursor.execute("""
-        SELECT id_servidor, fk_empresa
+        SELECT id_servidor, fk_empresa, mac_address
         FROM servidor
-        WHERE macadress = %s
-    """, (macadress,)) #alterar para MAC Adress
+        WHERE mac_address = %s
+    """, (mac_address,)) #alterar para MAC Adress
 
     result = cursor.fetchone()
     cursor.close()
@@ -138,7 +145,8 @@ def tempo_atual(): #Coleta a data-hora
     return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
 def coletar_mac_address(): #Coleta o MAC Adress
-    return get_mac_address()
+    mac = get_mac_address()
+    return mac.lower().replace("-", ":")
 
 def coletar_dados_rede(): #Coleta dados para métricas de fluxo de rede e pacotes
     network = psutil.net_io_counters();
@@ -199,10 +207,33 @@ def coletar_latencia_componentes(): #simulação da latencia entre os diferentes
     }
 
 def dados_opensky():
-    url = "https://opensky-network.org/api/states/all"
+    url_auth = "https://auth.opensky-network.org/auth/realms/opensky-network/protocol/openid-connect/token"
+    url_api = "https://opensky-network.org/api/states/all"
 
     try:
-        response = requests.get(url, timeout=10)
+        auth_response = requests.post(
+            url_auth,
+            data={
+                "grant_type": "client_credentials",
+                "client_id": API_CONFIG["client_id"],
+                "client_secret": API_CONFIG["secret"]
+            },
+            timeout=10
+        )
+
+        if auth_response.status_code != 200:
+            print("Erro autenticação OpenSky:", auth_response.text)
+            return None
+
+        token = auth_response.json()["access_token"]
+
+        response = requests.get(
+            url_api,
+            headers={
+                "Authorization": f"Bearer {token}"
+            },
+            timeout=10
+        )
 
         if response.status_code == 200:
             return response.json()
@@ -383,7 +414,7 @@ def atualizar_csv_local(
             perda_componentes["sync_loss"],
 
             # opensky
-            opensky_timestamp(opensky_data),
+            opensky_timestamp(opensky_data) if opensky_data else None,
             total_aeronaves,
             avg_adsb_update
         ])
@@ -422,21 +453,59 @@ def salvar_voos_csv(voos): #Conselho da Profa. Giu
 def main():
 
     ultima_execucao_aviation = 0
-    INTERVALO_AVIATION = 14400  
+    ultima_execucao_upload = 0
+    INTERVALO_AVIATION = 14400
+    INTERVALO_UPLOAD = 3600
     
     print("Iniciando coleta local...")
     os.makedirs("raw", exist_ok=True)
     
+
+    #AWS BUCKET
+
+    s3 = conectar_s3()
+
+    mac_address = coletar_mac_address()
+
+    #MySQL
+    info = obter_servidor_info(mac_address)
+
+    if not info:
+        print("Servidor não encontrado!")
+        time.sleep(INTERVALO)
+        return
+
+    servidor_id = info["servidor_id"]
+    empresa_id = info["empresa_id"]
+
+    network_key = f"raw/empresa_{empresa_id}/{mac_address}/network_raw.csv"
+    flights_key = f"raw/empresa_{empresa_id}/{mac_address}/flights_raw.csv"
+   
+
+    if arquivo_existe_s3(s3, network_key):
+        baixar_csv_s3(
+            s3,
+            network_key,
+            "raw/network_raw.csv"
+        )
+    else:
+        print("Arquivo network não existe na S3. Será criado localmente.")
+
+    if arquivo_existe_s3(s3, flights_key):
+        baixar_csv_s3(
+            s3,
+            flights_key,
+            "raw/flights_raw.csv"
+        )
+    else:
+        print("Arquivo flights não existe na S3. Será criado localmente.")
+
     while True:
         try:
             # Identificação local
             tempo_atual_loop = time.time()
             hostname = socket.gethostname()
-            mac_address = coletar_mac_address()
-
-            # mock temporário até integrar MySQL
-            servidor_id = 1
-            empresa_id = 1
+                 
 
             print("Coletando dados de rede...")
 
@@ -471,6 +540,7 @@ def main():
                     if adsb_updates else None
                 )
             else:
+                opensky_data = None
                 total_aeronaves = None
                 avg_adsb_update = None
 
@@ -495,7 +565,7 @@ def main():
                 
                 ultima_execucao_aviation = tempo_atual_loop
 
-            # Network CSV
+            # Network CSV           
             existe = os.path.exists("raw/network_raw.csv")
 
             atualizar_csv_local(
@@ -518,11 +588,25 @@ def main():
             print("network_raw salvo com sucesso.")
             print("Aguardando próxima coleta...\n")
 
+            if tempo_atual_loop - ultima_execucao_upload >= INTERVALO_UPLOAD:
+                print("Enviando CSVs para S3...")
+
+                network_key = f"raw/empresa_{empresa_id}/{mac_address}/network_raw.csv"
+                flights_key = f"raw/empresa_{empresa_id}/{mac_address}/flights_raw.csv"
+
+                enviar_csv_s3(s3, "raw/network_raw.csv", network_key)
+
+                if os.path.exists("raw/flights_raw.csv"):
+                    enviar_csv_s3(s3, "raw/flights_raw.csv", flights_key)
+
+                ultima_execucao_upload = tempo_atual_loop
+        
         except Exception as e:
             print(f"Erro geral na coleta: {e}")
 
         # intervalo de teste
-        time.sleep(60)
+        print(f"Nova coleta em {INTERVALO/60} minutos....")
+        time.sleep(INTERVALO)
 
 
 if __name__ == "__main__":

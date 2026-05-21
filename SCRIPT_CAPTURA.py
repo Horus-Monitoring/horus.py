@@ -4,7 +4,6 @@ import socket
 import csv
 import boto3
 import mysql.connector
-import os
 from datetime import datetime
 from botocore.exceptions import ClientError
 
@@ -13,17 +12,18 @@ AWS_CONFIG = {
     "aws_secret_access_key": "",
     "aws_session_token": "",
     "region_name": "us-east-1",
-    "bucket_name": "horus-monitoring"
+    "bucket_name": "horus-monitoring-gustavo"
 }
 
 DB_CONFIG = {
     "host": "localhost",
     "user": "root",
-    "password": "",
-    "database": ""
+    "password": "Uhtred5236",
+    "database": "horus_db"
 }
 
 INTERVALO = 10
+
 
 def conectar_s3():
     return boto3.client(
@@ -34,8 +34,10 @@ def conectar_s3():
         region_name=AWS_CONFIG["region_name"]
     )
 
+
 def gerar_chave_s3(empresa_id, hostname):
     return f"raw/empresa_{empresa_id}/{hostname}/metricas.csv"
+
 
 def arquivo_existe_s3(s3, key):
     try:
@@ -44,11 +46,14 @@ def arquivo_existe_s3(s3, key):
     except ClientError:
         return False
 
+
 def baixar_csv_s3(s3, key):
     s3.download_file(AWS_CONFIG["bucket_name"], key, "temp.csv")
 
+
 def enviar_csv_s3(s3, key):
     s3.upload_file("temp.csv", AWS_CONFIG["bucket_name"], key)
+
 
 def obter_servidor_info(hostname):
     conn = mysql.connector.connect(**DB_CONFIG)
@@ -61,12 +66,18 @@ def obter_servidor_info(hostname):
     """, (hostname,))
 
     result = cursor.fetchone()
+
     cursor.close()
     conn.close()
 
     if result:
-        return {"servidor_id": result[0], "empresa_id": result[1]}
+        return {
+            "servidor_id": result[0],
+            "empresa_id": result[1]
+        }
+
     return None
+
 
 def obter_componentes_servidor(servidor_id):
     conn = mysql.connector.connect(**DB_CONFIG)
@@ -80,13 +91,32 @@ def obter_componentes_servidor(servidor_id):
     """, (servidor_id,))
 
     dados = [r[0] for r in cursor.fetchall()]
+
     cursor.close()
     conn.close()
 
     return dados
 
+
+def gerar_status(valor):
+    if valor >= 85:
+        return "critico"
+    elif valor >= 70:
+        return "atencao"
+    return "estavel"
+
+
 def coletar_metricas(componentes):
     dados = {}
+
+    hostname = socket.gethostname()
+
+    try:
+        ip = socket.gethostbyname(hostname)
+    except:
+        ip = "0.0.0.0"
+
+    dados['ip'] = ip
 
     if 'CPU' in componentes:
         dados['cpu'] = psutil.cpu_percent(interval=1)
@@ -97,47 +127,38 @@ def coletar_metricas(componentes):
     if 'DISCO' in componentes:
         dados['disco'] = psutil.disk_usage('/').percent
 
-    if 'REDE_RX' in componentes or 'REDE_TX' in componentes:
-        net1 = psutil.net_io_counters()
-        time.sleep(1)
-        net2 = psutil.net_io_counters()
-        dados['rede_rx'] = net2.bytes_recv - net1.bytes_recv
-        dados['rede_tx'] = net2.bytes_sent - net1.bytes_sent
 
-    if 'PROCESSOS' in componentes:
-        num_cores = psutil.cpu_count()
+    cpu = dados.get('cpu', 0)
+    ram = dados.get('ram', 0)
+    disco = dados.get('disco', 0)
 
-        for proc in psutil.process_iter():
-            try:
-                proc.cpu_percent(None)
-            except:
-                pass
 
-        time.sleep(1)
+# o calculo do heath score é uma media de porcentagem de todos os componentes. de 100 - 70 é estavel, de 40 - 69 é alerta e de 0 a 39 é critico.
+    health_score = 100 - ((cpu + ram + disco) / 3)
 
-        processos = []
-        for proc in psutil.process_iter(['name', 'cpu_percent']):
-            try:
-                cpu_normalizado = proc.info['cpu_percent'] / num_cores
-                processos.append({
-                    "name": proc.info['name'],
-                    "cpu": round(cpu_normalizado, 2)
-                })
-            except:
-                pass
+    dados['health_score'] = round(
+        max(0, health_score),
+        2
+    )
 
-        top5 = sorted(processos, key=lambda x: x['cpu'], reverse=True)[:5]
-
-        dados['processos'] = "; ".join(
-            [f"{p['name']}({p['cpu']}%)" for p in top5]
-        )
+    dados['status_cpu'] = gerar_status(cpu)
+    dados['status_ram'] = gerar_status(ram)
+    dados['status_disco'] = gerar_status(disco)
 
     return dados
 
-def atualizar_csv_local(hostname, servidor_id, empresa_id, dados, existe):
+
+def atualizar_csv_local(
+    hostname,
+    servidor_id,
+    empresa_id,
+    dados,
+    existe
+):
     mode = 'a' if existe else 'w'
 
     with open("temp.csv", mode, newline='') as file:
+
         writer = csv.writer(file)
 
         if mode == 'w':
@@ -146,12 +167,14 @@ def atualizar_csv_local(hostname, servidor_id, empresa_id, dados, existe):
                 "hostname",
                 "id_empresa",
                 "servidor_id",
+                "ip",
                 "cpu",
                 "ram",
                 "disco",
-                "rede_rx",
-                "rede_tx",
-                "processos"
+                "health_score",
+                "status_cpu",
+                "status_ram",
+                "status_disco"
             ])
 
         writer.writerow([
@@ -159,16 +182,20 @@ def atualizar_csv_local(hostname, servidor_id, empresa_id, dados, existe):
             hostname,
             empresa_id,
             servidor_id,
+            dados.get('ip'),
             dados.get('cpu'),
             dados.get('ram'),
             dados.get('disco'),
-            dados.get('rede_rx'),
-            dados.get('rede_tx'),
-            dados.get('processos')
+            dados.get('health_score'),
+            dados.get('status_cpu'),
+            dados.get('status_ram'),
+            dados.get('status_disco')
         ])
+
 
 def main():
     hostname = socket.gethostname()
+
     print(f"Hostname: {hostname}")
 
     s3 = conectar_s3()
@@ -181,6 +208,7 @@ def main():
 
             if not info:
                 print("Servidor não encontrado!")
+
                 time.sleep(INTERVALO)
                 continue
 
@@ -191,24 +219,36 @@ def main():
 
             if not componentes:
                 print("Nenhum componente ativo!")
+
                 time.sleep(INTERVALO)
                 continue
 
             dados = coletar_metricas(componentes)
 
-            key = gerar_chave_s3(empresa_id, hostname)
+            key = gerar_chave_s3(
+                empresa_id,
+                hostname
+            )
 
             existe = arquivo_existe_s3(s3, key)
 
             if existe:
                 print("Baixando CSV do S3...")
                 baixar_csv_s3(s3, key)
+
             else:
                 print("Criando novo CSV...")
 
-            atualizar_csv_local(hostname, servidor_id, empresa_id, dados, existe)
+            atualizar_csv_local(
+                hostname,
+                servidor_id,
+                empresa_id,
+                dados,
+                existe
+            )
 
             print("Enviando CSV para S3...")
+
             enviar_csv_s3(s3, key)
 
             print("Coleta finalizada!")
@@ -217,6 +257,7 @@ def main():
             print(f"Erro: {e}")
 
         time.sleep(INTERVALO)
+
 
 if __name__ == "__main__":
     main()
