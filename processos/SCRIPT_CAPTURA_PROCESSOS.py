@@ -4,6 +4,8 @@ import time
 import csv
 import os
 
+num_cpu = psutil.cpu_count(logical=True)
+
 def capturar_processos(): 
 
     processos = []
@@ -16,7 +18,8 @@ def capturar_processos():
     ]):
 
         try:
-            cpu = proc.cpu_percent(interval=0.1)
+            cpu_percent = proc.cpu_percent(interval=0.1)
+            cpu = cpu_percent / num_cpu
             ram_percent = proc.memory_percent()
             ram_mb = proc.memory_info().rss / 1024 / 1024 # transforma bytes para KB e depois para MB
             tempo_execucao = (
@@ -55,8 +58,8 @@ def capturar_processos():
 
 def salvar_csv(processos):
 
-    arquivo_existe = os.path.isfile("raw_processos.csv")
-    with open("raw_processos.csv", "a", newline="", encoding="utf-8") as arquivo:
+    arquivo_existe = os.path.isfile("process_raw.csv")
+    with open("process_raw.csv", "w", newline="", encoding="utf-8") as arquivo:
 
         colunas = processos[0].keys()
 

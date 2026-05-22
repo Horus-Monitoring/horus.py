@@ -4,10 +4,7 @@ import pandas
 from io import StringIO
 import boto3
 import json
-
-# =========================
-# CONFIGURAÇÕES AWS
-# =========================
+import time
 
 AWS_CONFIG = {
     "aws_access_key_id": "",
@@ -18,10 +15,6 @@ AWS_CONFIG = {
 }
 
 
-# =========================
-# CLIENTE S3
-# =========================
-
 s3 = boto3.client(
     "s3",
     aws_access_key_id=AWS_CONFIG["aws_access_key_id"],
@@ -29,11 +22,6 @@ s3 = boto3.client(
     aws_session_token=AWS_CONFIG["aws_session_token"],
     region_name=AWS_CONFIG["region_name"]
 )
-
-
-# =========================
-# LIMITES
-# =========================
 
 CPU_CRITICA = 80
 CPU_ALERTA = 50
@@ -85,7 +73,6 @@ def salvar_s3(conteudo, key):
 
     print(f"Arquivo enviado: {key}")
 
-#--------------------------------#
 
 def processos_criticidade(cpu, ram_percent, latencia):
 
@@ -113,7 +100,7 @@ dados_tratados = []
 # modificar para ler do S3
 def processos_tratados():
 
-    with open("raw_processos.csv", "r", encoding="utf-8") as arquivo:
+    with open("process_raw.csv", "r", encoding="utf-8") as arquivo:
 
         leitor = csv.DictReader(arquivo)
 
@@ -154,10 +141,10 @@ def processos_tratados():
                 processo_tratado
             )
 
-    arquivo_existe = os.path.isfile("processos_tratados.csv")
+    arquivo_existe = os.path.isfile("process_raw.csv")
 
     with open(
-        "processos_tratados.csv",
+        "process_raw.csv",
         "a",
         newline="",
         encoding="utf-8"
@@ -185,25 +172,18 @@ def processos_tratados():
 
 def top5cpu(dfProcessos):
 
-    # arrumar cpu nucleos
-    # top5 = sorted(processos_tratados, key=lambda x: x['cpu'], reverse=True)[:5]
-
     dfTop5 = dfProcessos.sort_values(
         'cpu',
         ascending=False
     )
 
-    # print(dfTop5)
     print("teste cpu!")
-
-    # print(dfTop5.nlargest(5, 'cpu'))
-    # print(dfTop5.head())
 
     cpu5 = {}
 
     for i in range (5):
-        cpu5[f"nome-{i+1}"] = dfTop5["nome"].iloc[i]
-        cpu5[f"cpu-{i+1}"] = float(dfTop5["cpu"].iloc[i])
+        cpu5[f"nome_cpu{i+1}"] = dfTop5["nome"].iloc[i]
+        cpu5[f"cpu_{i+1}"] = float(dfTop5["cpu"].iloc[i])
 
     print(cpu5)
     return cpu5
@@ -211,32 +191,24 @@ def top5cpu(dfProcessos):
 
 def top5ram(dfProcessos):
 
-    # arrumar cpu nucleos
-    # top5 = sorted(processos_tratados, key=lambda x: x['cpu'], reverse=True)[:5]
-
     dfTop5 = dfProcessos.sort_values(
         'ram_percent',
         ascending=False
     )
 
-    # print(dfTop5)
     print("teste ram!")
-
-    # print(dfTop5.nlargest(5, 'ram'))
-    # print(dfTop5.head())
 
     ram5 = {}
 
     for i in range (5):
-        ram5[f"nome-{i+1}"] = dfTop5["nome"].iloc[i]
-        ram5[f"ram-{i+1}"] = float(dfTop5["ram_percent"].iloc[i])
+        ram5[f"nome_ram{i+1}"] = dfTop5["nome"].iloc[i]
+        ram5[f"ram_{i+1}"] = float(dfTop5["ram_percent"].iloc[i])
 
     print(ram5)
     return ram5
 
 
 def processos_criticos(df_processos):
-    # Como True vale 1 e False vale 0, a soma dá o total de acertos
     total_criticos = (df_processos['criticidade'] == 'Crítico').sum()
     return {"totalCriticos": int(total_criticos)}
 
@@ -246,7 +218,7 @@ def maior_latencia():
     maior_valor = None
 
     with open(
-        'processos_tratados.csv',
+        'process_raw.csv',
         mode='r',
         encoding='utf-8'
     ) as arquivo:
@@ -367,9 +339,56 @@ def contar_criticos(processos_tratados):
 
     return criticos_count
 
-# =========================
-# JSON PROCESSOS
-# =========================
+def criticos_24h_em_blocos_4h(dfProcessos):
+
+    df = dfProcessos.copy()
+
+    # garantir datetime
+    df["timestamp"] = pandas.to_datetime(df["timestamp"])
+
+    agora = pandas.Timestamp.now()
+
+    # filtrar últimas 24h
+    df_24h = df[
+        df["timestamp"] >= agora - pandas.Timedelta(hours=24)
+    ]
+
+    # só críticos
+    df_24h = df_24h[df_24h["criticidade"] == "Crítico"]
+
+    # cria "horas desde agora"
+    df_24h["horas_atras"] = (agora - df_24h["timestamp"]).dt.total_seconds() / 3600
+
+    # função para definir bucket de 4h
+    def bucket(horas):
+        if horas <= 4:
+            return "0-4h"
+        elif horas <= 8:
+            return "4-8h"
+        elif horas <= 12:
+            return "8-12h"
+        elif horas <= 16:
+            return "12-16h"
+        elif horas <= 20:
+            return "16-20h"
+        else:
+            return "20-24h"
+
+    df_24h["bloco"] = df_24h["horas_atras"].apply(bucket)
+
+    # contar por bloco
+    resultado = df_24h["bloco"].value_counts().to_dict()
+
+    # garantir todas as chaves mesmo se zeradas
+    blocos = ["0-4h", "4-8h", "8-12h", "12-16h", "16-20h", "20-24h"]
+
+    final = {b: resultado.get(b, 0) for b in blocos}
+
+    return final
+
+
+# dados_blocos = criticos_24h_em_blocos_4h(dfProcessos)
+
 
 def salvar_json_processos(df, key):
 
@@ -387,10 +406,6 @@ def salvar_json_processos(df, key):
     )
 
 
-# =========================
-# JSON KPIs
-# =========================
-
 def salvar_json_dashboard(dashboard, key):
 
     salvar_s3(
@@ -402,10 +417,6 @@ def salvar_json_dashboard(dashboard, key):
         key
     )
 
-
-# =========================
-# MAIN
-# =========================
 
 def main():
 
@@ -419,35 +430,18 @@ def main():
 
         print(f"Processando arquivo: {arquivo}")
 
-        key = "raw/empresa_1/c0:35:32:c7:0b:59/raw_processos.csv"
-
-        # =========================
-        # LEITURA RAW S3
-        # =========================
+        key = "raw/empresa_1/c0:35:32:c7:0b:59/process_raw.csv"
 
         dfRaw = ler_csv_s3(key)
 
-        # =========================
-        # SALVA CSV TEMPORÁRIO
-        # (mantendo sua lógica original)
-        # =========================
-
         dfRaw.to_csv(
-            "raw_processos.csv",
+            "process_raw.csv",
             index=False
         )
-
-        # =========================
-        # PROCESSAMENTO
-        # =========================
 
         dfProcessos = processos_tratados()
 
         print(dfProcessos)
-
-        # =========================
-        # KPIs
-        # =========================
 
         kpis = {}
 
@@ -478,10 +472,11 @@ def main():
         kpis.update(
             contar_criticos(dfProcessos)
         )
+        print("---------------------------------")
+        #print(criticos24h(dfProcessos))
 
-        # =========================
-        # NOME DOS ARQUIVOS
-        # =========================
+        dados_blocos = criticos_24h_em_blocos_4h(dfProcessos)
+
 
         nome_base = (
             arquivo
@@ -497,9 +492,7 @@ def main():
             f"client/kpis/{nome_base}_kpis.json"
         )
 
-        # =========================
-        # ENVIO S3
-        # =========================
+        key_blocos = (f"client/kpis/{nome_base}_criticos_4h.json")
 
         salvar_json_processos(
             dfProcessos,
@@ -509,6 +502,11 @@ def main():
         salvar_json_dashboard(
             kpis,
             key_kpis
+        )
+
+        salvar_json_dashboard(
+            dados_blocos,
+            key_blocos
         )
 
         print("ETL finalizada.")
