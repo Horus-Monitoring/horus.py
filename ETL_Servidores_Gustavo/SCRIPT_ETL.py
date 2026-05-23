@@ -4,6 +4,9 @@ import json
 import mysql.connector
 from datetime import datetime
 from io import StringIO
+####################################
+from collections import defaultdict
+#####################################
 
 AWS_CONFIG = {
     "aws_access_key_id": "",
@@ -12,6 +15,8 @@ AWS_CONFIG = {
     "region_name": "us-east-1",
     "bucket_name": "horus-monitoring-gustavo"
 }
+
+
 
 DB_CONFIG = {
     "host": "localhost",
@@ -145,7 +150,9 @@ def processar():
 
         client_json = []
         alertas = []
-
+        ##################################
+        historico_ram = defaultdict(list)
+        ##################################
         alertas_por_dia = {}
         alertas_por_servidor = {}
 
@@ -159,12 +166,17 @@ def processar():
 
             cpu = float(row["cpu"])
             ram = float(row["ram"])
+            #####################################################################
+            timestamp = datetime.strptime(row["data_hora"], "%Y-%m-%d %H:%M:%S")
+            historico_ram[servidor_id].append({
+                "ram": ram,
+                "timestamp": timestamp})
+            ####################################################################
             disco = float(row["disco"])
             health_score = float(row["health_score"])
             status_cpu = row["status_cpu"]
             status_ram = row["status_ram"]
             status_disco = row["status_disco"]
-
             ip = row["ip"]
             hostname = row["hostname"]
 
@@ -215,11 +227,51 @@ def processar():
             if writer is None:
                 writer = csv.DictWriter(trusted_output, fieldnames=row_trusted.keys())
                 writer.writeheader()
+            writer.writerow(row_trusted)
 
+##########################################################################
+            historico = historico_ram[servidor_id]
 
+            linha_real = ram
+            linha_tendencia = ram
+            tendencia_hora = 0
 
-                writer.writerow(row_trusted)
+            if len(historico) >= 2:
 
+                    ultimo = historico[-1]
+                    penultimo = historico[-2]
+
+                    ram_atual = ultimo["ram"]
+                    ram_anterior = penultimo["ram"]
+
+                    tempo_atual = ultimo["timestamp"]
+                    tempo_anterior = penultimo["timestamp"]
+
+                    diferenca_ram = ram_atual - ram_anterior
+
+                    diferenca_tempo = (
+                        tempo_atual - tempo_anterior
+                        ).total_seconds() / 3600
+
+                    if diferenca_tempo > 0:
+
+                        tendencia_hora = (
+                        diferenca_ram / diferenca_tempo
+                        )
+
+                        linha_tendencia = ram_atual + tendencia_hora
+
+                        linha_tendencia = round(
+                        max(0, min(100, linha_tendencia)),
+                        2
+                         )
+
+                        tendencia_hora = round(
+                        tendencia_hora,
+                        2
+                        )
+            
+####################################################################################
             client_json.append({
                 "data_hora": row["data_hora"],
                 "empresa_id": empresa_id,
@@ -232,7 +284,13 @@ def processar():
                     "ram": ram,
                     "disco": disco,
                     "health_score": health_score,
-                    "status_health": status_health
+                    "status_health": status_health,
+####################################################################
+                    "linha_real": linha_real,
+                    "linha_tendencia": linha_tendencia,
+                    "tendencia_aumento_hora": tendencia_hora
+
+#####################################################################
                 },
                 "status_componentes":{
                     "cpu": status_cpu,

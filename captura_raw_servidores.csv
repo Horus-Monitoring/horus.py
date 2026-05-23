@@ -1,0 +1,2 @@
+﻿source_agent;capture_timestamp;raw_payload
+Agent-DataCenter-RJ;2026-05-23 01:03:13;"ID:2;IP:192.168.56.1;HOSTNAME:Jortieke;MAC:c0:35:32:c7:0b:59;LOCATION:Data Center RJ;OS:Windows 11;SEVERITY:Crítico;TIME:2026-05-21 10:27:52"

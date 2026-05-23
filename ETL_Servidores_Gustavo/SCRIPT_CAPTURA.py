@@ -15,6 +15,7 @@ AWS_CONFIG = {
     "bucket_name": "horus-monitoring-gustavo"
 }
 
+
 DB_CONFIG = {
     "host": "localhost",
     "user": "root",
