@@ -6,14 +6,10 @@ from io import StringIO
 import pandas
 import math
 from dotenv import load_dotenv
-import csv
 from collections import defaultdict
 from getmac import get_mac_address
 import os
-import tempfile
 from collections import Counter
-from botocore.exceptions import ClientError
-
 
 load_dotenv()
 env = os.getenv
@@ -272,7 +268,8 @@ def limpar_dados(df):
     ]
 
     for coluna in colunas_numericas:
-       df[coluna] = pandas.to_numeric(df[coluna], errors="coerce")
+        if coluna in df.columns:
+            df[coluna] = pandas.to_numeric(df[coluna], errors="coerce")
        
     df[colunas_numericas] = df[colunas_numericas].fillna(0)
     df["timestamp"] = pandas.to_datetime(df["timestamp"])
@@ -312,13 +309,7 @@ def limpar_voos(df):
 
 #Atualização de Status no Banco de Dados
 def determinar_status_servidor(severidades):
-    prioridade = {
-        "crítico": 5,
-        "alta": 4,
-        "média": 3,
-        "baixa": 2,
-        "normal": 1
-    }
+    prioridade = SEVERIDADE
 
     if not severidades:
         return "Online"
@@ -545,13 +536,7 @@ def severidade_servidor_latencia(linha):
     linha["status_bd_sync"]
 ]
 
-    prioridade = {
-        "critico": 4,
-        "alto": 3,
-        "medio": 2,
-        "baixo": 1,
-        "normal": 0
-    }
+    prioridade = SEVERIDADE
 
     pior_status = max(status, key=lambda x: prioridade[x])
 
@@ -582,13 +567,7 @@ def severidade_servidor_pacotes(linha):
         linha["status_sync_loss"]
     ]
 
-    prioridade = {
-        "critico": 4,
-        "alto": 3,
-        "medio": 2,
-        "baixo": 1,
-        "normal": 0
-    }
+    prioridade = SEVERIDADE
 
     return max(status, key=lambda x: prioridade[x])
 
@@ -743,11 +722,12 @@ def rotas_sem_atualizacao(df_voos):
     return len(rotas_paradas)
 
 def taxa_transferencia(df):
-    df["taxa_total_mb"] = (
+    taxa_total_mb = (
         df["bytes_recv"] + df["bytes_sent"]
-    ) / (1024 * 1024) #Byte para MegaByte
+    ) / (1024 * 1024)
 
-    return df["taxa_total_mb"].mean()
+    return taxa_total_mb.mean()
+
 
 def consumo_banda_servico(df):
     return {
@@ -759,8 +739,6 @@ def consumo_banda_servico(df):
         "Sync Service": round(df["sync_service_mbps"].mean(), 2)
     }
 #Processos
-
-import pandas as pd
 
 def processos_tratados_s3(df_raw):
 
@@ -794,7 +772,7 @@ def processos_tratados_s3(df_raw):
 
         dados_tratados.append(processo_tratado)
 
-    return pd.DataFrame(dados_tratados)
+    return pandas.DataFrame(dados_tratados)
 
 def processos_criticidade(cpu, ram_percent, latencia):
 
@@ -829,8 +807,8 @@ def top5cpu(dfProcessos):
     cpu5 = {}
 
     for i in range (5):
-        cpu5[f"nome-{i+1}"] = dfTop5["nome"].iloc[i]
-        cpu5[f"cpu-{i+1}"] = float(dfTop5["cpu"].iloc[i])
+        cpu5[f"nome_cpu_{i+1}"] = dfTop5["nome"].iloc[i]
+        cpu5[f"cpu_{i+1}"] = float(dfTop5["cpu"].iloc[i])
     return cpu5
 
 
@@ -847,8 +825,8 @@ def top5ram(dfProcessos):
     ram5 = {}
 
     for i in range (5):
-        ram5[f"nome-{i+1}"] = dfTop5["nome"].iloc[i]
-        ram5[f"ram-{i+1}"] = float(dfTop5["ram_percent"].iloc[i])
+        ram5[f"nome_ram_{i+1}"] = dfTop5["nome"].iloc[i]
+        ram5[f"ram_{i+1}"] = float(dfTop5["ram_percent"].iloc[i])
 
     return ram5
 
@@ -881,73 +859,136 @@ def maior_latencia(df):
 
 
 def limites_processos(processos_tratados):
+    return {"limite": len(processos_tratados) * 0.30}
 
-    total_processos = len(processos_tratados)
-    limite_30 = total_processos * 0.30
+def gerar_raw_criticos_4h(df):
 
-    return {"limite": limite_30}
+    if df.empty:
+        return {
+            "atual": 0,
+            "0-2h59min": 0,
+            "3-5h59min": 0,
+            "6-8h59min": 0,
+            "9-11h59min": 0,
+            "12-14h59min": 0,
+            "15-17h59min": 0,
+            "18-20h59min": 0,
+            "21-23h59min": 0
+        }
 
+    df = df.copy()
 
-def contar_status(processos_tratados):
+    # timestamp
+    df["timestamp"] = pandas.to_datetime(df["timestamp"])
 
-    i = 0
+    agora = pandas.Timestamp.now()
 
-    status_count = {
-        "running": 0,
-        "sleeping": 0,
-        "stopped": 0
+    # diferença em horas
+    df["horas_atras"] = (
+        (agora - df["timestamp"])
+        .dt.total_seconds() / 3600
+    )
+
+    # apenas críticos
+    df_criticos = df[
+        df["criticidade"] == "Crítico"
+    ]
+
+    def bucket(horas):
+
+        if horas < (5 / 60):
+            return "atual"
+
+        elif horas < 3:
+            return "0-2h59min"
+
+        elif horas < 6:
+            return "3-5h59min"
+
+        elif horas < 9:
+            return "6-8h59min"
+
+        elif horas < 12:
+            return "9-11h59min"
+
+        elif horas < 15:
+            return "12-14h59min"
+
+        elif horas < 18:
+            return "15-17h59min"
+
+        elif horas < 21:
+            return "18-20h59min"
+
+        else:
+            return "21-23h59min"
+
+    df_criticos["bloco"] = (
+        df_criticos["horas_atras"]
+        .apply(bucket)
+    )
+
+    resultado = (
+        df_criticos["bloco"]
+        .value_counts()
+        .to_dict()
+    )
+
+    blocos = [
+        "atual",
+        "0-2h59min",
+        "3-5h59min",
+        "6-8h59min",
+        "9-11h59min",
+        "12-14h59min",
+        "15-17h59min",
+        "18-20h59min",
+        "21-23h59min"
+    ]
+
+    return {
+        bloco: resultado.get(bloco, 0)
+        for bloco in blocos
     }
 
-    while i < len(processos_tratados):
+def contar_status(df):
 
-        # pega o status da linha atual
-        status = processos_tratados.iloc[i]["status"].lower()
+    contagem = (
+        df["status"]
+        .str.lower()
+        .value_counts()
+        .to_dict()
+    )
 
-        if status in status_count:
-            status_count[status] += 1
-
-        i += 1
-    return status_count
-
-
-def contar_criticos(processos_tratados):
-
-    i = 0
-
-    criticos_count = {
-        "latencia": 0,
-        "cpu": 0,
-        "ram": 0,
-        "total": 0
+    return {
+        "running": contagem.get("running", 0),
+        "sleeping": contagem.get("sleeping", 0),
+        "stopped": contagem.get("stopped", 0)
     }
 
-    while i < len(processos_tratados):
 
-        processos = processos_tratados.iloc[i]
+def contar_criticos(df):
 
-        if processos["criticidade"] == "Crítico":
+    criticos = df[
+        df["criticidade"] == "Crítico"
+    ]
 
-                if processos["cpu"] >= CPU_CRITICA:
-                    criticos_count["cpu"] += 1
-                    criticos_count["total"] += 1
+    cpu = (criticos["cpu"] >= CPU_CRITICA).sum()
 
-                if (
-                    processos["ram_percent"]
-                    > RAM_CRITICA_PERCENT
-                ):
-                    criticos_count["ram"] += 1
-                    criticos_count["total"] += 1
+    ram = (
+        criticos["ram_percent"] > RAM_CRITICA_PERCENT
+    ).sum()
 
-                if (
-                    processos["latencia_ms"]
-                    > LATENCIA_CRITICA
-                ):
-                    criticos_count["latencia"] += 1
-                    criticos_count["total"] += 1
-                    
-        i += 1
+    latencia = (
+        criticos["latencia_ms"] > LATENCIA_CRITICA
+    ).sum()
 
-    return criticos_count
+    return {
+        "cpu": int(cpu),
+        "ram": int(ram),
+        "latencia": int(latencia),
+        "total": int(cpu + ram + latencia)
+    }
 
 #Temperatura 
 
@@ -1020,7 +1061,7 @@ def gerar_alerta(row):
 
     # THROTTLING
 
-    if throttling == "sim":
+    if throttling in ["sim", "true", "1"]:
 
         alertas.append(
             "CPU em throttling"
@@ -1042,7 +1083,7 @@ def calcular_dia_mais_alertas(df):
 
     dias = pandas.to_datetime(
         df_alertas["timestamp"]
-    ).dt.day_name()
+    ).dt.strftime("%A")
 
     contador = Counter(dias)
 
@@ -1053,32 +1094,28 @@ def calcular_dia_mais_alertas(df):
 
 
 def filtrar_periodo(leituras, periodo):
+
     delta = PERIODOS[periodo]
-    agora = datetime.now()
-    corte = agora - delta
+    corte = datetime.now() - delta
 
     filtradas = []
 
     for r in leituras:
-
-        # evita crash silencioso
         if not isinstance(r, dict):
             continue
-
         data_str = r.get("data_hora")
+
         if not data_str:
             continue
-
         try:
-            data = datetime.strptime(data_str, "%Y-%m-%d %H:%M:%S")
-        except ValueError:
+            data = pandas.to_datetime(data_str)
+        except:
             continue
 
         if data >= corte:
             filtradas.append(r)
 
     return filtradas
-
 
 def classificar(valor, limite):
     if limite == 0:
@@ -1111,6 +1148,9 @@ def calcular_disponibilidade(leituras, limites):
 
         if cpu != "crítico" and ram != "crítico" and disco != "crítico":
             online += 1
+
+        if not leituras:
+            return 0
 
     return (online / len(leituras)) * 100
 
@@ -1485,7 +1525,7 @@ def main():
 
     salvar_s3_unificado(
         s3,
-        f"client/empresa_{EMPRESA_ID}/{mac_address}/servidores_score.json",
+        f"client/empresa_{EMPRESA_ID}/{mac_address}/calcularIndice.json",
         client_score_json,
         formato="json_dashboard"
     )
@@ -1553,7 +1593,7 @@ def main():
 
     salvar_s3_unificado(
         s3,
-        f"client/empresa_{EMPRESA_ID}/{mac_address}/temperatura_client.json",
+        f"client/empresa_{EMPRESA_ID}/{mac_address}/client_metrics.json",
         client_temp_json,
         formato="json_dashboard"
     )
@@ -1588,6 +1628,7 @@ def main():
 
     # 3. TRANSFORM (TRUSTED)
     dfProcessos = processos_tratados_s3(df_raw)
+    raw_criticos_4h = gerar_raw_criticos_4h(dfProcessos)
 
     # =========================
     # KPIs
@@ -1602,7 +1643,7 @@ def main():
     kpis.update(contar_status(dfProcessos))
     kpis.update(contar_criticos(dfProcessos))
 
-    dfKPI = pd.DataFrame([kpis])
+    dfKPI = pandas.DataFrame([kpis])
 
 
     # =========================
@@ -1635,8 +1676,15 @@ def main():
     # CLIENT JSON
     salvar_s3_unificado(
         s3,
-        f"client/empresa_{EMPRESA_ID}/{mac_address}/processos_client.json",
+        f"client/empresa_{EMPRESA_ID}/{mac_address}/process_raw_kpis.json",
         client_processos_json,
+        formato="json_dashboard"
+    )
+
+    salvar_s3_unificado(
+        s3,
+        f"client/empresa_{EMPRESA_ID}/{mac_address}/raw_criticos_4h.json",
+        raw_criticos_4h,
         formato="json_dashboard"
     )
 
@@ -1650,7 +1698,7 @@ def main():
 
     for key in arquivos:
         
-        if key.endswith("flights_raw (1).csv"):
+        if key.endswith("flights_raw.csv"):
             continue
         if key.endswith("raw_processos.csv"):
             continue
@@ -1841,13 +1889,13 @@ def main():
     # =========================
     df_trusted = pandas.DataFrame(trusted_rows)
 
-    salvar_s3_unificado(s3, f"trusted/{base_path}", df_trusted, formato="csv")
+    salvar_s3_unificado(s3, f"trusted/empresa_{empresa_id}/{mac_address}/metricas_trusted.csv", df_trusted, formato="csv")
 
-    salvar_s3_unificado(s3, f"client/{base_path.replace('.csv', '.json')}", client_json, formato="json")
+    salvar_s3_unificado(s3, f"client/empresa_{empresa_id}/{mac_address}/metricas.json", client_json, formato="json")
 
-    salvar_s3_unificado(s3, f"client/alertas/{base_path.replace('.csv', '_alertas.json')}", alertas, formato="json")
+    salvar_s3_unificado(s3, f"client/alertas/empresa_{empresa_id}/{mac_address}/metricas.json", alertas, formato="json")
 
-    salvar_s3_unificado(s3, f"client/resumo/{base_path.replace('.csv', '_resumo.json')}", resumo, formato="json")
+    salvar_s3_unificado(s3, f"client/resumo/empresa_{empresa_id}/{mac_address}/metricas.json", resumo, formato="json")
 
     
 
@@ -1863,7 +1911,7 @@ def main():
         print(f"\n── Processando empresa {empresa_id}")
 
         network_key = f"raw/empresa_{empresa_id}/{mac_address}/telemetria_servidores.csv"
-        flights_key = f"raw/empresa_{empresa_id}/{mac_address}/flights_raw (1).csv"
+        flights_key = f"raw/empresa_{empresa_id}/{mac_address}/flights_raw.csv"
 
         df_network = ler_csv_s3(network_key)
         df_flights = ler_csv_s3(flights_key)
@@ -1877,13 +1925,43 @@ def main():
         dfN_24h = enriquecer_dados(dfN_24h)
 
         salvar_s3_unificado(s3, f"trusted/empresa_{empresa_id}/{mac_address}/network_trusted.csv", df_network, formato="csv")
-        salvar_s3_unificado(s3, f"trusted/empresa_{empresa_id}/flights_trusted.csv", df_flights, formato="csv")
+        salvar_s3_unificado(s3, f"trusted/empresa_{empresa_id}/{mac_address}/flights_trusted.csv", df_flights, formato="csv")
 
         dashboard = gerar_json_dashboard(dfN_24h, dfV_24h, "24h")
+        dfN_3d = df_network[df_network["timestamp"] >= agora - pandas.Timedelta(days=3)]
+        dfV_3d = df_flights[df_flights["timestamp_coleta"] >= agora - pandas.Timedelta(days=3)]
+
+        dfN_7d = df_network[df_network["timestamp"] >= agora - pandas.Timedelta(days=7)]
+        dfV_7d = df_flights[df_flights["timestamp_coleta"] >= agora - pandas.Timedelta(days=7)]
+
+        dfN_3d = enriquecer_dados(dfN_3d)
+        dfN_7d = enriquecer_dados(dfN_7d)
+
+        dashboard_3d = gerar_json_dashboard(dfN_3d, dfV_3d, "3d")
+        dashboard_7d = gerar_json_dashboard(dfN_7d, dfV_7d, "7d")
 
         base_path = f"client/empresa_{empresa_id}/{mac_address}"
 
-        salvar_s3_unificado(s3, f"{base_path}/dashboard_rede_24h.json", dashboard, formato="json")
+        salvar_s3_unificado(
+            s3,
+            f"{base_path}/dashboard_rede_24h.json",
+            dashboard,
+            formato="json"
+        )
+
+        salvar_s3_unificado(
+            s3,
+            f"{base_path}/dashboard_rede_3d.json",
+            dashboard_3d,
+            formato="json"
+        )
+
+        salvar_s3_unificado(
+            s3,
+            f"{base_path}/dashboard_rede_7d.json",
+            dashboard_7d,
+            formato="json"
+        )
 
         # =========================
         # DASHBOARD GESTOR
