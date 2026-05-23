@@ -904,6 +904,14 @@ def capturar_processos():
                 datetime.fromtimestamp(proc.create_time())
             )
 
+            # formatação de tempo de execução
+            dias = tempo_execucao.days
+            horas = tempo_execucao.seconds // 3600
+            minutos = (tempo_execucao.seconds % 3600) // 60
+
+            tempo_formatado = f"{dias}d {horas}h {minutos}min"
+            # =================================================
+
             inicio = time.perf_counter()
             proc.memory_percent()
             fim = time.perf_counter()
@@ -920,7 +928,7 @@ def capturar_processos():
                 "ram_percent": round(ram_percent, 2),
                 "ram_mb": round(ram_mb, 2),
                 "status": proc.info['status'],
-                "tempo_execucao": str(tempo_execucao),
+                "tempo_execucao": str(tempo_formatado),
                 "latencia_ms": round(latencia, 2)
             }
 
