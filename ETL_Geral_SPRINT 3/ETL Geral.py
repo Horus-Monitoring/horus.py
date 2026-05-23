@@ -1647,7 +1647,6 @@ def main():
     print("\n=== PIPELINE RAW → CLIENT/ALERTAS ===")
 
     arquivos = listar_raw()
-    print(arquivos)
 
     for key in arquivos:
         
@@ -1664,8 +1663,6 @@ def main():
             col = "id_servidor"
         else:
             raise ValueError("Coluna de servidor não encontrada")
-
-        print(df)
 
         trusted_rows = []
         client_json = []
