@@ -318,6 +318,253 @@ timestamp,pid,nome,usuario,cpu,ram_percent,ram_mb,status,tempo_execucao,latencia
 2026-05-21 17:24:08,33140,Code.exe,JORTIEKE\ricar,0.0,0.26,20.8,running,1:10:39.564220,0.01
 2026-05-21 17:24:09,33152,chrome.exe,JORTIEKE\ricar,0.0,0.79,62.43,running,1:20:36.480870,0.01
 2026-05-21 17:24:09,33368,pet.exe,JORTIEKE\ricar,0.0,0.07,5.8,running,1:05:24.012100,0.02
+2026-05-22 21:40:28,0,System Idle Process,NT AUTHORITY\SYSTEM,78.78,0.0,0.01,running,"20596 days, 0:40:28.308388",6.35
+2026-05-22 21:40:28,4,System,NT AUTHORITY\SYSTEM,0.0,0.01,0.24,running,"20596 days, 0:40:28.457426",6.73
+2026-05-22 21:40:28,92,,,0.0,0.53,20.73,stopped,"1 day, 14:14:05.052273",6.51
+2026-05-22 21:40:28,132,Registry,,0.0,0.08,3.03,running,"1 day, 14:14:05.181849",6.5
+2026-05-22 21:40:28,544,lsass.exe,,0.0,0.23,8.85,running,"1 day, 14:13:36.103994",6.61
+2026-05-22 21:40:29,560,smss.exe,,0.0,0.0,0.0,running,"1 day, 14:13:58.366359",7.83
+2026-05-22 21:40:29,636,services.exe,,0.0,0.1,3.92,running,"1 day, 14:13:36.492147",7.32
+2026-05-22 21:40:29,688,LsaIso.exe,,0.0,0.0,0.0,running,"1 day, 14:13:36.566957",6.48
+2026-05-22 21:40:29,828,csrss.exe,,0.0,0.01,0.55,running,"1 day, 14:13:40.669554",6.6
+2026-05-22 21:40:29,912,wininit.exe,,0.0,0.01,0.44,running,"1 day, 14:13:40.107067",6.32
+2026-05-22 21:40:29,924,Code.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.82,31.93,running,1:13:51.050899,0.05
+2026-05-22 21:40:29,1080,svchost.exe,,0.0,0.22,8.74,running,"1 day, 14:13:36.602762",7.63
+2026-05-22 21:40:30,1112,fontdrvhost.exe,,0.0,0.0,0.0,running,"1 day, 14:13:36.727497",8.85
+2026-05-22 21:40:30,1188,WUDFHost.exe,,0.0,0.0,0.0,running,"1 day, 14:13:36.806400",6.67
+2026-05-22 21:40:30,1252,svchost.exe,,0.0,0.21,8.36,running,"1 day, 14:13:36.839030",6.95
+2026-05-22 21:40:30,1296,svchost.exe,,0.0,0.05,1.95,running,"1 day, 14:13:36.896501",6.62
+2026-05-22 21:40:30,1444,RAVCpl64.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.0,0.01,running,23:03:26.710888,0.08
+2026-05-22 21:40:30,1456,msedgewebview2.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.02,0.78,running,23:00:48.850185,0.05
+2026-05-22 21:40:30,1500,svchost.exe,,0.0,0.02,0.61,running,"1 day, 14:13:36.850312",7.16
+2026-05-22 21:40:31,1616,svchost.exe,,0.0,0.02,0.75,running,"1 day, 14:13:36.937594",6.31
+2026-05-22 21:40:31,1648,msedgewebview2.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.48,18.75,running,23:00:41.485666,0.1
+2026-05-22 21:40:31,1672,svchost.exe,,0.0,0.08,3.17,running,"1 day, 14:13:37.160370",6.63
+2026-05-22 21:40:31,1684,IntelCpHDCPSvc.exe,,0.0,0.0,0.0,running,"1 day, 14:13:37.300421",6.82
+2026-05-22 21:40:31,1692,svchost.exe,,0.0,0.02,0.9,running,"1 day, 14:13:37.450501",6.6
+2026-05-22 21:40:31,1700,svchost.exe,,0.0,0.02,0.91,running,"1 day, 14:13:37.599143",6.51
+2026-05-22 21:40:31,1712,svchost.exe,,0.0,0.03,0.98,running,"1 day, 14:13:37.739906",6.53
+2026-05-22 21:40:32,1748,svchost.exe,,0.0,0.02,0.61,running,"1 day, 14:13:37.875389",6.93
+2026-05-22 21:40:32,1816,svchost.exe,,0.0,0.01,0.44,running,"1 day, 14:13:38.009761",6.94
+2026-05-22 21:40:32,1840,svchost.exe,,0.0,0.06,2.46,running,"1 day, 14:13:38.161827",6.59
+2026-05-22 21:40:32,1888,svchost.exe,,0.0,0.02,0.86,running,"1 day, 14:13:38.204417",6.72
+2026-05-22 21:40:32,1952,svchost.exe,,0.0,0.05,1.96,running,"1 day, 14:13:38.453078",7.49
+2026-05-22 21:40:32,1984,svchost.exe,,0.0,0.08,3.12,running,"1 day, 14:13:38.628098",6.88
+2026-05-22 21:40:33,2052,IntelCpHeciSvc.exe,,0.0,0.0,0.0,running,"1 day, 14:13:38.706797",6.88
+2026-05-22 21:40:33,2112,svchost.exe,,0.0,0.17,6.54,running,"1 day, 14:13:38.827123",10.43
+2026-05-22 21:40:33,2124,Code.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.43,16.78,running,1:17:32.750703,0.05
+2026-05-22 21:40:33,2180,svchost.exe,,0.0,0.01,0.45,running,"1 day, 14:13:39.115331",9.65
+2026-05-22 21:40:33,2316,Spotify.exe,DESKTOP-AARF97L\JOAQUIM,0.0,4.45,173.57,running,23:02:42.730621,0.05
+2026-05-22 21:40:33,2344,igfxCUIService.exe,,0.0,0.0,0.0,running,"1 day, 14:13:39.241248",6.86
+2026-05-22 21:40:34,2392,svchost.exe,,0.0,0.14,5.39,running,"1 day, 14:13:39.349196",8.93
+2026-05-22 21:40:34,2460,svchost.exe,,0.0,0.06,2.41,running,"1 day, 14:13:39.455634",10.52
+2026-05-22 21:40:34,2476,svchost.exe,,0.0,0.03,1.23,running,"1 day, 14:13:39.617054",9.59
+2026-05-22 21:40:34,2584,svchost.exe,,0.0,0.02,0.78,running,"1 day, 14:13:39.705443",6.44
+2026-05-22 21:40:34,2596,svchost.exe,,0.0,0.03,0.98,running,"1 day, 14:13:39.897790",6.73
+2026-05-22 21:40:34,2608,svchost.exe,,0.0,0.1,3.96,running,"1 day, 14:13:40.106164",13.56
+2026-05-22 21:40:35,2616,MemCompression,,0.0,2.09,82.12,running,"1 day, 14:13:40.303933",7.95
+2026-05-22 21:40:35,2736,svchost.exe,,0.0,0.02,0.66,running,"1 day, 14:13:40.331473",8.77
+2026-05-22 21:40:35,2792,svchost.exe,,0.0,0.02,0.97,running,"1 day, 14:13:40.530957",25.16
+2026-05-22 21:40:35,2848,WhatsApp.Root.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.51,20.07,running,23:01:01.140059,0.07
+2026-05-22 21:40:36,2876,svchost.exe,,0.0,0.05,2.01,running,"1 day, 14:13:40.832090",96.01
+2026-05-22 21:40:36,2884,svchost.exe,,0.0,0.03,0.99,running,"1 day, 14:13:40.873872",14.18
+2026-05-22 21:40:36,2904,msedgewebview2.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.06,2.54,running,23:03:51.826418,0.05
+2026-05-22 21:40:36,2908,RtkAudioService64.exe,,0.0,0.0,0.0,running,"1 day, 14:13:41.632640",63.45
+2026-05-22 21:40:37,2936,svchost.exe,,0.0,0.01,0.54,running,"1 day, 14:13:42.176505",10.78
+2026-05-22 21:40:37,2972,svchost.exe,,0.0,0.03,1.25,running,"1 day, 14:13:42.377868",17.41
+2026-05-22 21:40:37,3016,CrossDeviceService.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.21,8.07,running,23:04:22.297271,0.05
+2026-05-22 21:40:38,3168,svchost.exe,,0.0,0.19,7.46,running,"1 day, 14:13:42.515441",9.0
+2026-05-22 21:40:38,3176,svchost.exe,,0.0,0.01,0.34,running,"1 day, 14:13:42.686280",6.63
+2026-05-22 21:40:38,3184,svchost.exe,,0.0,0.06,2.28,running,"1 day, 14:13:42.894012",33.9
+2026-05-22 21:40:38,3200,svchost.exe,,0.0,0.01,0.62,running,"1 day, 14:12:05.255902",19.75
+2026-05-22 21:40:39,3280,svchost.exe,,0.0,0.04,1.61,running,"1 day, 14:13:43.324287",21.74
+2026-05-22 21:40:39,3292,SearchHost.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.23,8.8,running,23:03:57.279860,0.05
+2026-05-22 21:40:39,3316,svchost.exe,,0.0,0.14,5.65,running,"1 day, 14:13:42.530132",12.8
+2026-05-22 21:40:39,3320,svchost.exe,,0.0,0.02,0.93,running,"1 day, 14:13:43.839222",6.37
+2026-05-22 21:40:39,3408,RAVBg64.exe,,0.0,0.0,0.11,running,23:04:34.567696,7.28
+2026-05-22 21:40:39,3428,svchost.exe,,0.0,0.1,3.82,running,"1 day, 14:13:44.034758",8.71
+2026-05-22 21:40:40,3472,svchost.exe,,0.0,0.02,0.64,running,"1 day, 14:13:44.160796",6.51
+2026-05-22 21:40:40,3504,SearchProtocolHost.exe,,0.0,0.19,7.6,running,0:01:02.773400,6.56
+2026-05-22 21:40:40,3536,spoolsv.exe,,0.0,0.0,0.0,running,"1 day, 14:13:44.396907",8.49
+2026-05-22 21:40:40,3556,WidgetService.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.0,0.09,running,23:04:16.652363,0.05
+2026-05-22 21:40:40,3576,svchost.exe,,0.0,0.02,0.76,running,"1 day, 14:13:44.532412",7.62
+2026-05-22 21:40:40,3588,chrome.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.0,0.03,running,23:03:50.854855,0.05
+2026-05-22 21:40:40,3672,GameInputSvc.exe,,0.0,0.02,0.8,running,23:12:23.844206,6.37
+2026-05-22 21:40:41,3692,svchost.exe,,0.0,0.01,0.23,running,"1 day, 14:13:44.700954",6.62
+2026-05-22 21:40:41,3700,armsvc.exe,,0.0,0.0,0.0,running,"1 day, 14:13:44.853783",8.05
+2026-05-22 21:40:41,3716,svchost.exe,,0.0,0.07,2.75,running,"1 day, 14:13:45.000261",10.51
+2026-05-22 21:40:41,3732,svchost.exe,,0.0,0.39,15.09,running,"1 day, 14:13:45.173981",7.99
+2026-05-22 21:40:41,3752,svchost.exe,,0.0,0.41,16.07,running,"1 day, 14:13:45.320149",7.27
+2026-05-22 21:40:41,3780,GameInputRedistService.exe,,0.0,0.0,0.06,running,"1 day, 14:13:45.437514",8.14
+2026-05-22 21:40:42,3792,esif_uf.exe,,0.0,0.0,0.0,running,"1 day, 14:13:45.587944",6.56
+2026-05-22 21:40:42,3800,OfficeClickToRun.exe,,0.0,0.08,3.29,running,"1 day, 14:13:45.744225",9.15
+2026-05-22 21:40:42,3884,OneApp.IGCC.WinService.exe,,0.0,0.03,1.09,running,"1 day, 14:13:45.814607",6.58
+2026-05-22 21:40:42,3892,WidgetBoard.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.07,2.9,running,23:04:22.259931,0.05
+2026-05-22 21:40:42,3900,svchost.exe,,0.0,0.01,0.48,running,"1 day, 14:13:46.070008",9.46
+2026-05-22 21:40:42,3912,LGUWPService.exe,,0.0,0.04,1.69,running,"1 day, 14:13:46.216895",6.81
+2026-05-22 21:40:43,3944,MpDefenderCoreService.exe,,0.0,0.02,0.84,running,"1 day, 14:13:46.351563",7.03
+2026-05-22 21:40:43,3964,svchost.exe,,0.0,0.01,0.48,running,"1 day, 14:13:46.490389",7.11
+2026-05-22 21:40:43,3980,MsMpEng.exe,,0.0,4.39,171.27,running,"1 day, 14:13:46.389590",6.23
+2026-05-22 21:40:43,4012,PlatformMgrService.exe,,0.0,0.02,0.96,running,"1 day, 14:13:46.735982",8.25
+2026-05-22 21:40:43,4056,svchost.exe,,0.0,0.0,0.03,running,"1 day, 14:13:46.821730",6.43
+2026-05-22 21:40:43,4092,mysqld.exe,,0.0,0.0,0.0,running,"1 day, 14:13:46.917212",7.61
+2026-05-22 21:40:43,4184,svchost.exe,,0.0,0.04,1.62,running,"1 day, 14:13:46.926478",6.57
+2026-05-22 21:40:44,4416,wslservice.exe,,0.0,0.1,4.01,running,"1 day, 14:13:46.828181",8.23
+2026-05-22 21:40:44,4596,FileSyncHelper.exe,,0.0,0.0,0.0,running,"1 day, 14:11:53.115388",7.5
+2026-05-22 21:40:44,4848,GameInputSvc.exe,,0.0,0.0,0.0,running,"1 day, 14:13:07.843863",6.89
+2026-05-22 21:40:44,4900,mysqld.exe,,0.0,0.04,1.51,running,"1 day, 14:13:46.640881",8.85
+2026-05-22 21:40:44,4936,conhost.exe,,0.0,0.01,0.38,running,"1 day, 14:13:46.718531",6.58
+2026-05-22 21:40:44,4948,svchost.exe,,0.0,0.09,3.58,running,0:01:20.316712,6.83
+2026-05-22 21:40:45,4964,WmiPrvSE.exe,,0.0,0.1,3.8,running,0:01:45.348425,6.36
+2026-05-22 21:40:45,4984,ShellExperienceHost.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.0,0.01,stopped,23:03:21.525464,0.09
+2026-05-22 21:40:45,5068,svchost.exe,,0.0,0.02,0.77,running,"1 day, 14:13:31.395674",6.97
+2026-05-22 21:40:45,5148,OneDrive.exe,DESKTOP-AARF97L\JOAQUIM,0.0,1.09,42.45,running,23:03:38.092818,0.05
+2026-05-22 21:40:45,5184,XboxPcAppFT.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.06,2.37,running,23:00:40.380714,0.12
+2026-05-22 21:40:45,5212,OpenConsole.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.01,0.3,running,1:24:48.357343,0.05
+2026-05-22 21:40:45,5412,Code.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.0,0.01,running,1:13:38.144893,0.05
+2026-05-22 21:40:45,5444,svchost.exe,,0.0,0.03,1.25,running,"1 day, 14:13:46.405342",6.99
+2026-05-22 21:40:46,5532,RuntimeBroker.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.09,3.32,running,22:20:34.801718,0.11
+2026-05-22 21:40:46,5580,jusched.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.0,0.01,running,22:59:57.733243,0.18
+2026-05-22 21:40:46,5624,msedge.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.1,4.03,running,0:33:33.415635,0.05
+2026-05-22 21:40:46,5732,Code.exe,DESKTOP-AARF97L\JOAQUIM,0.0,1.54,60.08,running,1:17:56.986764,0.1
+2026-05-22 21:40:46,5744,conhost.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.0,0.04,running,1:17:29.425905,0.06
+2026-05-22 21:40:46,5824,chrome.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.37,14.55,running,23:03:55.268592,0.14
+2026-05-22 21:40:46,6096,svchost.exe,,0.0,0.23,8.96,running,"1 day, 14:13:39.237010",6.6
+2026-05-22 21:40:46,6192,msedgewebview2.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.29,11.29,running,23:04:02.587120,0.05
+2026-05-22 21:40:46,6464,wlanext.exe,,0.0,0.0,0.0,running,"1 day, 14:13:39.098782",7.15
+2026-05-22 21:40:47,6496,svchost.exe,,0.0,0.01,0.51,running,"1 day, 14:13:39.281586",7.29
+2026-05-22 21:40:47,6524,WmiPrvSE.exe,,0.0,0.01,0.23,running,"1 day, 14:13:42.665298",6.65
+2026-05-22 21:40:47,6684,svchost.exe,,0.0,0.15,5.77,running,"1 day, 14:13:40.629625",6.53
+2026-05-22 21:40:47,6696,pet.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.0,0.01,running,1:17:29.039481,0.05
+2026-05-22 21:40:47,6812,svchost.exe,,0.0,0.01,0.36,running,"1 day, 14:13:40.688334",6.67
+2026-05-22 21:40:47,6824,svchost.exe,,0.0,0.01,0.37,running,"1 day, 14:13:40.834721",7.08
+2026-05-22 21:40:48,6832,gamingservices.exe,,0.0,0.21,8.06,running,"1 day, 14:13:40.982361",7.19
+2026-05-22 21:40:48,6848,gamingservicesnet.exe,,0.0,0.01,0.2,running,"1 day, 14:13:41.126791",7.32
+2026-05-22 21:40:48,6876,jetbrainsd.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.17,6.52,running,23:01:27.522519,0.1
+2026-05-22 21:40:48,6904,chrome.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.24,9.18,running,1:07:42.888961,0.11
+2026-05-22 21:40:48,7140,msedgewebview2.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.01,0.45,running,23:04:04.190303,0.12
+2026-05-22 21:40:48,7144,Code.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.0,0.05,running,1:17:58.093537,0.05
+2026-05-22 21:40:48,7192,RuntimeBroker.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.0,0.14,running,23:04:13.300201,0.05
+2026-05-22 21:40:48,7200,svchost.exe,,0.0,0.02,0.76,running,"1 day, 10:22:56.383500",6.93
+2026-05-22 21:40:49,7276,svchost.exe,,0.0,0.01,0.42,running,"1 day, 14:13:39.938211",7.32
+2026-05-22 21:40:49,7308,msedgewebview2.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.1,3.9,running,23:04:04.021366,0.05
+2026-05-22 21:40:49,7324,svchost.exe,,0.0,0.06,2.15,running,"1 day, 14:13:40.149977",6.55
+2026-05-22 21:40:49,7344,XboxPcTray.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.02,0.78,running,23:00:44.689667,0.05
+2026-05-22 21:40:49,7368,svchost.exe,,0.0,0.01,0.54,running,"1 day, 14:13:36.707116",6.51
+2026-05-22 21:40:49,7384,svchost.exe,,0.0,0.01,0.25,running,"1 day, 14:09:35.250492",6.55
+2026-05-22 21:40:49,7424,svchost.exe,,0.0,0.02,0.78,running,"1 day, 14:13:36.425583",6.27
+2026-05-22 21:40:50,7468,svchost.exe,,0.0,0.0,0.02,running,1:34:11.858729,6.5
+2026-05-22 21:40:50,7676,AggregatorHost.exe,,0.0,0.01,0.44,running,"1 day, 14:13:39.682771",6.32
+2026-05-22 21:40:50,7876,chrome.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.57,22.12,running,23:04:00.403208,0.05
+2026-05-22 21:40:50,7952,svchost.exe,,0.0,0.02,0.75,running,"1 day, 14:13:38.300161",6.88
+2026-05-22 21:40:50,8036,chrome.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.11,4.37,running,0:11:07.237522,0.05
+2026-05-22 21:40:50,8088,RuntimeBroker.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.13,4.89,running,23:04:30.007554,0.11
+2026-05-22 21:40:50,8220,chrome.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.05,2.0,running,22:19:24.160074,0.05
+2026-05-22 21:40:50,8232,svchost.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.02,0.75,running,22:18:18.519109,0.05
+2026-05-22 21:40:50,8312,chrome.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.5,19.43,running,0:04:54.683826,0.05
+2026-05-22 21:40:51,8464,svchost.exe,,0.0,0.03,1.23,running,"1 day, 14:13:35.800206",6.24
+2026-05-22 21:40:51,8480,svchost.exe,,0.0,0.02,0.9,running,"1 day, 14:12:10.787921",6.72
+2026-05-22 21:40:51,8512,svchost.exe,,0.0,0.01,0.48,running,"1 day, 14:13:35.958948",6.24
+2026-05-22 21:40:51,8800,csrss.exe,,0.0,0.05,2.02,running,23:12:42.917900,7.88
+2026-05-22 21:40:51,8864,RuntimeBroker.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.01,0.5,running,23:01:12.871708,0.11
+2026-05-22 21:40:51,8888,msedgewebview2.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.47,18.53,running,23:01:10.158398,0.05
+2026-05-22 21:40:51,8904,ctfmon.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.07,2.74,running,23:04:19.279660,0.05
+2026-05-22 21:40:52,9012,Code.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.24,9.49,running,1:14:06.341654,0.05
+2026-05-22 21:40:52,9096,msedge.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.11,4.18,running,0:33:39.349628,0.05
+2026-05-22 21:40:52,9208,RuntimeBroker.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.03,1.02,running,23:03:27.767988,0.12
+2026-05-22 21:40:52,9212,chrome.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.08,3.1,running,0:11:11.887887,0.05
+2026-05-22 21:40:52,9348,RAVBg64.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.0,0.01,running,23:03:45.782472,0.17
+2026-05-22 21:40:52,9424,Code.exe,DESKTOP-AARF97L\JOAQUIM,0.0,11.81,461.23,running,1:17:24.093671,0.11
+2026-05-22 21:40:52,9480,Spotify.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.0,0.02,running,23:03:14.779188,0.12
+2026-05-22 21:40:52,9528,svchost.exe,,0.0,0.16,6.12,running,0:01:12.391281,6.29
+2026-05-22 21:40:53,9532,svchost.exe,,0.0,0.03,1.34,running,"1 day, 14:13:30.589361",8.05
+2026-05-22 21:40:53,9660,Code.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.21,8.35,running,1:18:02.003771,0.05
+2026-05-22 21:40:53,9700,igfxEM.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.0,0.02,running,23:04:47.552480,0.09
+2026-05-22 21:40:53,9724,FileCoAuth.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.02,0.73,running,23:03:30.146690,0.05
+2026-05-22 21:40:53,9800,msedgewebview2.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.17,6.68,running,23:01:10.462539,0.05
+2026-05-22 21:40:53,9992,taskhostw.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.06,2.32,running,23:04:47.639803,0.05
+2026-05-22 21:40:53,10444,audiodg.exe,,0.0,0.18,7.07,running,"1 day, 14:13:24.183401",0.05
+2026-05-22 21:40:53,10460,msedgewebview2.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.04,1.57,running,23:04:08.911484,0.05
+2026-05-22 21:40:53,10612,Code.exe,DESKTOP-AARF97L\JOAQUIM,0.0,1.32,51.69,running,1:17:53.250518,0.05
+2026-05-22 21:40:54,10752,UserOOBEBroker.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.0,0.01,running,23:04:28.747762,0.09
+2026-05-22 21:40:54,10796,chrome.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.17,6.5,running,0:11:16.176877,0.04
+2026-05-22 21:40:54,10992,winlogon.exe,,0.0,0.0,0.13,running,23:12:45.592036,6.32
+2026-05-22 21:40:54,11096,ShellHost.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.03,1.07,running,22:08:18.453399,0.11
+2026-05-22 21:40:54,11156,WindowsTerminal.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.14,5.66,running,1:24:58.438603,0.04
+2026-05-22 21:40:54,11212,SecurityHealthService.exe,,0.0,0.03,1.05,running,"1 day, 14:12:55.111990",6.29
+2026-05-22 21:40:54,11368,powershell.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.03,1.15,running,1:17:25.720106,0.07
+2026-05-22 21:40:54,11456,SearchIndexer.exe,,0.0,0.16,6.19,running,"1 day, 14:13:11.231982",6.57
+2026-05-22 21:40:55,11544,svchost.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.01,0.54,running,23:02:49.192753,0.11
+2026-05-22 21:40:55,11568,SecurityHealthSystray.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.0,0.01,running,23:03:55.364101,0.19
+2026-05-22 21:40:55,11580,svchost.exe,,0.0,0.04,1.42,running,0:03:34.869647,6.76
+2026-05-22 21:40:55,11592,svchost.exe,,0.0,0.03,1.09,running,"1 day, 14:13:10.599382",6.77
+2026-05-22 21:40:55,11688,dwm.exe,,0.0,0.4,15.46,running,23:12:46.629284,6.7
+2026-05-22 21:40:55,11724,msedge.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.0,0.16,running,0:33:48.392112,0.05
+2026-05-22 21:40:55,11884,powershell.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.03,1.12,running,1:13:58.186660,0.05
+2026-05-22 21:40:56,11932,StartMenuExperienceHost.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.11,4.3,running,23:04:37.088564,0.05
+2026-05-22 21:40:56,12096,explorer.exe,DESKTOP-AARF97L\JOAQUIM,0.0,1.41,55.22,running,23:04:48.722579,0.05
+2026-05-22 21:40:56,12192,svchost.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.07,2.61,running,23:04:50.509749,0.05
+2026-05-22 21:40:56,12276,powershell.exe,DESKTOP-AARF97L\JOAQUIM,0.0,1.99,77.74,running,0:00:37.217857,0.05
+2026-05-22 21:40:56,12480,Code.exe,DESKTOP-AARF97L\JOAQUIM,15.55,1.7,66.23,running,1:18:05.534581,0.05
+2026-05-22 21:40:56,12576,AppActions.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.09,3.59,running,22:54:48.525894,0.05
+2026-05-22 21:40:56,12592,Code.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.04,1.67,running,1:13:16.246373,0.05
+2026-05-22 21:40:56,12628,conhost.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.0,0.01,running,1:17:38.163904,0.09
+2026-05-22 21:40:56,12676,svchost.exe,,0.0,0.05,1.91,running,"1 day, 11:12:41.736546",6.7
+2026-05-22 21:40:57,12940,NisSrv.exe,,0.0,0.06,2.32,running,"1 day, 14:12:40.269149",15.18
+2026-05-22 21:40:57,13172,RuntimeBroker.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.17,6.67,running,23:00:47.955139,0.06
+2026-05-22 21:40:57,13308,Spotify.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.09,3.49,running,23:03:12.602102,0.05
+2026-05-22 21:40:57,13324,msedgewebview2.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.06,2.36,running,23:01:14.341324,0.05
+2026-05-22 21:40:57,13340,svchost.exe,,0.0,0.18,7.15,running,"1 day, 14:11:50.294305",9.67
+2026-05-22 21:40:57,13556,sihost.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.13,5.1,running,23:04:52.597400,0.04
+2026-05-22 21:40:57,13664,svchost.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.03,0.98,running,23:03:05.131042,0.05
+2026-05-22 21:40:58,13668,OpenConsole.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.22,8.69,running,0:00:39.612563,0.05
+2026-05-22 21:40:58,13700,svchost.exe,,0.0,0.01,0.56,running,"1 day, 14:11:47.629315",9.28
+2026-05-22 21:40:58,13776,svchost.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.06,2.3,running,23:04:52.941808,0.05
+2026-05-22 21:40:58,13824,Spotify.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.89,34.86,running,23:03:21.017914,0.05
+2026-05-22 21:40:58,13852,svchost.exe,,0.0,0.01,0.37,running,"1 day, 14:11:46.972559",6.4
+2026-05-22 21:40:58,13964,svchost.exe,,0.0,0.37,14.58,running,"1 day, 14:11:46.430910",6.52
+2026-05-22 21:40:58,14012,svchost.exe,,0.0,0.02,0.94,running,"1 day, 14:11:46.408868",6.92
+2026-05-22 21:40:59,14028,Code.exe,DESKTOP-AARF97L\JOAQUIM,0.0,1.04,40.47,running,1:17:52.726700,0.05
+2026-05-22 21:40:59,14072,OpenConsole.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.0,0.02,running,1:14:08.113392,0.05
+2026-05-22 21:40:59,14368,msedgewebview2.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.11,4.41,running,23:04:14.526783,0.1
+2026-05-22 21:40:59,14376,svchost.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.06,2.34,running,23:04:38.456730,0.1
+2026-05-22 21:40:59,14400,jetbrains-toolbox.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.97,37.87,running,23:02:51.152505,0.1
+2026-05-22 21:40:59,14572,svchost.exe,,0.0,0.01,0.54,running,"1 day, 14:04:08.094108",6.88
+2026-05-22 21:40:59,14648,Code.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.04,1.66,running,1:13:29.750249,0.1
+2026-05-22 21:40:59,14868,svchost.exe,,0.0,0.0,0.13,running,"1 day, 14:04:09.355855",6.29
+2026-05-22 21:40:59,14876,pet.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.02,0.62,running,1:17:43.032400,0.05
+2026-05-22 21:41:00,15168,chrome.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.04,1.7,running,22:18:12.246717,0.14
+2026-05-22 21:41:00,15252,Spotify.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.38,14.82,running,23:03:15.388001,0.12
+2026-05-22 21:41:00,15308,MicrosoftStartFeedProvider.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.09,3.33,running,23:04:24.092500,0.14
+2026-05-22 21:41:00,15320,Code.exe,DESKTOP-AARF97L\JOAQUIM,3.88,5.61,218.89,running,1:18:08.102009,0.05
+2026-05-22 21:41:00,15372,Spotify.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.05,1.88,running,23:03:15.596956,0.05
+2026-05-22 21:41:00,15448,msedge.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.3,11.54,running,0:33:55.527768,0.04
+2026-05-22 21:41:00,15460,Code.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.24,9.36,running,1:14:14.588862,0.1
+2026-05-22 21:41:00,15496,jucheck.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.0,0.01,running,22:55:11.765924,0.09
+2026-05-22 21:41:00,15660,powershell.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.07,2.59,running,1:14:55.303801,0.05
+2026-05-22 21:41:01,15740,OpenConsole.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.0,0.02,running,1:17:33.668654,0.05
+2026-05-22 21:41:01,15792,svchost.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.0,0.02,running,23:04:55.601637,0.09
+2026-05-22 21:41:01,15812,Spotify.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.05,1.79,running,23:02:55.255632,0.11
+2026-05-22 21:41:01,15960,fontdrvhost.exe,,0.0,0.0,0.0,running,23:12:52.269894,7.26
+2026-05-22 21:41:01,16016,LockApp.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.0,0.01,stopped,22:34:26.774953,0.24
+2026-05-22 21:41:01,16124,svchost.exe,,0.0,0.01,0.37,running,"1 day, 14:02:50.116424",6.66
+2026-05-22 21:41:01,16160,CrossDeviceResume.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.09,3.51,running,23:04:52.415746,0.05
+2026-05-22 21:41:01,16288,EP64.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.0,0.0,running,23:03:55.860921,0.08
+2026-05-22 21:41:02,16360,chrome.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.05,2.0,running,23:04:10.733656,0.11
+2026-05-22 21:41:02,16368,XboxPcApp.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.56,21.71,running,23:00:53.251857,0.05
+2026-05-22 21:41:02,16520,msedge.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.03,1.11,running,0:33:47.973831,0.1
+2026-05-22 21:41:02,16628,GameInputRedistService.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.0,0.07,running,23:04:57.293509,0.05
+2026-05-22 21:41:02,16684,chrome.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.52,20.15,running,23:04:11.218337,0.05
+2026-05-22 21:41:02,16824,svchost.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.02,0.67,running,23:04:45.567547,0.05
+2026-05-22 21:41:02,16848,Code.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.42,16.35,running,1:18:02.129014,0.05
+2026-05-22 21:41:02,16872,OpenConsole.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.0,0.02,running,1:14:57.182014,0.05
+2026-05-22 21:41:02,16980,msedgewebview2.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.07,2.6,running,23:01:19.925209,0.05
+2026-05-22 21:41:03,17324,ApplicationFrameHost.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.01,0.2,running,23:00:54.126773,0.05
+2026-05-22 21:41:03,17456,Code.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.22,8.43,running,0:01:39.299298,0.05
+2026-05-22 21:41:03,17468,python.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.44,17.33,running,0:00:36.427313,0.04
+2026-05-22 21:41:03,17940,Code.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.02,0.95,running,1:13:49.922904,0.11
+2026-05-22 21:41:03,18088,chrome.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.07,2.91,running,0:04:21.540563,0.1
+2026-05-22 21:41:03,18380,Code.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.0,0.01,running,1:13:56.151883,0.05
 2026-05-21 17:23:27,0,System Idle Process,NT AUTHORITY\SYSTEM,86.29,0.0,0.01,running,"20594 days, 20:23:27.630366",5.75,Crítico
 2026-05-21 17:23:27,4,System,NT AUTHORITY\SYSTEM,0.0,0.03,2.16,running,"20594 days, 20:23:27.779298",6.95,Estável
 2026-05-21 17:23:27,236,,,0.0,0.53,42.0,stopped,"1 day, 8:08:40.316664",7.22,Estável
@@ -637,960 +884,250 @@ timestamp,pid,nome,usuario,cpu,ram_percent,ram_mb,status,tempo_execucao,latencia
 2026-05-21 17:24:08,33140,Code.exe,JORTIEKE\ricar,0.0,0.26,20.8,running,1:10:39.564220,0.01,Estável
 2026-05-21 17:24:09,33152,chrome.exe,JORTIEKE\ricar,0.0,0.79,62.43,running,1:20:36.480870,0.01,Estável
 2026-05-21 17:24:09,33368,pet.exe,JORTIEKE\ricar,0.0,0.07,5.8,running,1:05:24.012100,0.02,Estável
-2026-05-21 17:23:27,0,System Idle Process,NT AUTHORITY\SYSTEM,86.29,0.0,0.01,running,"20594 days, 20:23:27.630366",5.75,Crítico
-2026-05-21 17:23:27,4,System,NT AUTHORITY\SYSTEM,0.0,0.03,2.16,running,"20594 days, 20:23:27.779298",6.95,Estável
-2026-05-21 17:23:27,236,,,0.0,0.53,42.0,stopped,"1 day, 8:08:40.316664",7.22,Estável
-2026-05-21 17:23:28,280,Registry,,0.0,0.18,14.16,running,"1 day, 8:08:40.450227",8.31,Estável
-2026-05-21 17:23:28,772,smss.exe,,0.0,0.0,0.04,running,"1 day, 8:08:37.803886",5.54,Estável
-2026-05-21 17:23:28,1124,csrss.exe,,0.0,0.04,2.9,running,"1 day, 8:08:25.746693",7.36,Estável
-2026-05-21 17:23:28,1232,wininit.exe,,0.0,0.02,1.45,running,"1 day, 8:08:23.837468",6.59,Estável
-2026-05-21 17:23:28,1308,services.exe,,0.0,0.08,6.57,running,"1 day, 8:08:23.537257",7.42,Estável
-2026-05-21 17:23:28,1328,LsaIso.exe,,0.0,0.01,0.75,running,"1 day, 8:08:23.660288",7.9,Estável
-2026-05-21 17:23:29,1336,lsass.exe,,0.0,0.16,12.34,running,"1 day, 8:08:23.811048",8.31,Estável
-2026-05-21 17:23:29,1392,svchost.exe,,0.0,0.02,1.25,running,7:46:24.994617,7.11,Estável
-2026-05-21 17:23:29,1460,svchost.exe,,0.0,0.26,20.81,running,"1 day, 8:08:23.920360",7.69,Estável
-2026-05-21 17:23:29,1492,fontdrvhost.exe,,0.0,0.01,0.73,running,"1 day, 8:08:24.056365",5.9,Estável
-2026-05-21 17:23:29,1544,WUDFHost.exe,,0.0,0.02,1.58,running,"1 day, 8:08:24.189073",6.37,Estável
-2026-05-21 17:23:29,1604,svchost.exe,,0.0,0.14,11.25,running,"1 day, 8:08:24.275424",7.24,Estável
-2026-05-21 17:23:29,1668,svchost.exe,,0.0,0.04,3.32,running,"1 day, 8:08:24.411262",10.78,Estável
-2026-05-21 17:23:30,1688,Code.exe,JORTIEKE\ricar,3.89,2.18,172.2,running,1:10:02.376282,0.02,Estável
-2026-05-21 17:23:30,1908,svchost.exe,,0.0,0.01,1.0,running,"1 day, 8:08:24.356567",5.02,Estável
-2026-05-21 17:23:30,1984,svchost.exe,,0.0,0.05,3.92,running,22:42:32.908328,7.98,Estável
-2026-05-21 17:23:30,2044,WUDFHost.exe,,0.0,0.02,1.93,running,"1 day, 8:08:24.667728",7.27,Estável
-2026-05-21 17:23:30,2100,svchost.exe,,0.0,0.03,2.66,running,"1 day, 8:08:24.798952",6.2,Estável
-2026-05-21 17:23:30,2108,svchost.exe,,0.0,0.09,6.77,running,"1 day, 8:08:24.948601",7.16,Estável
-2026-05-21 17:23:30,2132,svchost.exe,,0.91,0.13,10.53,running,"1 day, 8:08:25.102627",7.46,Estável
-2026-05-21 17:23:31,2316,svchost.exe,,0.0,0.03,2.64,running,"1 day, 8:08:25.233799",6.5,Estável
-2026-05-21 17:23:31,2324,svchost.exe,,0.0,0.02,1.56,running,"1 day, 8:08:25.384190",6.59,Estável
-2026-05-21 17:23:31,2332,svchost.exe,,0.0,0.03,2.71,running,"1 day, 8:08:25.532918",6.2,Estável
-2026-05-21 17:23:31,2344,svchost.exe,,0.0,0.11,9.05,running,"1 day, 8:08:25.682295",6.23,Estável
-2026-05-21 17:23:31,2408,MQRDCrashpadHandler.exe,JORTIEKE\ricar,0.0,0.02,1.4,running,7:45:09.146494,0.02,Estável
-2026-05-21 17:23:31,2444,svchost.exe,,0.0,0.02,1.83,running,"1 day, 8:08:25.916966",5.88,Estável
-2026-05-21 17:23:31,2512,IntelCpHDCPSvc.exe,,0.0,0.01,1.18,running,"1 day, 8:08:26.053482",5.32,Estável
-2026-05-21 17:23:32,2524,svchost.exe,,0.0,0.02,1.54,running,"1 day, 8:08:26.195550",6.91,Estável
-2026-05-21 17:23:32,2548,svchost.exe,,0.0,0.07,5.15,running,"1 day, 8:08:26.341299",6.42,Estável
-2026-05-21 17:23:32,2656,svchost.exe,,0.0,0.04,3.5,running,"1 day, 8:08:26.481123",6.04,Estável
-2026-05-21 17:23:32,2812,chrome.exe,JORTIEKE\ricar,0.0,0.42,33.55,running,1:19:59.595495,0.02,Estável
-2026-05-21 17:23:32,2852,svchost.exe,,0.0,0.14,11.05,running,"1 day, 8:08:26.712593",6.48,Estável
-2026-05-21 17:23:32,2928,svchost.exe,,0.0,0.03,2.11,running,"1 day, 8:08:26.523449",6.36,Estável
-2026-05-21 17:23:32,3000,svchost.exe,,0.0,0.02,1.61,running,"1 day, 8:08:26.980938",6.94,Estável
-2026-05-21 17:23:33,3108,svchost.exe,,0.0,0.08,6.03,running,"1 day, 8:08:27.082936",7.18,Estável
-2026-05-21 17:23:33,3124,svchost.exe,,0.0,0.08,6.32,running,"1 day, 8:08:27.232408",7.87,Estável
-2026-05-21 17:23:33,3172,chrome.exe,JORTIEKE\ricar,0.0,2.41,189.97,running,1:18:41.377155,0.02,Estável
-2026-05-21 17:23:33,3292,svchost.exe,,0.0,0.05,4.29,running,"1 day, 8:08:27.252494",7.95,Estável
-2026-05-21 17:23:33,3332,svchost.exe,,0.0,0.05,4.28,running,"1 day, 8:08:27.621218",7.07,Estável
-2026-05-21 17:23:33,3380,WUDFHost.exe,,0.0,0.07,5.6,running,"1 day, 8:08:27.751426",7.33,Estável
-2026-05-21 17:23:34,3392,NVDisplay.Container.exe,,0.0,0.17,13.53,running,"1 day, 8:08:27.905926",7.04,Estável
-2026-05-21 17:23:34,3424,msedgewebview2.exe,JORTIEKE\ricar,0.0,0.31,24.83,running,7:46:47.177838,0.02,Estável
-2026-05-21 17:23:34,3436,dllhost.exe,JORTIEKE\ricar,0.0,0.03,2.08,running,7:28:08.221298,0.02,Estável
-2026-05-21 17:23:34,3452,svchost.exe,,0.0,0.05,4.07,running,"1 day, 8:08:28.267220",6.99,Estável
-2026-05-21 17:23:34,3516,git-bash.exe,JORTIEKE\ricar,0.0,0.02,1.41,running,1:06:11.185852,0.07,Estável
-2026-05-21 17:23:34,3524,svchost.exe,,0.0,0.07,5.84,running,"1 day, 8:08:28.510782",6.68,Estável
-2026-05-21 17:23:34,3556,svchost.exe,,0.0,0.02,1.38,running,"1 day, 8:08:28.651054",11.82,Estável
-2026-05-21 17:23:34,3564,svchost.exe,,0.0,0.08,6.27,running,"1 day, 8:08:28.803322",5.3,Estável
-2026-05-21 17:23:35,3568,svchost.exe,,0.0,0.02,1.52,running,"1 day, 8:08:28.944167",5.57,Estável
-2026-05-21 17:23:35,3644,svchost.exe,,0.0,0.02,1.2,running,"1 day, 8:08:28.933956",6.62,Estável
-2026-05-21 17:23:35,3664,MemCompression,,0.0,0.53,41.54,running,"1 day, 8:08:29.221876",7.48,Estável
-2026-05-21 17:23:35,3716,svchost.exe,,0.0,0.01,0.9,running,"1 day, 8:08:29.374474",7.23,Estável
-2026-05-21 17:23:35,3756,svchost.exe,,0.0,0.02,1.62,running,"1 day, 8:08:29.514316",6.78,Estável
-2026-05-21 17:23:35,3764,svchost.exe,,0.0,0.02,1.69,running,"1 day, 8:08:29.665275",6.65,Estável
-2026-05-21 17:23:35,3816,svchost.exe,,0.0,0.13,10.6,running,"1 day, 8:08:29.807316",5.08,Estável
-2026-05-21 17:23:36,3928,svchost.exe,,0.0,0.04,2.8,running,"1 day, 8:08:29.919996",6.19,Estável
-2026-05-21 17:23:36,3968,svchost.exe,,0.0,0.03,2.7,running,"1 day, 8:08:30.053668",5.64,Estável
-2026-05-21 17:23:36,4088,svchost.exe,,0.0,0.1,7.7,running,"1 day, 8:08:30.142872",7.86,Estável
-2026-05-21 17:23:36,4124,pet.exe,JORTIEKE\ricar,0.0,0.04,3.1,running,1:04:51.638845,0.02,Estável
-2026-05-21 17:23:36,4144,DtsApo4Service.exe,,0.0,0.02,1.64,running,"1 day, 8:08:29.982348",6.69,Estável
-2026-05-21 17:23:36,4340,svchost.exe,,0.0,0.14,10.89,running,"1 day, 8:08:30.482621",7.6,Estável
-2026-05-21 17:23:36,4372,svchost.exe,,0.0,0.04,3.52,running,"1 day, 8:08:30.623917",6.62,Estável
-2026-05-21 17:23:37,4460,spoolsv.exe,,0.0,0.04,2.91,running,"1 day, 8:08:30.675325",7.28,Estável
-2026-05-21 17:23:37,4488,svchost.exe,,0.0,0.11,8.41,running,"1 day, 8:08:30.756667",5.26,Estável
-2026-05-21 17:23:37,4600,svchost.exe,,0.0,0.04,2.81,running,"1 day, 8:08:30.776825",5.73,Estável
-2026-05-21 17:23:37,4676,taskhostw.exe,JORTIEKE\ricar,0.0,0.03,2.74,running,7:46:53.749142,0.03,Estável
-2026-05-21 17:23:37,4728,OpenConsole.exe,JORTIEKE\ricar,0.0,0.03,2.73,running,1:04:52.886732,0.02,Estável
-2026-05-21 17:23:37,4732,explorer.exe,JORTIEKE\ricar,0.0,1.8,141.75,running,7:46:54.865416,0.03,Estável
-2026-05-21 17:23:37,4748,svchost.exe,,0.0,0.28,21.72,running,"1 day, 8:08:31.234276",6.33,Estável
-2026-05-21 17:23:38,4764,AcerCCAgent.exe,,0.0,0.05,4.21,running,"1 day, 8:08:31.385820",6.89,Estável
-2026-05-21 17:23:38,4784,svchost.exe,,0.0,0.26,20.92,running,"1 day, 8:08:31.537422",6.67,Estável
-2026-05-21 17:23:38,4876,AcerLightingService.exe,,0.0,0.02,1.88,running,"1 day, 8:08:31.682039",6.76,Estável
-2026-05-21 17:23:38,4884,ARTAimmxService.exe,,0.0,0.02,1.8,running,"1 day, 8:08:31.831034",6.7,Estável
-2026-05-21 17:23:38,4892,HPSIsvc.exe,,0.0,0.02,1.7,running,"1 day, 8:08:31.978355",5.52,Estável
-2026-05-21 17:23:38,4900,AcerPixyService.exe,,0.0,0.05,3.82,running,"1 day, 8:08:32.123061",5.64,Estável
-2026-05-21 17:23:38,4908,ADESv2Svc.exe,,0.0,0.02,1.92,running,"1 day, 8:08:32.268288",5.96,Estável
-2026-05-21 17:23:39,4916,AcerDIAgent.exe,,0.0,0.03,2.47,running,"1 day, 8:08:32.412546",5.96,Estável
-2026-05-21 17:23:39,4924,AcerCentralService.exe,,0.0,0.05,3.72,running,"1 day, 8:08:32.558255",6.31,Estável
-2026-05-21 17:23:39,4932,AcerServiceWrapper.exe,,0.0,0.02,1.95,running,"1 day, 8:08:32.703595",5.88,Estável
-2026-05-21 17:23:39,4944,IntelAudioService.exe,,0.0,0.03,2.72,running,"1 day, 8:08:32.850913",6.26,Estável
-2026-05-21 17:23:39,4952,mtkbtsvc.exe,,0.0,0.02,1.61,running,"1 day, 8:08:32.998281",5.63,Estável
-2026-05-21 17:23:39,4960,AAADSvc.exe,,0.0,0.02,1.73,running,"1 day, 8:08:33.142645",5.79,Estável
-2026-05-21 17:23:39,4968,svchost.exe,,0.0,0.01,0.56,running,"1 day, 8:08:33.286931",5.73,Estável
-2026-05-21 17:23:40,4976,AcerGAICameraService.exe,,0.0,0.03,2.04,running,"1 day, 8:08:33.432472",8.51,Estável
-2026-05-21 17:23:40,4984,AcerQAAgent.exe,,0.0,0.06,5.08,running,"1 day, 8:08:33.589154",5.53,Estável
-2026-05-21 17:23:40,4992,svchost.exe,,0.0,0.06,4.82,running,"1 day, 8:08:33.734911",6.77,Estável
-2026-05-21 17:23:40,5000,DSAService.exe,,0.0,0.39,30.86,running,"1 day, 8:08:33.883383",7.31,Estável
-2026-05-21 17:23:40,5012,DSAUpdateService.exe,,0.0,0.28,22.07,running,"1 day, 8:08:34.038014",6.91,Estável
-2026-05-21 17:23:40,5020,armsvc.exe,,0.0,0.02,1.32,running,"1 day, 8:08:34.191802",6.83,Estável
-2026-05-21 17:23:41,5040,svchost.exe,,0.0,0.09,7.48,running,"1 day, 8:08:34.343061",7.34,Estável
-2026-05-21 17:23:41,5052,svchost.exe,,0.0,0.03,2.5,running,"1 day, 8:08:34.494144",5.94,Estável
-2026-05-21 17:23:41,5080,AcerSystemCentralService.exe,,0.0,0.02,1.56,running,"1 day, 8:08:34.640955",6.1,Estável
-2026-05-21 17:23:41,5088,PresentMonService.exe,,0.0,0.04,3.18,running,"1 day, 8:08:34.792422",7.47,Estável
-2026-05-21 17:23:41,5096,AcerEZService.exe,,0.0,0.09,6.92,running,"1 day, 8:08:34.945536",6.62,Estável
-2026-05-21 17:23:41,5104,MsMpEng.exe,,0.0,2.46,194.15,running,"1 day, 8:08:35.094056",6.44,Estável
-2026-05-21 17:23:41,5112,jhi_service.exe,,0.0,0.02,1.25,running,"1 day, 8:08:35.248175",8.67,Estável
-2026-05-21 17:23:42,5144,WMIRegistrationService.exe,,0.0,0.02,1.88,running,"1 day, 8:08:35.397520",6.89,Estável
-2026-05-21 17:23:42,5168,IntelGraphicsSoftware.Service.exe,,0.0,0.07,5.43,running,"1 day, 8:08:35.547409",7.39,Estável
-2026-05-21 17:23:42,5180,MpDefenderCoreService.exe,,0.0,0.11,8.93,running,"1 day, 8:08:35.700401",7.19,Estável
-2026-05-21 17:23:42,5196,collector_service.exe,,0.0,0.03,2.59,running,"1 day, 8:08:35.853168",6.6,Estável
-2026-05-21 17:23:42,5204,SurSvc.exe,,0.0,0.11,9.0,running,"1 day, 8:08:36.004554",12.71,Estável
-2026-05-21 17:23:42,5212,RtkAudUService64.exe,,0.0,0.03,2.5,running,"1 day, 8:08:36.160328",6.48,Estável
-2026-05-21 17:23:43,5224,nvcontainer.exe,,0.0,0.12,9.63,running,"1 day, 8:08:36.309054",6.87,Estável
-2026-05-21 17:23:43,5264,esrv_svc.exe,,0.0,0.49,38.68,running,7:44:10.971013,7.63,Estável
-2026-05-21 17:23:43,5432,ipfsvc.exe,,0.0,0.04,2.93,running,"1 day, 8:08:36.598069",7.54,Estável
-2026-05-21 17:23:43,5448,AcerAgentService.exe,,0.0,0.02,1.85,running,"1 day, 8:08:36.746837",7.69,Estável
-2026-05-21 17:23:43,5456,python.exe,JORTIEKE\ricar,0.0,0.23,17.93,running,0:00:16.224921,0.01,Estável
-2026-05-21 17:23:43,5464,OfficeClickToRun.exe,,0.0,0.11,8.86,running,"1 day, 8:08:36.998896",7.42,Estável
-2026-05-21 17:23:43,5476,mysqld.exe,,0.0,0.02,1.64,running,"1 day, 8:08:37.152395",5.97,Estável
-2026-05-21 17:23:44,5492,svchost.exe,JORTIEKE\ricar,0.0,0.09,7.46,running,7:46:59.343358,0.01,Estável
-2026-05-21 17:23:44,5660,powershell.exe,JORTIEKE\ricar,0.0,0.34,27.21,running,0:49:36.034036,0.03,Estável
-2026-05-21 17:23:44,5940,WidgetService.exe,JORTIEKE\ricar,0.0,0.04,3.1,running,7:46:58.188909,0.02,Estável
-2026-05-21 17:23:44,6112,svchost.exe,,0.0,0.05,3.74,running,"1 day, 8:08:37.525594",6.35,Estável
-2026-05-21 17:23:44,6232,svchost.exe,,0.0,0.1,7.56,running,1:21:07.426997,7.26,Estável
-2026-05-21 17:23:44,6856,chrome.exe,JORTIEKE\ricar,0.0,0.1,8.11,running,1:20:12.001285,0.02,Estável
-2026-05-21 17:23:44,6952,mysqld.exe,,0.0,0.04,3.45,running,"1 day, 8:08:37.731371",6.24,Estável
-2026-05-21 17:23:44,7060,conhost.exe,,0.0,0.01,0.81,running,"1 day, 8:08:37.831036",6.24,Estável
-2026-05-21 17:23:45,7244,svchost.exe,,0.0,0.05,3.72,running,"1 day, 8:08:36.933823",7.19,Estável
-2026-05-21 17:23:45,7344,svchost.exe,,0.0,0.05,3.61,running,"1 day, 8:08:34.002384",6.73,Estável
-2026-05-21 17:23:45,7388,unsecapp.exe,,0.0,0.04,3.12,running,7:46:59.587338,6.76,Estável
-2026-05-21 17:23:45,7684,svchost.exe,,0.0,0.02,1.46,running,"1 day, 8:08:35.633641",7.52,Estável
-2026-05-21 17:23:45,7768,AcerService.exe,,0.0,0.04,3.21,running,"1 day, 8:08:38.293227",6.07,Estável
-2026-05-21 17:23:45,7816,conhost.exe,,0.0,0.01,0.79,running,"1 day, 8:08:38.420067",6.28,Estável
-2026-05-21 17:23:45,7852,svchost.exe,JORTIEKE\ricar,0.0,0.02,1.37,running,7:47:03.345962,0.1,Estável
-2026-05-21 17:23:46,7940,Code.exe,JORTIEKE\ricar,0.0,0.14,11.27,running,0:46:31.320722,0.03,Estável
-2026-05-21 17:23:46,7956,msedgewebview2.exe,JORTIEKE\ricar,0.0,0.03,2.15,running,7:44:58.244197,0.02,Estável
-2026-05-21 17:23:46,8184,dasHost.exe,,0.0,0.01,1.12,running,"1 day, 8:08:38.705092",7.19,Estável
-2026-05-21 17:23:46,8288,AcerHardwareService.exe,,0.0,0.04,3.29,running,7:47:00.984754,6.02,Estável
-2026-05-21 17:23:46,8344,PresentMonService.exe,,0.0,0.02,1.65,running,"1 day, 8:08:38.868036",5.49,Estável
-2026-05-21 17:23:46,8368,conhost.exe,,0.0,0.01,1.09,running,"1 day, 8:08:39.003836",6.8,Estável
-2026-05-21 17:23:46,8584,Rterm.exe,JORTIEKE\ricar,0.0,0.51,40.29,running,1:05:00.636560,0.03,Estável
-2026-05-21 17:23:47,8660,WmiPrvSE.exe,,0.0,0.08,6.52,running,"1 day, 8:08:39.154019",5.74,Estável
-2026-05-21 17:23:47,8884,AcerSysMonitorService.exe,,0.0,0.02,1.73,running,"1 day, 8:08:35.236654",5.19,Estável
-2026-05-21 17:23:47,9060,ipf_helper.exe,JORTIEKE\ricar,0.0,0.03,2.13,running,6:36:11.972207,0.08,Estável
-2026-05-21 17:23:47,9260,svchost.exe,JORTIEKE\ricar,0.0,0.04,2.87,running,7:47:01.548106,0.03,Estável
-2026-05-21 17:23:47,9476,telemetry_agent.exe,,0.0,0.16,12.39,running,"1 day, 8:08:39.080850",5.61,Estável
-2026-05-21 17:23:47,9616,CrossDeviceService.exe,JORTIEKE\ricar,0.0,0.19,15.1,running,7:47:03.804522,0.02,Estável
-2026-05-21 17:23:47,9796,chrome.exe,JORTIEKE\ricar,0.0,0.77,60.91,running,1:18:03.114617,0.02,Estável
-2026-05-21 17:23:47,10192,svchost.exe,,0.0,0.15,11.99,running,"1 day, 8:08:38.070409",6.92,Estável
-2026-05-21 17:23:48,10300,AggregatorHost.exe,,0.0,0.06,4.73,running,"1 day, 8:08:37.685546",7.97,Estável
-2026-05-21 17:23:48,10304,TabTip.exe,JORTIEKE\ricar,0.0,0.16,12.93,running,7:47:00.522011,0.02,Estável
-2026-05-21 17:23:48,10340,StartMenuExperienceHost.exe,JORTIEKE\ricar,0.0,0.17,13.75,running,7:47:02.853747,0.02,Estável
-2026-05-21 17:23:48,10432,svchost.exe,,0.0,0.14,11.42,running,"1 day, 8:08:38.406298",6.47,Estável
-2026-05-21 17:23:48,10536,ADESv2BW.exe,,0.0,0.01,1.13,running,7:46:50.807296,6.27,Estável
-2026-05-21 17:23:48,10768,svchost.exe,,0.0,0.02,1.71,running,"1 day, 8:08:38.628746",5.72,Estável
-2026-05-21 17:23:48,10968,svchost.exe,,0.0,0.37,29.5,running,"1 day, 8:06:27.549130",6.67,Estável
-2026-05-21 17:23:49,10976,svchost.exe,,0.0,0.04,3.09,running,1:46:56.712456,6.21,Estável
-2026-05-21 17:23:49,11224,nvcontainer.exe,JORTIEKE\ricar,0.0,0.25,20.1,running,7:47:06.639075,0.02,Estável
-2026-05-21 17:23:49,11244,WmiApSrv.exe,,0.0,0.03,2.25,running,7:36:54.063520,6.61,Estável
-2026-05-21 17:23:49,11256,svchost.exe,,0.0,0.13,10.21,running,"1 day, 8:08:39.036191",5.65,Estável
-2026-05-21 17:23:49,11520,R.exe,JORTIEKE\ricar,0.0,0.02,1.9,running,1:05:03.511739,0.01,Estável
-2026-05-21 17:23:49,11544,svchost.exe,JORTIEKE\ricar,0.0,0.08,6.5,running,7:47:07.012625,0.02,Estável
-2026-05-21 17:23:49,11588,svchost.exe,,0.0,0.05,3.99,running,"1 day, 8:08:39.289343",6.24,Estável
-2026-05-21 17:23:49,11832,ShellHost.exe,JORTIEKE\ricar,0.0,0.07,5.34,running,4:26:34.016574,0.02,Estável
-2026-05-21 17:23:50,11856,OpenConsole.exe,JORTIEKE\ricar,0.0,0.02,1.91,running,1:14:41.139676,0.02,Estável
-2026-05-21 17:23:50,12268,svchost.exe,,0.0,0.15,12.13,running,"1 day, 8:08:39.157453",5.03,Estável
-2026-05-21 17:23:50,12276,wlanext.exe,,0.0,0.02,1.25,running,"1 day, 8:08:39.296420",5.39,Estável
-2026-05-21 17:23:50,12412,RuntimeBroker.exe,JORTIEKE\ricar,0.0,0.11,8.89,running,7:47:01.708325,0.01,Estável
-2026-05-21 17:23:50,12472,svchost.exe,,0.0,0.03,2.03,running,"1 day, 8:08:37.661852",6.09,Estável
-2026-05-21 17:23:50,12504,unsecapp.exe,,0.0,0.04,3.09,running,"1 day, 8:08:34.032362",4.63,Estável
-2026-05-21 17:23:50,12572,nvcontainer.exe,,0.0,0.13,10.02,running,19:23:13.742431,5.72,Estável
-2026-05-21 17:23:50,12576,NgcIso.exe,,0.0,0.01,1.13,running,"1 day, 8:08:37.713102",6.37,Estável
-2026-05-21 17:23:51,12608,svchost.exe,,0.0,0.04,3.46,running,"1 day, 8:01:29.475792",4.33,Estável
-2026-05-21 17:23:51,12752,RtkAudUService64.exe,,0.0,0.03,2.67,running,7:47:05.777649,6.49,Estável
-2026-05-21 17:23:51,13092,svchost.exe,,0.0,0.03,2.41,running,"1 day, 8:08:06.243305",7.47,Estável
-2026-05-21 17:23:51,13520,svchost.exe,JORTIEKE\ricar,0.0,0.02,1.41,running,4:36:38.908806,0.02,Estável
-2026-05-21 17:23:51,13624,csrss.exe,,0.0,0.02,1.95,running,19:23:25.110552,6.65,Estável
-2026-05-21 17:23:51,13736,chrome.exe,JORTIEKE\ricar,0.0,0.07,5.49,running,1:20:15.982658,0.02,Estável
-2026-05-21 17:23:51,13916,msedgewebview2.exe,JORTIEKE\ricar,0.0,0.1,7.68,running,7:47:04.352201,0.03,Estável
-2026-05-21 17:23:52,14212,msedgewebview2.exe,JORTIEKE\ricar,0.0,0.03,2.45,running,7:45:03.765591,0.02,Estável
-2026-05-21 17:23:52,14328,svchost.exe,,0.0,0.02,1.92,running,22:49:48.272325,7.64,Estável
-2026-05-21 17:23:52,14460,RuntimeBroker.exe,JORTIEKE\ricar,0.0,0.11,8.34,running,7:47:06.433185,0.02,Estável
-2026-05-21 17:23:52,14528,Code.exe,JORTIEKE\ricar,0.0,0.03,2.74,running,1:10:24.780873,0.01,Estável
-2026-05-21 17:23:52,14732,svchost.exe,,0.0,0.02,1.73,running,"1 day, 8:07:48.086038",6.63,Estável
-2026-05-21 17:23:52,14912,WUDFHost.exe,,0.0,0.06,4.77,running,6:36:02.655191,6.89,Estável
-2026-05-21 17:23:52,14920,msedgewebview2.exe,JORTIEKE\ricar,0.0,0.13,9.92,running,7:45:05.045261,0.01,Estável
-2026-05-21 17:23:52,15040,winlogon.exe,,0.0,0.02,1.68,running,19:23:26.360344,7.05,Estável
-2026-05-21 17:23:53,15260,Code.exe,JORTIEKE\ricar,0.0,0.36,28.72,running,1:10:23.723170,0.02,Estável
-2026-05-21 17:23:53,15384,SearchIndexer.exe,,0.0,0.12,9.81,running,"1 day, 8:08:28.029692",8.11,Estável
-2026-05-21 17:23:53,15420,bash.exe,JORTIEKE\ricar,0.0,0.02,1.94,running,1:05:08.407363,0.03,Estável
-2026-05-21 17:23:53,15508,WindowsTerminal.exe,JORTIEKE\ricar,0.0,0.11,8.36,running,1:14:44.975731,0.02,Estável
-2026-05-21 17:23:53,15652,Code.exe,JORTIEKE\ricar,0.0,5.73,452.69,running,1:05:03.299530,0.02,Estável
-2026-05-21 17:23:53,15656,powershell.exe,JORTIEKE\ricar,0.0,0.13,9.94,running,1:05:08.740488,0.01,Estável
-2026-05-21 17:23:53,15704,svchost.exe,,0.0,0.07,5.48,running,"1 day, 8:08:27.636846",8.07,Estável
-2026-05-21 17:23:53,15752,dllhost.exe,JORTIEKE\ricar,0.0,0.03,2.21,running,7:28:28.009760,0.03,Estável
-2026-05-21 17:23:54,16200,Rterm.exe,JORTIEKE\ricar,0.0,1.96,154.85,running,1:05:07.777455,0.02,Estável
-2026-05-21 17:23:54,16456,bash.exe,JORTIEKE\ricar,0.0,0.02,1.53,running,1:10:37.202430,0.02,Estável
-2026-05-21 17:23:54,16492,ShellExperienceHost.exe,JORTIEKE\ricar,0.0,0.02,1.57,stopped,7:28:31.426072,0.12,Estável
-2026-05-21 17:23:54,16644,NisSrv.exe,,0.0,0.07,5.59,running,"1 day, 8:08:20.349457",6.5,Estável
-2026-05-21 17:23:54,16704,NVIDIA Overlay.exe,JORTIEKE\ricar,0.0,0.18,14.01,running,7:47:00.794528,0.25,Estável
-2026-05-21 17:23:54,16732,Code.exe,JORTIEKE\ricar,0.0,2.51,198.27,running,1:10:26.676066,0.02,Estável
-2026-05-21 17:23:54,16864,svchost.exe,,0.0,0.01,1.04,running,1:21:14.862362,6.09,Estável
-2026-05-21 17:23:54,16996,cmd.exe,JORTIEKE\ricar,0.0,0.05,3.79,running,0:38:25.422546,0.16,Estável
-2026-05-21 17:23:54,17072,AcerGAICameraW.exe,JORTIEKE\ricar,0.0,0.04,3.54,running,7:46:47.517971,0.02,Estável
-2026-05-21 17:23:55,17176,AcerSysHardwareService.exe,,0.0,0.03,2.38,running,7:47:08.109303,5.72,Estável
-2026-05-21 17:23:55,17444,OpenConsole.exe,JORTIEKE\ricar,0.0,0.04,2.77,running,1:05:10.465540,0.03,Estável
-2026-05-21 17:23:55,17488,ctfmon.exe,JORTIEKE\ricar,0.0,0.14,11.0,running,7:47:07.764116,0.02,Estável
-2026-05-21 17:23:55,17540,powershell.exe,JORTIEKE\ricar,0.0,0.12,9.17,running,1:05:10.528258,0.03,Estável
-2026-05-21 17:23:55,18052,Code.exe,JORTIEKE\ricar,0.0,0.21,16.74,running,1:10:24.675602,0.04,Estável
-2026-05-21 17:23:55,18376,conhost.exe,JORTIEKE\ricar,0.0,0.02,1.59,running,1:10:38.784207,0.03,Estável
-2026-05-21 17:23:55,18536,conhost.exe,JORTIEKE\ricar,0.0,0.02,1.62,running,1:05:09.730321,0.03,Estável
-2026-05-21 17:23:55,18540,SecurityHealthService.exe,,0.0,0.09,6.8,running,"1 day, 8:08:04.855837",5.59,Estável
-2026-05-21 17:23:56,18576,R.exe,JORTIEKE\ricar,0.0,0.02,1.72,running,1:05:09.999077,0.03,Estável
-2026-05-21 17:23:56,18652,svchost.exe,,0.0,0.07,5.73,running,"1 day, 8:08:03.629553",5.59,Estável
-2026-05-21 17:23:56,18744,node.exe,JORTIEKE\ricar,0.0,0.31,24.48,running,0:38:27.811546,0.05,Estável
-2026-05-21 17:23:56,18804,Code.exe,JORTIEKE\ricar,0.0,0.47,36.91,running,1:05:12.521808,0.02,Estável
-2026-05-21 17:23:56,18868,Widgets.exe,JORTIEKE\ricar,0.0,0.09,7.46,running,7:47:10.804229,0.03,Estável
-2026-05-21 17:23:56,18964,Code.exe,JORTIEKE\ricar,0.0,0.31,24.84,running,1:05:13.733961,0.02,Estável
-2026-05-21 17:23:56,18988,chrome.exe,JORTIEKE\ricar,0.0,0.09,6.86,running,1:20:23.056778,0.02,Estável
-2026-05-21 17:23:56,19320,Code.exe,JORTIEKE\ricar,0.0,0.19,15.17,running,1:10:29.143147,0.03,Estável
-2026-05-21 17:23:56,19504,powershell.exe,JORTIEKE\ricar,0.0,0.12,9.24,running,1:05:10.650443,0.03,Estável
-2026-05-21 17:23:57,19584,svchost.exe,,0.0,0.06,4.73,running,"1 day, 8:06:37.043048",5.01,Estável
-2026-05-21 17:23:57,19612,svchost.exe,,0.0,0.05,3.6,running,"1 day, 8:06:35.748716",5.64,Estável
-2026-05-21 17:23:57,19632,conhost.exe,JORTIEKE\ricar,0.0,0.02,1.68,running,1:05:12.202988,0.03,Estável
-2026-05-21 17:23:57,19668,nvcontainer.exe,JORTIEKE\ricar,0.0,0.06,4.76,running,7:47:14.964309,0.04,Estável
-2026-05-21 17:23:57,19880,RtkAudUService64.exe,JORTIEKE\ricar,0.0,0.04,2.87,running,7:46:52.153622,0.02,Estável
-2026-05-21 17:23:57,19892,svchost.exe,,0.0,0.05,3.65,running,"1 day, 8:06:37.052852",5.13,Estável
-2026-05-21 17:23:57,19908,svchost.exe,JORTIEKE\ricar,0.0,0.1,8.25,running,7:47:15.205847,0.02,Estável
-2026-05-21 17:23:57,19940,svchost.exe,,0.0,0.04,2.87,running,"1 day, 8:06:37.152391",6.17,Estável
-2026-05-21 17:23:58,20072,chrome.exe,JORTIEKE\ricar,0.0,2.7,213.36,running,0:23:14.083635,0.03,Estável
-2026-05-21 17:23:58,20980,msedgewebview2.exe,JORTIEKE\ricar,0.0,0.07,5.54,running,7:45:10.093803,0.03,Estável
-2026-05-21 17:23:58,21084,svchost.exe,,0.0,0.02,1.39,running,22:49:55.477216,5.57,Estável
-2026-05-21 17:23:58,21156,LockApp.exe,JORTIEKE\ricar,0.0,0.0,0.07,stopped,7:47:10.667686,0.05,Estável
-2026-05-21 17:23:58,21320,NVIDIA Overlay.exe,JORTIEKE\ricar,0.0,0.22,17.12,running,7:47:04.365350,0.03,Estável
-2026-05-21 17:23:58,21464,msedgewebview2.exe,JORTIEKE\ricar,0.0,0.17,13.42,running,7:47:11.286890,0.03,Estável
-2026-05-21 17:23:58,21484,svchost.exe,JORTIEKE\ricar,0.0,0.02,1.28,running,7:47:16.145472,0.03,Estável
-2026-05-21 17:23:58,21532,OVRServiceLauncher.exe,,0.0,0.02,1.28,running,7:45:39.764125,5.02,Estável
-2026-05-21 17:23:59,21840,svchost.exe,,0.0,0.03,2.36,running,"1 day, 5:52:24.683809",5.48,Estável
-2026-05-21 17:23:59,21868,ipf_uf.exe,,0.0,0.03,2.0,running,6:36:24.472025,5.64,Estável
-2026-05-21 17:23:59,22180,WUDFHost.exe,,0.0,0.03,2.11,running,6:36:09.242936,6.36,Estável
-2026-05-21 17:23:59,22372,conhost.exe,JORTIEKE\ricar,0.0,0.02,1.68,running,1:05:14.546069,0.02,Estável
-2026-05-21 17:23:59,22732,NVIDIA Overlay.exe,JORTIEKE\ricar,0.0,0.39,30.7,running,7:47:07.218216,0.02,Estável
-2026-05-21 17:23:59,22756,SecurityHealthSystray.exe,JORTIEKE\ricar,0.0,0.02,1.67,running,7:46:57.200855,0.02,Estável
-2026-05-21 17:23:59,22952,svchost.exe,JORTIEKE\ricar,0.0,0.02,1.71,running,7:45:17.106476,0.05,Estável
-2026-05-21 17:23:59,23116,SearchHost.exe,JORTIEKE\ricar,0.0,0.18,13.84,running,7:47:14.483678,0.02,Estável
-2026-05-21 17:24:00,23124,NVIDIA Overlay.exe,JORTIEKE\ricar,0.0,0.05,4.07,running,7:47:06.162809,0.01,Estável
-2026-05-21 17:24:00,23144,RuntimeBroker.exe,JORTIEKE\ricar,0.0,0.02,1.68,running,7:47:13.443062,0.02,Estável
-2026-05-21 17:24:00,23168,RemoteDesktopCompanion.exe,JORTIEKE\ricar,0.0,0.22,17.57,running,7:45:37.886554,0.02,Estável
-2026-05-21 17:24:00,23380,TextInputHost.exe,JORTIEKE\ricar,0.0,0.25,19.95,running,7:47:04.989212,0.02,Estável
-2026-05-21 17:24:00,23472,jusched.exe,JORTIEKE\ricar,0.0,0.02,1.54,running,7:46:53.182548,0.13,Estável
-2026-05-21 17:24:00,23704,RuntimeBroker.exe,JORTIEKE\ricar,0.0,0.04,3.1,running,7:28:37.555470,0.02,Estável
-2026-05-21 17:24:00,23924,msedgewebview2.exe,JORTIEKE\ricar,0.0,0.09,7.04,running,7:47:13.307254,0.02,Estável
-2026-05-21 17:24:00,23988,taskhostw.exe,JORTIEKE\ricar,0.0,0.07,5.64,running,7:47:17.979487,0.02,Estável
-2026-05-21 17:24:00,24072,OpenConsole.exe,JORTIEKE\ricar,0.0,0.03,2.68,running,1:05:16.142153,0.02,Estável
-2026-05-21 17:24:01,24384,OVRRedir.exe,,0.0,0.02,1.84,running,7:45:41.771346,7.58,Estável
-2026-05-21 17:24:01,24552,conhost.exe,JORTIEKE\ricar,0.0,0.02,1.54,running,7:45:41.901260,0.01,Estável
-2026-05-21 17:24:01,24664,powershell.exe,JORTIEKE\ricar,0.0,0.19,14.89,running,0:48:02.315273,0.02,Estável
-2026-05-21 17:24:01,24872,sihost.exe,JORTIEKE\ricar,0.0,0.16,12.39,running,7:47:18.786634,0.02,Estável
-2026-05-21 17:24:01,24924,msedgewebview2.exe,JORTIEKE\ricar,0.0,0.06,4.61,running,7:45:13.401076,0.01,Estável
-2026-05-21 17:24:01,25048,svchost.exe,,0.0,0.02,1.59,running,7:47:17.674145,5.29,Estável
-2026-05-21 17:24:01,25428,svchost.exe,,0.0,0.02,1.82,running,"1 day, 5:50:58.863632",6.77,Estável
-2026-05-21 17:24:01,25536,msedgewebview2.exe,JORTIEKE\ricar,0.0,0.03,2.0,running,7:45:13.760066,0.09,Estável
-2026-05-21 17:24:01,25712,node.exe,JORTIEKE\ricar,0.0,0.34,26.64,running,0:38:32.524790,0.02,Estável
-2026-05-21 17:24:02,25744,nvsphelper64.exe,JORTIEKE\ricar,0.0,0.03,2.5,running,7:47:09.773064,0.02,Estável
-2026-05-21 17:24:02,25828,dllhost.exe,JORTIEKE\ricar,0.0,0.03,2.13,running,7:28:36.465614,0.03,Estável
-2026-05-21 17:24:02,25964,powershell.exe,JORTIEKE\ricar,0.0,0.05,3.75,running,1:14:53.427940,0.02,Estável
-2026-05-21 17:24:02,26092,chrome.exe,JORTIEKE\ricar,0.0,0.24,18.72,running,1:00:00.126740,0.02,Estável
-2026-05-21 17:24:02,26328,conhost.exe,,0.0,0.02,1.66,running,7:47:19.629235,6.7,Estável
-2026-05-21 17:24:02,26396,OneDrive.Sync.Service.exe,JORTIEKE\ricar,0.0,0.08,6.25,running,6:31:48.328766,0.03,Estável
-2026-05-21 17:24:02,26484,esrv.exe,JORTIEKE\ricar,0.0,0.12,9.43,running,7:47:19.709761,0.02,Estável
-2026-05-21 17:24:02,26736,msedgewebview2.exe,JORTIEKE\ricar,0.0,0.03,2.13,running,7:47:15.844132,0.02,Estável
-2026-05-21 17:24:03,27196,fontdrvhost.exe,,0.0,0.01,0.96,running,19:23:36.373148,7.09,Estável
-2026-05-21 17:24:03,27208,dwm.exe,,0.91,0.47,37.04,running,19:23:36.514366,7.04,Estável
-2026-05-21 17:24:03,27312,svchost.exe,JORTIEKE\ricar,0.0,0.03,2.5,running,7:47:14.315921,0.1,Estável
-2026-05-21 17:24:03,27392,conhost.exe,JORTIEKE\ricar,0.0,0.02,1.61,running,1:05:17.395420,0.02,Estável
-2026-05-21 17:24:03,27448,Code.exe,JORTIEKE\ricar,0.0,1.22,96.29,running,1:10:36.335430,0.02,Estável
-2026-05-21 17:24:03,27564,svchost.exe,JORTIEKE\ricar,0.0,0.04,2.8,running,7:47:07.038742,0.04,Estável
-2026-05-21 17:24:03,27752,R.exe,JORTIEKE\ricar,0.0,0.02,1.84,running,1:05:17.607407,0.02,Estável
-2026-05-21 17:24:03,27796,chrome.exe,JORTIEKE\ricar,0.0,0.09,7.11,running,1:09:15.830951,0.02,Estável
-2026-05-21 17:24:03,27844,AppActions.exe,JORTIEKE\ricar,0.0,0.07,5.49,running,7:37:20.650520,0.02,Estável
-2026-05-21 17:24:04,27876,NVIDIA Overlay.exe,JORTIEKE\ricar,0.0,0.1,7.91,running,7:47:10.481121,0.02,Estável
-2026-05-21 17:24:04,27940,chrome.exe,JORTIEKE\ricar,0.0,0.29,23.28,running,1:09:32.425594,0.02,Estável
-2026-05-21 17:24:04,28148,NVDisplay.Container.exe,,0.0,0.14,11.15,running,19:23:27.359702,6.89,Estável
-2026-05-21 17:24:04,28272,chrome.exe,JORTIEKE\ricar,0.0,3.14,247.66,running,1:08:59.117651,0.01,Estável
-2026-05-21 17:24:04,28408,OpenConsole.exe,JORTIEKE\ricar,0.0,0.03,2.58,running,1:05:18.454577,0.02,Estável
-2026-05-21 17:24:04,28548,svchost.exe,,0.0,0.03,2.04,running,1:50:32.670416,6.38,Estável
-2026-05-21 17:24:04,28568,msedgewebview2.exe,JORTIEKE\ricar,0.0,0.05,3.72,running,7:47:17.421203,0.03,Estável
-2026-05-21 17:24:04,28620,OpenConsole.exe,JORTIEKE\ricar,0.0,0.03,2.68,running,1:05:20.176883,0.06,Estável
-2026-05-21 17:24:05,28732,bash.exe,JORTIEKE\ricar,0.0,0.03,2.66,running,1:05:20.080981,0.03,Estável
-2026-05-21 17:24:05,28872,CrossDeviceResume.exe,JORTIEKE\ricar,0.0,0.05,4.22,running,7:47:22.098543,0.02,Estável
-2026-05-21 17:24:05,28976,conhost.exe,JORTIEKE\ricar,0.0,0.02,1.56,running,1:06:41.833351,0.02,Estável
-2026-05-21 17:24:05,28984,AQAUserPS.exe,JORTIEKE\ricar,0.0,0.06,4.49,running,7:47:20.717027,0.02,Estável
-2026-05-21 17:24:05,29044,Code.exe,JORTIEKE\ricar,0.0,0.49,38.8,running,1:10:36.269573,0.02,Estável
-2026-05-21 17:24:05,29196,ACCUserPS.exe,JORTIEKE\ricar,0.0,0.02,1.65,running,7:47:20.671535,0.02,Estável
-2026-05-21 17:24:05,29208,chrome.exe,JORTIEKE\ricar,0.0,0.38,29.81,running,0:01:49.419696,0.04,Estável
-2026-05-21 17:24:05,29292,OVRServer_x64.exe,JORTIEKE\ricar,0.0,0.41,32.18,running,7:45:46.587364,0.03,Estável
-2026-05-21 17:24:05,29544,chrome.exe,JORTIEKE\ricar,0.0,1.01,79.39,running,0:47:31.372266,0.03,Estável
-2026-05-21 17:24:06,29708,OpenConsole.exe,JORTIEKE\ricar,0.0,0.05,3.86,running,0:48:07.216615,0.02,Estável
-2026-05-21 17:24:06,29716,cmd.exe,JORTIEKE\ricar,0.0,0.02,1.4,running,1:05:20.078405,0.07,Estável
-2026-05-21 17:24:06,29880,cmd.exe,JORTIEKE\ricar,0.0,0.06,4.58,running,0:38:38.779635,0.14,Estável
-2026-05-21 17:24:06,30216,cmd.exe,JORTIEKE\ricar,0.0,0.02,1.37,running,1:05:20.303793,0.06,Estável
-2026-05-21 17:24:06,30260,chrome.exe,JORTIEKE\ricar,0.0,0.52,40.69,running,1:20:33.951003,0.03,Estável
-2026-05-21 17:24:06,30600,Code.exe,JORTIEKE\ricar,0.0,0.08,6.24,running,1:10:29.479373,0.02,Estável
-2026-05-21 17:24:06,30712,mintty.exe,JORTIEKE\ricar,0.0,0.05,3.65,running,1:06:43.377339,0.02,Estável
-2026-05-21 17:24:06,30724,chrome.exe,JORTIEKE\ricar,0.0,0.11,8.65,running,1:08:41.371336,0.02,Estável
-2026-05-21 17:24:06,30744,R.exe,JORTIEKE\ricar,0.0,0.02,1.82,running,1:05:20.784803,0.02,Estável
-2026-05-21 17:24:07,30876,mintty.exe,JORTIEKE\ricar,0.0,0.04,3.52,running,1:10:50.277851,0.02,Estável
-2026-05-21 17:24:07,30956,Code.exe,JORTIEKE\ricar,0.0,2.86,226.18,running,1:05:24.331812,0.02,Estável
-2026-05-21 17:24:07,30996,chrome.exe,JORTIEKE\ricar,0.0,0.03,2.55,running,1:20:34.901867,0.03,Estável
-2026-05-21 17:24:07,31096,Code.exe,JORTIEKE\ricar,0.0,5.35,422.42,running,1:05:59.576268,0.02,Estável
-2026-05-21 17:24:07,31252,cmd.exe,JORTIEKE\ricar,0.0,0.02,1.33,running,1:05:21.288189,0.26,Estável
-2026-05-21 17:24:07,31476,chrome.exe,JORTIEKE\ricar,0.0,0.36,28.14,running,0:40:38.374162,0.02,Estável
-2026-05-21 17:24:07,31564,powershell.exe,JORTIEKE\ricar,0.0,0.12,9.8,running,1:05:22.835552,0.01,Estável
-2026-05-21 17:24:07,31632,Code.exe,JORTIEKE\ricar,0.0,0.07,5.67,running,0:46:52.603295,0.02,Estável
-2026-05-21 17:24:07,31768,git-bash.exe,JORTIEKE\ricar,0.0,0.02,1.3,running,1:10:51.194660,0.03,Estável
-2026-05-21 17:24:08,31964,chrome.exe,JORTIEKE\ricar,2.91,2.42,190.84,running,1:20:35.704039,0.02,Estável
-2026-05-21 17:24:08,31984,chrome.exe,JORTIEKE\ricar,0.0,0.4,31.77,running,1:09:18.966963,0.01,Estável
-2026-05-21 17:24:08,32040,Code.exe,JORTIEKE\ricar,0.0,0.95,74.76,running,0:35:06.941816,0.02,Estável
-2026-05-21 17:24:08,32356,cmd.exe,JORTIEKE\ricar,0.0,0.02,1.31,running,1:05:22.174649,0.16,Estável
-2026-05-21 17:24:08,32428,chrome.exe,JORTIEKE\ricar,0.0,0.3,23.77,running,1:10:11.108644,0.01,Estável
-2026-05-21 17:24:08,32804,Code.exe,JORTIEKE\ricar,0.0,0.21,16.93,running,0:46:53.864347,0.02,Estável
-2026-05-21 17:24:08,32872,bash.exe,JORTIEKE\ricar,0.0,0.02,1.86,running,1:06:45.205036,0.02,Estável
-2026-05-21 17:24:08,33092,OpenConsole.exe,JORTIEKE\ricar,0.0,0.05,3.97,running,0:50:00.836322,0.04,Estável
-2026-05-21 17:24:08,33140,Code.exe,JORTIEKE\ricar,0.0,0.26,20.8,running,1:10:39.564220,0.01,Estável
-2026-05-21 17:24:09,33152,chrome.exe,JORTIEKE\ricar,0.0,0.79,62.43,running,1:20:36.480870,0.01,Estável
-2026-05-21 17:24:09,33368,pet.exe,JORTIEKE\ricar,0.0,0.07,5.8,running,1:05:24.012100,0.02,Estável
-2026-05-21 17:23:27,0,System Idle Process,NT AUTHORITY\SYSTEM,86.29,0.0,0.01,running,"20594 days, 20:23:27.630366",5.75,Crítico
-2026-05-21 17:23:27,4,System,NT AUTHORITY\SYSTEM,0.0,0.03,2.16,running,"20594 days, 20:23:27.779298",6.95,Estável
-2026-05-21 17:23:27,236,,,0.0,0.53,42.0,stopped,"1 day, 8:08:40.316664",7.22,Estável
-2026-05-21 17:23:28,280,Registry,,0.0,0.18,14.16,running,"1 day, 8:08:40.450227",8.31,Estável
-2026-05-21 17:23:28,772,smss.exe,,0.0,0.0,0.04,running,"1 day, 8:08:37.803886",5.54,Estável
-2026-05-21 17:23:28,1124,csrss.exe,,0.0,0.04,2.9,running,"1 day, 8:08:25.746693",7.36,Estável
-2026-05-21 17:23:28,1232,wininit.exe,,0.0,0.02,1.45,running,"1 day, 8:08:23.837468",6.59,Estável
-2026-05-21 17:23:28,1308,services.exe,,0.0,0.08,6.57,running,"1 day, 8:08:23.537257",7.42,Estável
-2026-05-21 17:23:28,1328,LsaIso.exe,,0.0,0.01,0.75,running,"1 day, 8:08:23.660288",7.9,Estável
-2026-05-21 17:23:29,1336,lsass.exe,,0.0,0.16,12.34,running,"1 day, 8:08:23.811048",8.31,Estável
-2026-05-21 17:23:29,1392,svchost.exe,,0.0,0.02,1.25,running,7:46:24.994617,7.11,Estável
-2026-05-21 17:23:29,1460,svchost.exe,,0.0,0.26,20.81,running,"1 day, 8:08:23.920360",7.69,Estável
-2026-05-21 17:23:29,1492,fontdrvhost.exe,,0.0,0.01,0.73,running,"1 day, 8:08:24.056365",5.9,Estável
-2026-05-21 17:23:29,1544,WUDFHost.exe,,0.0,0.02,1.58,running,"1 day, 8:08:24.189073",6.37,Estável
-2026-05-21 17:23:29,1604,svchost.exe,,0.0,0.14,11.25,running,"1 day, 8:08:24.275424",7.24,Estável
-2026-05-21 17:23:29,1668,svchost.exe,,0.0,0.04,3.32,running,"1 day, 8:08:24.411262",10.78,Estável
-2026-05-21 17:23:30,1688,Code.exe,JORTIEKE\ricar,3.89,2.18,172.2,running,1:10:02.376282,0.02,Estável
-2026-05-21 17:23:30,1908,svchost.exe,,0.0,0.01,1.0,running,"1 day, 8:08:24.356567",5.02,Estável
-2026-05-21 17:23:30,1984,svchost.exe,,0.0,0.05,3.92,running,22:42:32.908328,7.98,Estável
-2026-05-21 17:23:30,2044,WUDFHost.exe,,0.0,0.02,1.93,running,"1 day, 8:08:24.667728",7.27,Estável
-2026-05-21 17:23:30,2100,svchost.exe,,0.0,0.03,2.66,running,"1 day, 8:08:24.798952",6.2,Estável
-2026-05-21 17:23:30,2108,svchost.exe,,0.0,0.09,6.77,running,"1 day, 8:08:24.948601",7.16,Estável
-2026-05-21 17:23:30,2132,svchost.exe,,0.91,0.13,10.53,running,"1 day, 8:08:25.102627",7.46,Estável
-2026-05-21 17:23:31,2316,svchost.exe,,0.0,0.03,2.64,running,"1 day, 8:08:25.233799",6.5,Estável
-2026-05-21 17:23:31,2324,svchost.exe,,0.0,0.02,1.56,running,"1 day, 8:08:25.384190",6.59,Estável
-2026-05-21 17:23:31,2332,svchost.exe,,0.0,0.03,2.71,running,"1 day, 8:08:25.532918",6.2,Estável
-2026-05-21 17:23:31,2344,svchost.exe,,0.0,0.11,9.05,running,"1 day, 8:08:25.682295",6.23,Estável
-2026-05-21 17:23:31,2408,MQRDCrashpadHandler.exe,JORTIEKE\ricar,0.0,0.02,1.4,running,7:45:09.146494,0.02,Estável
-2026-05-21 17:23:31,2444,svchost.exe,,0.0,0.02,1.83,running,"1 day, 8:08:25.916966",5.88,Estável
-2026-05-21 17:23:31,2512,IntelCpHDCPSvc.exe,,0.0,0.01,1.18,running,"1 day, 8:08:26.053482",5.32,Estável
-2026-05-21 17:23:32,2524,svchost.exe,,0.0,0.02,1.54,running,"1 day, 8:08:26.195550",6.91,Estável
-2026-05-21 17:23:32,2548,svchost.exe,,0.0,0.07,5.15,running,"1 day, 8:08:26.341299",6.42,Estável
-2026-05-21 17:23:32,2656,svchost.exe,,0.0,0.04,3.5,running,"1 day, 8:08:26.481123",6.04,Estável
-2026-05-21 17:23:32,2812,chrome.exe,JORTIEKE\ricar,0.0,0.42,33.55,running,1:19:59.595495,0.02,Estável
-2026-05-21 17:23:32,2852,svchost.exe,,0.0,0.14,11.05,running,"1 day, 8:08:26.712593",6.48,Estável
-2026-05-21 17:23:32,2928,svchost.exe,,0.0,0.03,2.11,running,"1 day, 8:08:26.523449",6.36,Estável
-2026-05-21 17:23:32,3000,svchost.exe,,0.0,0.02,1.61,running,"1 day, 8:08:26.980938",6.94,Estável
-2026-05-21 17:23:33,3108,svchost.exe,,0.0,0.08,6.03,running,"1 day, 8:08:27.082936",7.18,Estável
-2026-05-21 17:23:33,3124,svchost.exe,,0.0,0.08,6.32,running,"1 day, 8:08:27.232408",7.87,Estável
-2026-05-21 17:23:33,3172,chrome.exe,JORTIEKE\ricar,0.0,2.41,189.97,running,1:18:41.377155,0.02,Estável
-2026-05-21 17:23:33,3292,svchost.exe,,0.0,0.05,4.29,running,"1 day, 8:08:27.252494",7.95,Estável
-2026-05-21 17:23:33,3332,svchost.exe,,0.0,0.05,4.28,running,"1 day, 8:08:27.621218",7.07,Estável
-2026-05-21 17:23:33,3380,WUDFHost.exe,,0.0,0.07,5.6,running,"1 day, 8:08:27.751426",7.33,Estável
-2026-05-21 17:23:34,3392,NVDisplay.Container.exe,,0.0,0.17,13.53,running,"1 day, 8:08:27.905926",7.04,Estável
-2026-05-21 17:23:34,3424,msedgewebview2.exe,JORTIEKE\ricar,0.0,0.31,24.83,running,7:46:47.177838,0.02,Estável
-2026-05-21 17:23:34,3436,dllhost.exe,JORTIEKE\ricar,0.0,0.03,2.08,running,7:28:08.221298,0.02,Estável
-2026-05-21 17:23:34,3452,svchost.exe,,0.0,0.05,4.07,running,"1 day, 8:08:28.267220",6.99,Estável
-2026-05-21 17:23:34,3516,git-bash.exe,JORTIEKE\ricar,0.0,0.02,1.41,running,1:06:11.185852,0.07,Estável
-2026-05-21 17:23:34,3524,svchost.exe,,0.0,0.07,5.84,running,"1 day, 8:08:28.510782",6.68,Estável
-2026-05-21 17:23:34,3556,svchost.exe,,0.0,0.02,1.38,running,"1 day, 8:08:28.651054",11.82,Estável
-2026-05-21 17:23:34,3564,svchost.exe,,0.0,0.08,6.27,running,"1 day, 8:08:28.803322",5.3,Estável
-2026-05-21 17:23:35,3568,svchost.exe,,0.0,0.02,1.52,running,"1 day, 8:08:28.944167",5.57,Estável
-2026-05-21 17:23:35,3644,svchost.exe,,0.0,0.02,1.2,running,"1 day, 8:08:28.933956",6.62,Estável
-2026-05-21 17:23:35,3664,MemCompression,,0.0,0.53,41.54,running,"1 day, 8:08:29.221876",7.48,Estável
-2026-05-21 17:23:35,3716,svchost.exe,,0.0,0.01,0.9,running,"1 day, 8:08:29.374474",7.23,Estável
-2026-05-21 17:23:35,3756,svchost.exe,,0.0,0.02,1.62,running,"1 day, 8:08:29.514316",6.78,Estável
-2026-05-21 17:23:35,3764,svchost.exe,,0.0,0.02,1.69,running,"1 day, 8:08:29.665275",6.65,Estável
-2026-05-21 17:23:35,3816,svchost.exe,,0.0,0.13,10.6,running,"1 day, 8:08:29.807316",5.08,Estável
-2026-05-21 17:23:36,3928,svchost.exe,,0.0,0.04,2.8,running,"1 day, 8:08:29.919996",6.19,Estável
-2026-05-21 17:23:36,3968,svchost.exe,,0.0,0.03,2.7,running,"1 day, 8:08:30.053668",5.64,Estável
-2026-05-21 17:23:36,4088,svchost.exe,,0.0,0.1,7.7,running,"1 day, 8:08:30.142872",7.86,Estável
-2026-05-21 17:23:36,4124,pet.exe,JORTIEKE\ricar,0.0,0.04,3.1,running,1:04:51.638845,0.02,Estável
-2026-05-21 17:23:36,4144,DtsApo4Service.exe,,0.0,0.02,1.64,running,"1 day, 8:08:29.982348",6.69,Estável
-2026-05-21 17:23:36,4340,svchost.exe,,0.0,0.14,10.89,running,"1 day, 8:08:30.482621",7.6,Estável
-2026-05-21 17:23:36,4372,svchost.exe,,0.0,0.04,3.52,running,"1 day, 8:08:30.623917",6.62,Estável
-2026-05-21 17:23:37,4460,spoolsv.exe,,0.0,0.04,2.91,running,"1 day, 8:08:30.675325",7.28,Estável
-2026-05-21 17:23:37,4488,svchost.exe,,0.0,0.11,8.41,running,"1 day, 8:08:30.756667",5.26,Estável
-2026-05-21 17:23:37,4600,svchost.exe,,0.0,0.04,2.81,running,"1 day, 8:08:30.776825",5.73,Estável
-2026-05-21 17:23:37,4676,taskhostw.exe,JORTIEKE\ricar,0.0,0.03,2.74,running,7:46:53.749142,0.03,Estável
-2026-05-21 17:23:37,4728,OpenConsole.exe,JORTIEKE\ricar,0.0,0.03,2.73,running,1:04:52.886732,0.02,Estável
-2026-05-21 17:23:37,4732,explorer.exe,JORTIEKE\ricar,0.0,1.8,141.75,running,7:46:54.865416,0.03,Estável
-2026-05-21 17:23:37,4748,svchost.exe,,0.0,0.28,21.72,running,"1 day, 8:08:31.234276",6.33,Estável
-2026-05-21 17:23:38,4764,AcerCCAgent.exe,,0.0,0.05,4.21,running,"1 day, 8:08:31.385820",6.89,Estável
-2026-05-21 17:23:38,4784,svchost.exe,,0.0,0.26,20.92,running,"1 day, 8:08:31.537422",6.67,Estável
-2026-05-21 17:23:38,4876,AcerLightingService.exe,,0.0,0.02,1.88,running,"1 day, 8:08:31.682039",6.76,Estável
-2026-05-21 17:23:38,4884,ARTAimmxService.exe,,0.0,0.02,1.8,running,"1 day, 8:08:31.831034",6.7,Estável
-2026-05-21 17:23:38,4892,HPSIsvc.exe,,0.0,0.02,1.7,running,"1 day, 8:08:31.978355",5.52,Estável
-2026-05-21 17:23:38,4900,AcerPixyService.exe,,0.0,0.05,3.82,running,"1 day, 8:08:32.123061",5.64,Estável
-2026-05-21 17:23:38,4908,ADESv2Svc.exe,,0.0,0.02,1.92,running,"1 day, 8:08:32.268288",5.96,Estável
-2026-05-21 17:23:39,4916,AcerDIAgent.exe,,0.0,0.03,2.47,running,"1 day, 8:08:32.412546",5.96,Estável
-2026-05-21 17:23:39,4924,AcerCentralService.exe,,0.0,0.05,3.72,running,"1 day, 8:08:32.558255",6.31,Estável
-2026-05-21 17:23:39,4932,AcerServiceWrapper.exe,,0.0,0.02,1.95,running,"1 day, 8:08:32.703595",5.88,Estável
-2026-05-21 17:23:39,4944,IntelAudioService.exe,,0.0,0.03,2.72,running,"1 day, 8:08:32.850913",6.26,Estável
-2026-05-21 17:23:39,4952,mtkbtsvc.exe,,0.0,0.02,1.61,running,"1 day, 8:08:32.998281",5.63,Estável
-2026-05-21 17:23:39,4960,AAADSvc.exe,,0.0,0.02,1.73,running,"1 day, 8:08:33.142645",5.79,Estável
-2026-05-21 17:23:39,4968,svchost.exe,,0.0,0.01,0.56,running,"1 day, 8:08:33.286931",5.73,Estável
-2026-05-21 17:23:40,4976,AcerGAICameraService.exe,,0.0,0.03,2.04,running,"1 day, 8:08:33.432472",8.51,Estável
-2026-05-21 17:23:40,4984,AcerQAAgent.exe,,0.0,0.06,5.08,running,"1 day, 8:08:33.589154",5.53,Estável
-2026-05-21 17:23:40,4992,svchost.exe,,0.0,0.06,4.82,running,"1 day, 8:08:33.734911",6.77,Estável
-2026-05-21 17:23:40,5000,DSAService.exe,,0.0,0.39,30.86,running,"1 day, 8:08:33.883383",7.31,Estável
-2026-05-21 17:23:40,5012,DSAUpdateService.exe,,0.0,0.28,22.07,running,"1 day, 8:08:34.038014",6.91,Estável
-2026-05-21 17:23:40,5020,armsvc.exe,,0.0,0.02,1.32,running,"1 day, 8:08:34.191802",6.83,Estável
-2026-05-21 17:23:41,5040,svchost.exe,,0.0,0.09,7.48,running,"1 day, 8:08:34.343061",7.34,Estável
-2026-05-21 17:23:41,5052,svchost.exe,,0.0,0.03,2.5,running,"1 day, 8:08:34.494144",5.94,Estável
-2026-05-21 17:23:41,5080,AcerSystemCentralService.exe,,0.0,0.02,1.56,running,"1 day, 8:08:34.640955",6.1,Estável
-2026-05-21 17:23:41,5088,PresentMonService.exe,,0.0,0.04,3.18,running,"1 day, 8:08:34.792422",7.47,Estável
-2026-05-21 17:23:41,5096,AcerEZService.exe,,0.0,0.09,6.92,running,"1 day, 8:08:34.945536",6.62,Estável
-2026-05-21 17:23:41,5104,MsMpEng.exe,,0.0,2.46,194.15,running,"1 day, 8:08:35.094056",6.44,Estável
-2026-05-21 17:23:41,5112,jhi_service.exe,,0.0,0.02,1.25,running,"1 day, 8:08:35.248175",8.67,Estável
-2026-05-21 17:23:42,5144,WMIRegistrationService.exe,,0.0,0.02,1.88,running,"1 day, 8:08:35.397520",6.89,Estável
-2026-05-21 17:23:42,5168,IntelGraphicsSoftware.Service.exe,,0.0,0.07,5.43,running,"1 day, 8:08:35.547409",7.39,Estável
-2026-05-21 17:23:42,5180,MpDefenderCoreService.exe,,0.0,0.11,8.93,running,"1 day, 8:08:35.700401",7.19,Estável
-2026-05-21 17:23:42,5196,collector_service.exe,,0.0,0.03,2.59,running,"1 day, 8:08:35.853168",6.6,Estável
-2026-05-21 17:23:42,5204,SurSvc.exe,,0.0,0.11,9.0,running,"1 day, 8:08:36.004554",12.71,Estável
-2026-05-21 17:23:42,5212,RtkAudUService64.exe,,0.0,0.03,2.5,running,"1 day, 8:08:36.160328",6.48,Estável
-2026-05-21 17:23:43,5224,nvcontainer.exe,,0.0,0.12,9.63,running,"1 day, 8:08:36.309054",6.87,Estável
-2026-05-21 17:23:43,5264,esrv_svc.exe,,0.0,0.49,38.68,running,7:44:10.971013,7.63,Estável
-2026-05-21 17:23:43,5432,ipfsvc.exe,,0.0,0.04,2.93,running,"1 day, 8:08:36.598069",7.54,Estável
-2026-05-21 17:23:43,5448,AcerAgentService.exe,,0.0,0.02,1.85,running,"1 day, 8:08:36.746837",7.69,Estável
-2026-05-21 17:23:43,5456,python.exe,JORTIEKE\ricar,0.0,0.23,17.93,running,0:00:16.224921,0.01,Estável
-2026-05-21 17:23:43,5464,OfficeClickToRun.exe,,0.0,0.11,8.86,running,"1 day, 8:08:36.998896",7.42,Estável
-2026-05-21 17:23:43,5476,mysqld.exe,,0.0,0.02,1.64,running,"1 day, 8:08:37.152395",5.97,Estável
-2026-05-21 17:23:44,5492,svchost.exe,JORTIEKE\ricar,0.0,0.09,7.46,running,7:46:59.343358,0.01,Estável
-2026-05-21 17:23:44,5660,powershell.exe,JORTIEKE\ricar,0.0,0.34,27.21,running,0:49:36.034036,0.03,Estável
-2026-05-21 17:23:44,5940,WidgetService.exe,JORTIEKE\ricar,0.0,0.04,3.1,running,7:46:58.188909,0.02,Estável
-2026-05-21 17:23:44,6112,svchost.exe,,0.0,0.05,3.74,running,"1 day, 8:08:37.525594",6.35,Estável
-2026-05-21 17:23:44,6232,svchost.exe,,0.0,0.1,7.56,running,1:21:07.426997,7.26,Estável
-2026-05-21 17:23:44,6856,chrome.exe,JORTIEKE\ricar,0.0,0.1,8.11,running,1:20:12.001285,0.02,Estável
-2026-05-21 17:23:44,6952,mysqld.exe,,0.0,0.04,3.45,running,"1 day, 8:08:37.731371",6.24,Estável
-2026-05-21 17:23:44,7060,conhost.exe,,0.0,0.01,0.81,running,"1 day, 8:08:37.831036",6.24,Estável
-2026-05-21 17:23:45,7244,svchost.exe,,0.0,0.05,3.72,running,"1 day, 8:08:36.933823",7.19,Estável
-2026-05-21 17:23:45,7344,svchost.exe,,0.0,0.05,3.61,running,"1 day, 8:08:34.002384",6.73,Estável
-2026-05-21 17:23:45,7388,unsecapp.exe,,0.0,0.04,3.12,running,7:46:59.587338,6.76,Estável
-2026-05-21 17:23:45,7684,svchost.exe,,0.0,0.02,1.46,running,"1 day, 8:08:35.633641",7.52,Estável
-2026-05-21 17:23:45,7768,AcerService.exe,,0.0,0.04,3.21,running,"1 day, 8:08:38.293227",6.07,Estável
-2026-05-21 17:23:45,7816,conhost.exe,,0.0,0.01,0.79,running,"1 day, 8:08:38.420067",6.28,Estável
-2026-05-21 17:23:45,7852,svchost.exe,JORTIEKE\ricar,0.0,0.02,1.37,running,7:47:03.345962,0.1,Estável
-2026-05-21 17:23:46,7940,Code.exe,JORTIEKE\ricar,0.0,0.14,11.27,running,0:46:31.320722,0.03,Estável
-2026-05-21 17:23:46,7956,msedgewebview2.exe,JORTIEKE\ricar,0.0,0.03,2.15,running,7:44:58.244197,0.02,Estável
-2026-05-21 17:23:46,8184,dasHost.exe,,0.0,0.01,1.12,running,"1 day, 8:08:38.705092",7.19,Estável
-2026-05-21 17:23:46,8288,AcerHardwareService.exe,,0.0,0.04,3.29,running,7:47:00.984754,6.02,Estável
-2026-05-21 17:23:46,8344,PresentMonService.exe,,0.0,0.02,1.65,running,"1 day, 8:08:38.868036",5.49,Estável
-2026-05-21 17:23:46,8368,conhost.exe,,0.0,0.01,1.09,running,"1 day, 8:08:39.003836",6.8,Estável
-2026-05-21 17:23:46,8584,Rterm.exe,JORTIEKE\ricar,0.0,0.51,40.29,running,1:05:00.636560,0.03,Estável
-2026-05-21 17:23:47,8660,WmiPrvSE.exe,,0.0,0.08,6.52,running,"1 day, 8:08:39.154019",5.74,Estável
-2026-05-21 17:23:47,8884,AcerSysMonitorService.exe,,0.0,0.02,1.73,running,"1 day, 8:08:35.236654",5.19,Estável
-2026-05-21 17:23:47,9060,ipf_helper.exe,JORTIEKE\ricar,0.0,0.03,2.13,running,6:36:11.972207,0.08,Estável
-2026-05-21 17:23:47,9260,svchost.exe,JORTIEKE\ricar,0.0,0.04,2.87,running,7:47:01.548106,0.03,Estável
-2026-05-21 17:23:47,9476,telemetry_agent.exe,,0.0,0.16,12.39,running,"1 day, 8:08:39.080850",5.61,Estável
-2026-05-21 17:23:47,9616,CrossDeviceService.exe,JORTIEKE\ricar,0.0,0.19,15.1,running,7:47:03.804522,0.02,Estável
-2026-05-21 17:23:47,9796,chrome.exe,JORTIEKE\ricar,0.0,0.77,60.91,running,1:18:03.114617,0.02,Estável
-2026-05-21 17:23:47,10192,svchost.exe,,0.0,0.15,11.99,running,"1 day, 8:08:38.070409",6.92,Estável
-2026-05-21 17:23:48,10300,AggregatorHost.exe,,0.0,0.06,4.73,running,"1 day, 8:08:37.685546",7.97,Estável
-2026-05-21 17:23:48,10304,TabTip.exe,JORTIEKE\ricar,0.0,0.16,12.93,running,7:47:00.522011,0.02,Estável
-2026-05-21 17:23:48,10340,StartMenuExperienceHost.exe,JORTIEKE\ricar,0.0,0.17,13.75,running,7:47:02.853747,0.02,Estável
-2026-05-21 17:23:48,10432,svchost.exe,,0.0,0.14,11.42,running,"1 day, 8:08:38.406298",6.47,Estável
-2026-05-21 17:23:48,10536,ADESv2BW.exe,,0.0,0.01,1.13,running,7:46:50.807296,6.27,Estável
-2026-05-21 17:23:48,10768,svchost.exe,,0.0,0.02,1.71,running,"1 day, 8:08:38.628746",5.72,Estável
-2026-05-21 17:23:48,10968,svchost.exe,,0.0,0.37,29.5,running,"1 day, 8:06:27.549130",6.67,Estável
-2026-05-21 17:23:49,10976,svchost.exe,,0.0,0.04,3.09,running,1:46:56.712456,6.21,Estável
-2026-05-21 17:23:49,11224,nvcontainer.exe,JORTIEKE\ricar,0.0,0.25,20.1,running,7:47:06.639075,0.02,Estável
-2026-05-21 17:23:49,11244,WmiApSrv.exe,,0.0,0.03,2.25,running,7:36:54.063520,6.61,Estável
-2026-05-21 17:23:49,11256,svchost.exe,,0.0,0.13,10.21,running,"1 day, 8:08:39.036191",5.65,Estável
-2026-05-21 17:23:49,11520,R.exe,JORTIEKE\ricar,0.0,0.02,1.9,running,1:05:03.511739,0.01,Estável
-2026-05-21 17:23:49,11544,svchost.exe,JORTIEKE\ricar,0.0,0.08,6.5,running,7:47:07.012625,0.02,Estável
-2026-05-21 17:23:49,11588,svchost.exe,,0.0,0.05,3.99,running,"1 day, 8:08:39.289343",6.24,Estável
-2026-05-21 17:23:49,11832,ShellHost.exe,JORTIEKE\ricar,0.0,0.07,5.34,running,4:26:34.016574,0.02,Estável
-2026-05-21 17:23:50,11856,OpenConsole.exe,JORTIEKE\ricar,0.0,0.02,1.91,running,1:14:41.139676,0.02,Estável
-2026-05-21 17:23:50,12268,svchost.exe,,0.0,0.15,12.13,running,"1 day, 8:08:39.157453",5.03,Estável
-2026-05-21 17:23:50,12276,wlanext.exe,,0.0,0.02,1.25,running,"1 day, 8:08:39.296420",5.39,Estável
-2026-05-21 17:23:50,12412,RuntimeBroker.exe,JORTIEKE\ricar,0.0,0.11,8.89,running,7:47:01.708325,0.01,Estável
-2026-05-21 17:23:50,12472,svchost.exe,,0.0,0.03,2.03,running,"1 day, 8:08:37.661852",6.09,Estável
-2026-05-21 17:23:50,12504,unsecapp.exe,,0.0,0.04,3.09,running,"1 day, 8:08:34.032362",4.63,Estável
-2026-05-21 17:23:50,12572,nvcontainer.exe,,0.0,0.13,10.02,running,19:23:13.742431,5.72,Estável
-2026-05-21 17:23:50,12576,NgcIso.exe,,0.0,0.01,1.13,running,"1 day, 8:08:37.713102",6.37,Estável
-2026-05-21 17:23:51,12608,svchost.exe,,0.0,0.04,3.46,running,"1 day, 8:01:29.475792",4.33,Estável
-2026-05-21 17:23:51,12752,RtkAudUService64.exe,,0.0,0.03,2.67,running,7:47:05.777649,6.49,Estável
-2026-05-21 17:23:51,13092,svchost.exe,,0.0,0.03,2.41,running,"1 day, 8:08:06.243305",7.47,Estável
-2026-05-21 17:23:51,13520,svchost.exe,JORTIEKE\ricar,0.0,0.02,1.41,running,4:36:38.908806,0.02,Estável
-2026-05-21 17:23:51,13624,csrss.exe,,0.0,0.02,1.95,running,19:23:25.110552,6.65,Estável
-2026-05-21 17:23:51,13736,chrome.exe,JORTIEKE\ricar,0.0,0.07,5.49,running,1:20:15.982658,0.02,Estável
-2026-05-21 17:23:51,13916,msedgewebview2.exe,JORTIEKE\ricar,0.0,0.1,7.68,running,7:47:04.352201,0.03,Estável
-2026-05-21 17:23:52,14212,msedgewebview2.exe,JORTIEKE\ricar,0.0,0.03,2.45,running,7:45:03.765591,0.02,Estável
-2026-05-21 17:23:52,14328,svchost.exe,,0.0,0.02,1.92,running,22:49:48.272325,7.64,Estável
-2026-05-21 17:23:52,14460,RuntimeBroker.exe,JORTIEKE\ricar,0.0,0.11,8.34,running,7:47:06.433185,0.02,Estável
-2026-05-21 17:23:52,14528,Code.exe,JORTIEKE\ricar,0.0,0.03,2.74,running,1:10:24.780873,0.01,Estável
-2026-05-21 17:23:52,14732,svchost.exe,,0.0,0.02,1.73,running,"1 day, 8:07:48.086038",6.63,Estável
-2026-05-21 17:23:52,14912,WUDFHost.exe,,0.0,0.06,4.77,running,6:36:02.655191,6.89,Estável
-2026-05-21 17:23:52,14920,msedgewebview2.exe,JORTIEKE\ricar,0.0,0.13,9.92,running,7:45:05.045261,0.01,Estável
-2026-05-21 17:23:52,15040,winlogon.exe,,0.0,0.02,1.68,running,19:23:26.360344,7.05,Estável
-2026-05-21 17:23:53,15260,Code.exe,JORTIEKE\ricar,0.0,0.36,28.72,running,1:10:23.723170,0.02,Estável
-2026-05-21 17:23:53,15384,SearchIndexer.exe,,0.0,0.12,9.81,running,"1 day, 8:08:28.029692",8.11,Estável
-2026-05-21 17:23:53,15420,bash.exe,JORTIEKE\ricar,0.0,0.02,1.94,running,1:05:08.407363,0.03,Estável
-2026-05-21 17:23:53,15508,WindowsTerminal.exe,JORTIEKE\ricar,0.0,0.11,8.36,running,1:14:44.975731,0.02,Estável
-2026-05-21 17:23:53,15652,Code.exe,JORTIEKE\ricar,0.0,5.73,452.69,running,1:05:03.299530,0.02,Estável
-2026-05-21 17:23:53,15656,powershell.exe,JORTIEKE\ricar,0.0,0.13,9.94,running,1:05:08.740488,0.01,Estável
-2026-05-21 17:23:53,15704,svchost.exe,,0.0,0.07,5.48,running,"1 day, 8:08:27.636846",8.07,Estável
-2026-05-21 17:23:53,15752,dllhost.exe,JORTIEKE\ricar,0.0,0.03,2.21,running,7:28:28.009760,0.03,Estável
-2026-05-21 17:23:54,16200,Rterm.exe,JORTIEKE\ricar,0.0,1.96,154.85,running,1:05:07.777455,0.02,Estável
-2026-05-21 17:23:54,16456,bash.exe,JORTIEKE\ricar,0.0,0.02,1.53,running,1:10:37.202430,0.02,Estável
-2026-05-21 17:23:54,16492,ShellExperienceHost.exe,JORTIEKE\ricar,0.0,0.02,1.57,stopped,7:28:31.426072,0.12,Estável
-2026-05-21 17:23:54,16644,NisSrv.exe,,0.0,0.07,5.59,running,"1 day, 8:08:20.349457",6.5,Estável
-2026-05-21 17:23:54,16704,NVIDIA Overlay.exe,JORTIEKE\ricar,0.0,0.18,14.01,running,7:47:00.794528,0.25,Estável
-2026-05-21 17:23:54,16732,Code.exe,JORTIEKE\ricar,0.0,2.51,198.27,running,1:10:26.676066,0.02,Estável
-2026-05-21 17:23:54,16864,svchost.exe,,0.0,0.01,1.04,running,1:21:14.862362,6.09,Estável
-2026-05-21 17:23:54,16996,cmd.exe,JORTIEKE\ricar,0.0,0.05,3.79,running,0:38:25.422546,0.16,Estável
-2026-05-21 17:23:54,17072,AcerGAICameraW.exe,JORTIEKE\ricar,0.0,0.04,3.54,running,7:46:47.517971,0.02,Estável
-2026-05-21 17:23:55,17176,AcerSysHardwareService.exe,,0.0,0.03,2.38,running,7:47:08.109303,5.72,Estável
-2026-05-21 17:23:55,17444,OpenConsole.exe,JORTIEKE\ricar,0.0,0.04,2.77,running,1:05:10.465540,0.03,Estável
-2026-05-21 17:23:55,17488,ctfmon.exe,JORTIEKE\ricar,0.0,0.14,11.0,running,7:47:07.764116,0.02,Estável
-2026-05-21 17:23:55,17540,powershell.exe,JORTIEKE\ricar,0.0,0.12,9.17,running,1:05:10.528258,0.03,Estável
-2026-05-21 17:23:55,18052,Code.exe,JORTIEKE\ricar,0.0,0.21,16.74,running,1:10:24.675602,0.04,Estável
-2026-05-21 17:23:55,18376,conhost.exe,JORTIEKE\ricar,0.0,0.02,1.59,running,1:10:38.784207,0.03,Estável
-2026-05-21 17:23:55,18536,conhost.exe,JORTIEKE\ricar,0.0,0.02,1.62,running,1:05:09.730321,0.03,Estável
-2026-05-21 17:23:55,18540,SecurityHealthService.exe,,0.0,0.09,6.8,running,"1 day, 8:08:04.855837",5.59,Estável
-2026-05-21 17:23:56,18576,R.exe,JORTIEKE\ricar,0.0,0.02,1.72,running,1:05:09.999077,0.03,Estável
-2026-05-21 17:23:56,18652,svchost.exe,,0.0,0.07,5.73,running,"1 day, 8:08:03.629553",5.59,Estável
-2026-05-21 17:23:56,18744,node.exe,JORTIEKE\ricar,0.0,0.31,24.48,running,0:38:27.811546,0.05,Estável
-2026-05-21 17:23:56,18804,Code.exe,JORTIEKE\ricar,0.0,0.47,36.91,running,1:05:12.521808,0.02,Estável
-2026-05-21 17:23:56,18868,Widgets.exe,JORTIEKE\ricar,0.0,0.09,7.46,running,7:47:10.804229,0.03,Estável
-2026-05-21 17:23:56,18964,Code.exe,JORTIEKE\ricar,0.0,0.31,24.84,running,1:05:13.733961,0.02,Estável
-2026-05-21 17:23:56,18988,chrome.exe,JORTIEKE\ricar,0.0,0.09,6.86,running,1:20:23.056778,0.02,Estável
-2026-05-21 17:23:56,19320,Code.exe,JORTIEKE\ricar,0.0,0.19,15.17,running,1:10:29.143147,0.03,Estável
-2026-05-21 17:23:56,19504,powershell.exe,JORTIEKE\ricar,0.0,0.12,9.24,running,1:05:10.650443,0.03,Estável
-2026-05-21 17:23:57,19584,svchost.exe,,0.0,0.06,4.73,running,"1 day, 8:06:37.043048",5.01,Estável
-2026-05-21 17:23:57,19612,svchost.exe,,0.0,0.05,3.6,running,"1 day, 8:06:35.748716",5.64,Estável
-2026-05-21 17:23:57,19632,conhost.exe,JORTIEKE\ricar,0.0,0.02,1.68,running,1:05:12.202988,0.03,Estável
-2026-05-21 17:23:57,19668,nvcontainer.exe,JORTIEKE\ricar,0.0,0.06,4.76,running,7:47:14.964309,0.04,Estável
-2026-05-21 17:23:57,19880,RtkAudUService64.exe,JORTIEKE\ricar,0.0,0.04,2.87,running,7:46:52.153622,0.02,Estável
-2026-05-21 17:23:57,19892,svchost.exe,,0.0,0.05,3.65,running,"1 day, 8:06:37.052852",5.13,Estável
-2026-05-21 17:23:57,19908,svchost.exe,JORTIEKE\ricar,0.0,0.1,8.25,running,7:47:15.205847,0.02,Estável
-2026-05-21 17:23:57,19940,svchost.exe,,0.0,0.04,2.87,running,"1 day, 8:06:37.152391",6.17,Estável
-2026-05-21 17:23:58,20072,chrome.exe,JORTIEKE\ricar,0.0,2.7,213.36,running,0:23:14.083635,0.03,Estável
-2026-05-21 17:23:58,20980,msedgewebview2.exe,JORTIEKE\ricar,0.0,0.07,5.54,running,7:45:10.093803,0.03,Estável
-2026-05-21 17:23:58,21084,svchost.exe,,0.0,0.02,1.39,running,22:49:55.477216,5.57,Estável
-2026-05-21 17:23:58,21156,LockApp.exe,JORTIEKE\ricar,0.0,0.0,0.07,stopped,7:47:10.667686,0.05,Estável
-2026-05-21 17:23:58,21320,NVIDIA Overlay.exe,JORTIEKE\ricar,0.0,0.22,17.12,running,7:47:04.365350,0.03,Estável
-2026-05-21 17:23:58,21464,msedgewebview2.exe,JORTIEKE\ricar,0.0,0.17,13.42,running,7:47:11.286890,0.03,Estável
-2026-05-21 17:23:58,21484,svchost.exe,JORTIEKE\ricar,0.0,0.02,1.28,running,7:47:16.145472,0.03,Estável
-2026-05-21 17:23:58,21532,OVRServiceLauncher.exe,,0.0,0.02,1.28,running,7:45:39.764125,5.02,Estável
-2026-05-21 17:23:59,21840,svchost.exe,,0.0,0.03,2.36,running,"1 day, 5:52:24.683809",5.48,Estável
-2026-05-21 17:23:59,21868,ipf_uf.exe,,0.0,0.03,2.0,running,6:36:24.472025,5.64,Estável
-2026-05-21 17:23:59,22180,WUDFHost.exe,,0.0,0.03,2.11,running,6:36:09.242936,6.36,Estável
-2026-05-21 17:23:59,22372,conhost.exe,JORTIEKE\ricar,0.0,0.02,1.68,running,1:05:14.546069,0.02,Estável
-2026-05-21 17:23:59,22732,NVIDIA Overlay.exe,JORTIEKE\ricar,0.0,0.39,30.7,running,7:47:07.218216,0.02,Estável
-2026-05-21 17:23:59,22756,SecurityHealthSystray.exe,JORTIEKE\ricar,0.0,0.02,1.67,running,7:46:57.200855,0.02,Estável
-2026-05-21 17:23:59,22952,svchost.exe,JORTIEKE\ricar,0.0,0.02,1.71,running,7:45:17.106476,0.05,Estável
-2026-05-21 17:23:59,23116,SearchHost.exe,JORTIEKE\ricar,0.0,0.18,13.84,running,7:47:14.483678,0.02,Estável
-2026-05-21 17:24:00,23124,NVIDIA Overlay.exe,JORTIEKE\ricar,0.0,0.05,4.07,running,7:47:06.162809,0.01,Estável
-2026-05-21 17:24:00,23144,RuntimeBroker.exe,JORTIEKE\ricar,0.0,0.02,1.68,running,7:47:13.443062,0.02,Estável
-2026-05-21 17:24:00,23168,RemoteDesktopCompanion.exe,JORTIEKE\ricar,0.0,0.22,17.57,running,7:45:37.886554,0.02,Estável
-2026-05-21 17:24:00,23380,TextInputHost.exe,JORTIEKE\ricar,0.0,0.25,19.95,running,7:47:04.989212,0.02,Estável
-2026-05-21 17:24:00,23472,jusched.exe,JORTIEKE\ricar,0.0,0.02,1.54,running,7:46:53.182548,0.13,Estável
-2026-05-21 17:24:00,23704,RuntimeBroker.exe,JORTIEKE\ricar,0.0,0.04,3.1,running,7:28:37.555470,0.02,Estável
-2026-05-21 17:24:00,23924,msedgewebview2.exe,JORTIEKE\ricar,0.0,0.09,7.04,running,7:47:13.307254,0.02,Estável
-2026-05-21 17:24:00,23988,taskhostw.exe,JORTIEKE\ricar,0.0,0.07,5.64,running,7:47:17.979487,0.02,Estável
-2026-05-21 17:24:00,24072,OpenConsole.exe,JORTIEKE\ricar,0.0,0.03,2.68,running,1:05:16.142153,0.02,Estável
-2026-05-21 17:24:01,24384,OVRRedir.exe,,0.0,0.02,1.84,running,7:45:41.771346,7.58,Estável
-2026-05-21 17:24:01,24552,conhost.exe,JORTIEKE\ricar,0.0,0.02,1.54,running,7:45:41.901260,0.01,Estável
-2026-05-21 17:24:01,24664,powershell.exe,JORTIEKE\ricar,0.0,0.19,14.89,running,0:48:02.315273,0.02,Estável
-2026-05-21 17:24:01,24872,sihost.exe,JORTIEKE\ricar,0.0,0.16,12.39,running,7:47:18.786634,0.02,Estável
-2026-05-21 17:24:01,24924,msedgewebview2.exe,JORTIEKE\ricar,0.0,0.06,4.61,running,7:45:13.401076,0.01,Estável
-2026-05-21 17:24:01,25048,svchost.exe,,0.0,0.02,1.59,running,7:47:17.674145,5.29,Estável
-2026-05-21 17:24:01,25428,svchost.exe,,0.0,0.02,1.82,running,"1 day, 5:50:58.863632",6.77,Estável
-2026-05-21 17:24:01,25536,msedgewebview2.exe,JORTIEKE\ricar,0.0,0.03,2.0,running,7:45:13.760066,0.09,Estável
-2026-05-21 17:24:01,25712,node.exe,JORTIEKE\ricar,0.0,0.34,26.64,running,0:38:32.524790,0.02,Estável
-2026-05-21 17:24:02,25744,nvsphelper64.exe,JORTIEKE\ricar,0.0,0.03,2.5,running,7:47:09.773064,0.02,Estável
-2026-05-21 17:24:02,25828,dllhost.exe,JORTIEKE\ricar,0.0,0.03,2.13,running,7:28:36.465614,0.03,Estável
-2026-05-21 17:24:02,25964,powershell.exe,JORTIEKE\ricar,0.0,0.05,3.75,running,1:14:53.427940,0.02,Estável
-2026-05-21 17:24:02,26092,chrome.exe,JORTIEKE\ricar,0.0,0.24,18.72,running,1:00:00.126740,0.02,Estável
-2026-05-21 17:24:02,26328,conhost.exe,,0.0,0.02,1.66,running,7:47:19.629235,6.7,Estável
-2026-05-21 17:24:02,26396,OneDrive.Sync.Service.exe,JORTIEKE\ricar,0.0,0.08,6.25,running,6:31:48.328766,0.03,Estável
-2026-05-21 17:24:02,26484,esrv.exe,JORTIEKE\ricar,0.0,0.12,9.43,running,7:47:19.709761,0.02,Estável
-2026-05-21 17:24:02,26736,msedgewebview2.exe,JORTIEKE\ricar,0.0,0.03,2.13,running,7:47:15.844132,0.02,Estável
-2026-05-21 17:24:03,27196,fontdrvhost.exe,,0.0,0.01,0.96,running,19:23:36.373148,7.09,Estável
-2026-05-21 17:24:03,27208,dwm.exe,,0.91,0.47,37.04,running,19:23:36.514366,7.04,Estável
-2026-05-21 17:24:03,27312,svchost.exe,JORTIEKE\ricar,0.0,0.03,2.5,running,7:47:14.315921,0.1,Estável
-2026-05-21 17:24:03,27392,conhost.exe,JORTIEKE\ricar,0.0,0.02,1.61,running,1:05:17.395420,0.02,Estável
-2026-05-21 17:24:03,27448,Code.exe,JORTIEKE\ricar,0.0,1.22,96.29,running,1:10:36.335430,0.02,Estável
-2026-05-21 17:24:03,27564,svchost.exe,JORTIEKE\ricar,0.0,0.04,2.8,running,7:47:07.038742,0.04,Estável
-2026-05-21 17:24:03,27752,R.exe,JORTIEKE\ricar,0.0,0.02,1.84,running,1:05:17.607407,0.02,Estável
-2026-05-21 17:24:03,27796,chrome.exe,JORTIEKE\ricar,0.0,0.09,7.11,running,1:09:15.830951,0.02,Estável
-2026-05-21 17:24:03,27844,AppActions.exe,JORTIEKE\ricar,0.0,0.07,5.49,running,7:37:20.650520,0.02,Estável
-2026-05-21 17:24:04,27876,NVIDIA Overlay.exe,JORTIEKE\ricar,0.0,0.1,7.91,running,7:47:10.481121,0.02,Estável
-2026-05-21 17:24:04,27940,chrome.exe,JORTIEKE\ricar,0.0,0.29,23.28,running,1:09:32.425594,0.02,Estável
-2026-05-21 17:24:04,28148,NVDisplay.Container.exe,,0.0,0.14,11.15,running,19:23:27.359702,6.89,Estável
-2026-05-21 17:24:04,28272,chrome.exe,JORTIEKE\ricar,0.0,3.14,247.66,running,1:08:59.117651,0.01,Estável
-2026-05-21 17:24:04,28408,OpenConsole.exe,JORTIEKE\ricar,0.0,0.03,2.58,running,1:05:18.454577,0.02,Estável
-2026-05-21 17:24:04,28548,svchost.exe,,0.0,0.03,2.04,running,1:50:32.670416,6.38,Estável
-2026-05-21 17:24:04,28568,msedgewebview2.exe,JORTIEKE\ricar,0.0,0.05,3.72,running,7:47:17.421203,0.03,Estável
-2026-05-21 17:24:04,28620,OpenConsole.exe,JORTIEKE\ricar,0.0,0.03,2.68,running,1:05:20.176883,0.06,Estável
-2026-05-21 17:24:05,28732,bash.exe,JORTIEKE\ricar,0.0,0.03,2.66,running,1:05:20.080981,0.03,Estável
-2026-05-21 17:24:05,28872,CrossDeviceResume.exe,JORTIEKE\ricar,0.0,0.05,4.22,running,7:47:22.098543,0.02,Estável
-2026-05-21 17:24:05,28976,conhost.exe,JORTIEKE\ricar,0.0,0.02,1.56,running,1:06:41.833351,0.02,Estável
-2026-05-21 17:24:05,28984,AQAUserPS.exe,JORTIEKE\ricar,0.0,0.06,4.49,running,7:47:20.717027,0.02,Estável
-2026-05-21 17:24:05,29044,Code.exe,JORTIEKE\ricar,0.0,0.49,38.8,running,1:10:36.269573,0.02,Estável
-2026-05-21 17:24:05,29196,ACCUserPS.exe,JORTIEKE\ricar,0.0,0.02,1.65,running,7:47:20.671535,0.02,Estável
-2026-05-21 17:24:05,29208,chrome.exe,JORTIEKE\ricar,0.0,0.38,29.81,running,0:01:49.419696,0.04,Estável
-2026-05-21 17:24:05,29292,OVRServer_x64.exe,JORTIEKE\ricar,0.0,0.41,32.18,running,7:45:46.587364,0.03,Estável
-2026-05-21 17:24:05,29544,chrome.exe,JORTIEKE\ricar,0.0,1.01,79.39,running,0:47:31.372266,0.03,Estável
-2026-05-21 17:24:06,29708,OpenConsole.exe,JORTIEKE\ricar,0.0,0.05,3.86,running,0:48:07.216615,0.02,Estável
-2026-05-21 17:24:06,29716,cmd.exe,JORTIEKE\ricar,0.0,0.02,1.4,running,1:05:20.078405,0.07,Estável
-2026-05-21 17:24:06,29880,cmd.exe,JORTIEKE\ricar,0.0,0.06,4.58,running,0:38:38.779635,0.14,Estável
-2026-05-21 17:24:06,30216,cmd.exe,JORTIEKE\ricar,0.0,0.02,1.37,running,1:05:20.303793,0.06,Estável
-2026-05-21 17:24:06,30260,chrome.exe,JORTIEKE\ricar,0.0,0.52,40.69,running,1:20:33.951003,0.03,Estável
-2026-05-21 17:24:06,30600,Code.exe,JORTIEKE\ricar,0.0,0.08,6.24,running,1:10:29.479373,0.02,Estável
-2026-05-21 17:24:06,30712,mintty.exe,JORTIEKE\ricar,0.0,0.05,3.65,running,1:06:43.377339,0.02,Estável
-2026-05-21 17:24:06,30724,chrome.exe,JORTIEKE\ricar,0.0,0.11,8.65,running,1:08:41.371336,0.02,Estável
-2026-05-21 17:24:06,30744,R.exe,JORTIEKE\ricar,0.0,0.02,1.82,running,1:05:20.784803,0.02,Estável
-2026-05-21 17:24:07,30876,mintty.exe,JORTIEKE\ricar,0.0,0.04,3.52,running,1:10:50.277851,0.02,Estável
-2026-05-21 17:24:07,30956,Code.exe,JORTIEKE\ricar,0.0,2.86,226.18,running,1:05:24.331812,0.02,Estável
-2026-05-21 17:24:07,30996,chrome.exe,JORTIEKE\ricar,0.0,0.03,2.55,running,1:20:34.901867,0.03,Estável
-2026-05-21 17:24:07,31096,Code.exe,JORTIEKE\ricar,0.0,5.35,422.42,running,1:05:59.576268,0.02,Estável
-2026-05-21 17:24:07,31252,cmd.exe,JORTIEKE\ricar,0.0,0.02,1.33,running,1:05:21.288189,0.26,Estável
-2026-05-21 17:24:07,31476,chrome.exe,JORTIEKE\ricar,0.0,0.36,28.14,running,0:40:38.374162,0.02,Estável
-2026-05-21 17:24:07,31564,powershell.exe,JORTIEKE\ricar,0.0,0.12,9.8,running,1:05:22.835552,0.01,Estável
-2026-05-21 17:24:07,31632,Code.exe,JORTIEKE\ricar,0.0,0.07,5.67,running,0:46:52.603295,0.02,Estável
-2026-05-21 17:24:07,31768,git-bash.exe,JORTIEKE\ricar,0.0,0.02,1.3,running,1:10:51.194660,0.03,Estável
-2026-05-21 17:24:08,31964,chrome.exe,JORTIEKE\ricar,2.91,2.42,190.84,running,1:20:35.704039,0.02,Estável
-2026-05-21 17:24:08,31984,chrome.exe,JORTIEKE\ricar,0.0,0.4,31.77,running,1:09:18.966963,0.01,Estável
-2026-05-21 17:24:08,32040,Code.exe,JORTIEKE\ricar,0.0,0.95,74.76,running,0:35:06.941816,0.02,Estável
-2026-05-21 17:24:08,32356,cmd.exe,JORTIEKE\ricar,0.0,0.02,1.31,running,1:05:22.174649,0.16,Estável
-2026-05-21 17:24:08,32428,chrome.exe,JORTIEKE\ricar,0.0,0.3,23.77,running,1:10:11.108644,0.01,Estável
-2026-05-21 17:24:08,32804,Code.exe,JORTIEKE\ricar,0.0,0.21,16.93,running,0:46:53.864347,0.02,Estável
-2026-05-21 17:24:08,32872,bash.exe,JORTIEKE\ricar,0.0,0.02,1.86,running,1:06:45.205036,0.02,Estável
-2026-05-21 17:24:08,33092,OpenConsole.exe,JORTIEKE\ricar,0.0,0.05,3.97,running,0:50:00.836322,0.04,Estável
-2026-05-21 17:24:08,33140,Code.exe,JORTIEKE\ricar,0.0,0.26,20.8,running,1:10:39.564220,0.01,Estável
-2026-05-21 17:24:09,33152,chrome.exe,JORTIEKE\ricar,0.0,0.79,62.43,running,1:20:36.480870,0.01,Estável
-2026-05-21 17:24:09,33368,pet.exe,JORTIEKE\ricar,0.0,0.07,5.8,running,1:05:24.012100,0.02,Estável
-2026-05-21 17:23:27,0,System Idle Process,NT AUTHORITY\SYSTEM,86.29,0.0,0.01,running,"20594 days, 20:23:27.630366",5.75,Crítico
-2026-05-21 17:23:27,4,System,NT AUTHORITY\SYSTEM,0.0,0.03,2.16,running,"20594 days, 20:23:27.779298",6.95,Estável
-2026-05-21 17:23:27,236,,,0.0,0.53,42.0,stopped,"1 day, 8:08:40.316664",7.22,Estável
-2026-05-21 17:23:28,280,Registry,,0.0,0.18,14.16,running,"1 day, 8:08:40.450227",8.31,Estável
-2026-05-21 17:23:28,772,smss.exe,,0.0,0.0,0.04,running,"1 day, 8:08:37.803886",5.54,Estável
-2026-05-21 17:23:28,1124,csrss.exe,,0.0,0.04,2.9,running,"1 day, 8:08:25.746693",7.36,Estável
-2026-05-21 17:23:28,1232,wininit.exe,,0.0,0.02,1.45,running,"1 day, 8:08:23.837468",6.59,Estável
-2026-05-21 17:23:28,1308,services.exe,,0.0,0.08,6.57,running,"1 day, 8:08:23.537257",7.42,Estável
-2026-05-21 17:23:28,1328,LsaIso.exe,,0.0,0.01,0.75,running,"1 day, 8:08:23.660288",7.9,Estável
-2026-05-21 17:23:29,1336,lsass.exe,,0.0,0.16,12.34,running,"1 day, 8:08:23.811048",8.31,Estável
-2026-05-21 17:23:29,1392,svchost.exe,,0.0,0.02,1.25,running,7:46:24.994617,7.11,Estável
-2026-05-21 17:23:29,1460,svchost.exe,,0.0,0.26,20.81,running,"1 day, 8:08:23.920360",7.69,Estável
-2026-05-21 17:23:29,1492,fontdrvhost.exe,,0.0,0.01,0.73,running,"1 day, 8:08:24.056365",5.9,Estável
-2026-05-21 17:23:29,1544,WUDFHost.exe,,0.0,0.02,1.58,running,"1 day, 8:08:24.189073",6.37,Estável
-2026-05-21 17:23:29,1604,svchost.exe,,0.0,0.14,11.25,running,"1 day, 8:08:24.275424",7.24,Estável
-2026-05-21 17:23:29,1668,svchost.exe,,0.0,0.04,3.32,running,"1 day, 8:08:24.411262",10.78,Estável
-2026-05-21 17:23:30,1688,Code.exe,JORTIEKE\ricar,3.89,2.18,172.2,running,1:10:02.376282,0.02,Estável
-2026-05-21 17:23:30,1908,svchost.exe,,0.0,0.01,1.0,running,"1 day, 8:08:24.356567",5.02,Estável
-2026-05-21 17:23:30,1984,svchost.exe,,0.0,0.05,3.92,running,22:42:32.908328,7.98,Estável
-2026-05-21 17:23:30,2044,WUDFHost.exe,,0.0,0.02,1.93,running,"1 day, 8:08:24.667728",7.27,Estável
-2026-05-21 17:23:30,2100,svchost.exe,,0.0,0.03,2.66,running,"1 day, 8:08:24.798952",6.2,Estável
-2026-05-21 17:23:30,2108,svchost.exe,,0.0,0.09,6.77,running,"1 day, 8:08:24.948601",7.16,Estável
-2026-05-21 17:23:30,2132,svchost.exe,,0.91,0.13,10.53,running,"1 day, 8:08:25.102627",7.46,Estável
-2026-05-21 17:23:31,2316,svchost.exe,,0.0,0.03,2.64,running,"1 day, 8:08:25.233799",6.5,Estável
-2026-05-21 17:23:31,2324,svchost.exe,,0.0,0.02,1.56,running,"1 day, 8:08:25.384190",6.59,Estável
-2026-05-21 17:23:31,2332,svchost.exe,,0.0,0.03,2.71,running,"1 day, 8:08:25.532918",6.2,Estável
-2026-05-21 17:23:31,2344,svchost.exe,,0.0,0.11,9.05,running,"1 day, 8:08:25.682295",6.23,Estável
-2026-05-21 17:23:31,2408,MQRDCrashpadHandler.exe,JORTIEKE\ricar,0.0,0.02,1.4,running,7:45:09.146494,0.02,Estável
-2026-05-21 17:23:31,2444,svchost.exe,,0.0,0.02,1.83,running,"1 day, 8:08:25.916966",5.88,Estável
-2026-05-21 17:23:31,2512,IntelCpHDCPSvc.exe,,0.0,0.01,1.18,running,"1 day, 8:08:26.053482",5.32,Estável
-2026-05-21 17:23:32,2524,svchost.exe,,0.0,0.02,1.54,running,"1 day, 8:08:26.195550",6.91,Estável
-2026-05-21 17:23:32,2548,svchost.exe,,0.0,0.07,5.15,running,"1 day, 8:08:26.341299",6.42,Estável
-2026-05-21 17:23:32,2656,svchost.exe,,0.0,0.04,3.5,running,"1 day, 8:08:26.481123",6.04,Estável
-2026-05-21 17:23:32,2812,chrome.exe,JORTIEKE\ricar,0.0,0.42,33.55,running,1:19:59.595495,0.02,Estável
-2026-05-21 17:23:32,2852,svchost.exe,,0.0,0.14,11.05,running,"1 day, 8:08:26.712593",6.48,Estável
-2026-05-21 17:23:32,2928,svchost.exe,,0.0,0.03,2.11,running,"1 day, 8:08:26.523449",6.36,Estável
-2026-05-21 17:23:32,3000,svchost.exe,,0.0,0.02,1.61,running,"1 day, 8:08:26.980938",6.94,Estável
-2026-05-21 17:23:33,3108,svchost.exe,,0.0,0.08,6.03,running,"1 day, 8:08:27.082936",7.18,Estável
-2026-05-21 17:23:33,3124,svchost.exe,,0.0,0.08,6.32,running,"1 day, 8:08:27.232408",7.87,Estável
-2026-05-21 17:23:33,3172,chrome.exe,JORTIEKE\ricar,0.0,2.41,189.97,running,1:18:41.377155,0.02,Estável
-2026-05-21 17:23:33,3292,svchost.exe,,0.0,0.05,4.29,running,"1 day, 8:08:27.252494",7.95,Estável
-2026-05-21 17:23:33,3332,svchost.exe,,0.0,0.05,4.28,running,"1 day, 8:08:27.621218",7.07,Estável
-2026-05-21 17:23:33,3380,WUDFHost.exe,,0.0,0.07,5.6,running,"1 day, 8:08:27.751426",7.33,Estável
-2026-05-21 17:23:34,3392,NVDisplay.Container.exe,,0.0,0.17,13.53,running,"1 day, 8:08:27.905926",7.04,Estável
-2026-05-21 17:23:34,3424,msedgewebview2.exe,JORTIEKE\ricar,0.0,0.31,24.83,running,7:46:47.177838,0.02,Estável
-2026-05-21 17:23:34,3436,dllhost.exe,JORTIEKE\ricar,0.0,0.03,2.08,running,7:28:08.221298,0.02,Estável
-2026-05-21 17:23:34,3452,svchost.exe,,0.0,0.05,4.07,running,"1 day, 8:08:28.267220",6.99,Estável
-2026-05-21 17:23:34,3516,git-bash.exe,JORTIEKE\ricar,0.0,0.02,1.41,running,1:06:11.185852,0.07,Estável
-2026-05-21 17:23:34,3524,svchost.exe,,0.0,0.07,5.84,running,"1 day, 8:08:28.510782",6.68,Estável
-2026-05-21 17:23:34,3556,svchost.exe,,0.0,0.02,1.38,running,"1 day, 8:08:28.651054",11.82,Estável
-2026-05-21 17:23:34,3564,svchost.exe,,0.0,0.08,6.27,running,"1 day, 8:08:28.803322",5.3,Estável
-2026-05-21 17:23:35,3568,svchost.exe,,0.0,0.02,1.52,running,"1 day, 8:08:28.944167",5.57,Estável
-2026-05-21 17:23:35,3644,svchost.exe,,0.0,0.02,1.2,running,"1 day, 8:08:28.933956",6.62,Estável
-2026-05-21 17:23:35,3664,MemCompression,,0.0,0.53,41.54,running,"1 day, 8:08:29.221876",7.48,Estável
-2026-05-21 17:23:35,3716,svchost.exe,,0.0,0.01,0.9,running,"1 day, 8:08:29.374474",7.23,Estável
-2026-05-21 17:23:35,3756,svchost.exe,,0.0,0.02,1.62,running,"1 day, 8:08:29.514316",6.78,Estável
-2026-05-21 17:23:35,3764,svchost.exe,,0.0,0.02,1.69,running,"1 day, 8:08:29.665275",6.65,Estável
-2026-05-21 17:23:35,3816,svchost.exe,,0.0,0.13,10.6,running,"1 day, 8:08:29.807316",5.08,Estável
-2026-05-21 17:23:36,3928,svchost.exe,,0.0,0.04,2.8,running,"1 day, 8:08:29.919996",6.19,Estável
-2026-05-21 17:23:36,3968,svchost.exe,,0.0,0.03,2.7,running,"1 day, 8:08:30.053668",5.64,Estável
-2026-05-21 17:23:36,4088,svchost.exe,,0.0,0.1,7.7,running,"1 day, 8:08:30.142872",7.86,Estável
-2026-05-21 17:23:36,4124,pet.exe,JORTIEKE\ricar,0.0,0.04,3.1,running,1:04:51.638845,0.02,Estável
-2026-05-21 17:23:36,4144,DtsApo4Service.exe,,0.0,0.02,1.64,running,"1 day, 8:08:29.982348",6.69,Estável
-2026-05-21 17:23:36,4340,svchost.exe,,0.0,0.14,10.89,running,"1 day, 8:08:30.482621",7.6,Estável
-2026-05-21 17:23:36,4372,svchost.exe,,0.0,0.04,3.52,running,"1 day, 8:08:30.623917",6.62,Estável
-2026-05-21 17:23:37,4460,spoolsv.exe,,0.0,0.04,2.91,running,"1 day, 8:08:30.675325",7.28,Estável
-2026-05-21 17:23:37,4488,svchost.exe,,0.0,0.11,8.41,running,"1 day, 8:08:30.756667",5.26,Estável
-2026-05-21 17:23:37,4600,svchost.exe,,0.0,0.04,2.81,running,"1 day, 8:08:30.776825",5.73,Estável
-2026-05-21 17:23:37,4676,taskhostw.exe,JORTIEKE\ricar,0.0,0.03,2.74,running,7:46:53.749142,0.03,Estável
-2026-05-21 17:23:37,4728,OpenConsole.exe,JORTIEKE\ricar,0.0,0.03,2.73,running,1:04:52.886732,0.02,Estável
-2026-05-21 17:23:37,4732,explorer.exe,JORTIEKE\ricar,0.0,1.8,141.75,running,7:46:54.865416,0.03,Estável
-2026-05-21 17:23:37,4748,svchost.exe,,0.0,0.28,21.72,running,"1 day, 8:08:31.234276",6.33,Estável
-2026-05-21 17:23:38,4764,AcerCCAgent.exe,,0.0,0.05,4.21,running,"1 day, 8:08:31.385820",6.89,Estável
-2026-05-21 17:23:38,4784,svchost.exe,,0.0,0.26,20.92,running,"1 day, 8:08:31.537422",6.67,Estável
-2026-05-21 17:23:38,4876,AcerLightingService.exe,,0.0,0.02,1.88,running,"1 day, 8:08:31.682039",6.76,Estável
-2026-05-21 17:23:38,4884,ARTAimmxService.exe,,0.0,0.02,1.8,running,"1 day, 8:08:31.831034",6.7,Estável
-2026-05-21 17:23:38,4892,HPSIsvc.exe,,0.0,0.02,1.7,running,"1 day, 8:08:31.978355",5.52,Estável
-2026-05-21 17:23:38,4900,AcerPixyService.exe,,0.0,0.05,3.82,running,"1 day, 8:08:32.123061",5.64,Estável
-2026-05-21 17:23:38,4908,ADESv2Svc.exe,,0.0,0.02,1.92,running,"1 day, 8:08:32.268288",5.96,Estável
-2026-05-21 17:23:39,4916,AcerDIAgent.exe,,0.0,0.03,2.47,running,"1 day, 8:08:32.412546",5.96,Estável
-2026-05-21 17:23:39,4924,AcerCentralService.exe,,0.0,0.05,3.72,running,"1 day, 8:08:32.558255",6.31,Estável
-2026-05-21 17:23:39,4932,AcerServiceWrapper.exe,,0.0,0.02,1.95,running,"1 day, 8:08:32.703595",5.88,Estável
-2026-05-21 17:23:39,4944,IntelAudioService.exe,,0.0,0.03,2.72,running,"1 day, 8:08:32.850913",6.26,Estável
-2026-05-21 17:23:39,4952,mtkbtsvc.exe,,0.0,0.02,1.61,running,"1 day, 8:08:32.998281",5.63,Estável
-2026-05-21 17:23:39,4960,AAADSvc.exe,,0.0,0.02,1.73,running,"1 day, 8:08:33.142645",5.79,Estável
-2026-05-21 17:23:39,4968,svchost.exe,,0.0,0.01,0.56,running,"1 day, 8:08:33.286931",5.73,Estável
-2026-05-21 17:23:40,4976,AcerGAICameraService.exe,,0.0,0.03,2.04,running,"1 day, 8:08:33.432472",8.51,Estável
-2026-05-21 17:23:40,4984,AcerQAAgent.exe,,0.0,0.06,5.08,running,"1 day, 8:08:33.589154",5.53,Estável
-2026-05-21 17:23:40,4992,svchost.exe,,0.0,0.06,4.82,running,"1 day, 8:08:33.734911",6.77,Estável
-2026-05-21 17:23:40,5000,DSAService.exe,,0.0,0.39,30.86,running,"1 day, 8:08:33.883383",7.31,Estável
-2026-05-21 17:23:40,5012,DSAUpdateService.exe,,0.0,0.28,22.07,running,"1 day, 8:08:34.038014",6.91,Estável
-2026-05-21 17:23:40,5020,armsvc.exe,,0.0,0.02,1.32,running,"1 day, 8:08:34.191802",6.83,Estável
-2026-05-21 17:23:41,5040,svchost.exe,,0.0,0.09,7.48,running,"1 day, 8:08:34.343061",7.34,Estável
-2026-05-21 17:23:41,5052,svchost.exe,,0.0,0.03,2.5,running,"1 day, 8:08:34.494144",5.94,Estável
-2026-05-21 17:23:41,5080,AcerSystemCentralService.exe,,0.0,0.02,1.56,running,"1 day, 8:08:34.640955",6.1,Estável
-2026-05-21 17:23:41,5088,PresentMonService.exe,,0.0,0.04,3.18,running,"1 day, 8:08:34.792422",7.47,Estável
-2026-05-21 17:23:41,5096,AcerEZService.exe,,0.0,0.09,6.92,running,"1 day, 8:08:34.945536",6.62,Estável
-2026-05-21 17:23:41,5104,MsMpEng.exe,,0.0,2.46,194.15,running,"1 day, 8:08:35.094056",6.44,Estável
-2026-05-21 17:23:41,5112,jhi_service.exe,,0.0,0.02,1.25,running,"1 day, 8:08:35.248175",8.67,Estável
-2026-05-21 17:23:42,5144,WMIRegistrationService.exe,,0.0,0.02,1.88,running,"1 day, 8:08:35.397520",6.89,Estável
-2026-05-21 17:23:42,5168,IntelGraphicsSoftware.Service.exe,,0.0,0.07,5.43,running,"1 day, 8:08:35.547409",7.39,Estável
-2026-05-21 17:23:42,5180,MpDefenderCoreService.exe,,0.0,0.11,8.93,running,"1 day, 8:08:35.700401",7.19,Estável
-2026-05-21 17:23:42,5196,collector_service.exe,,0.0,0.03,2.59,running,"1 day, 8:08:35.853168",6.6,Estável
-2026-05-21 17:23:42,5204,SurSvc.exe,,0.0,0.11,9.0,running,"1 day, 8:08:36.004554",12.71,Estável
-2026-05-21 17:23:42,5212,RtkAudUService64.exe,,0.0,0.03,2.5,running,"1 day, 8:08:36.160328",6.48,Estável
-2026-05-21 17:23:43,5224,nvcontainer.exe,,0.0,0.12,9.63,running,"1 day, 8:08:36.309054",6.87,Estável
-2026-05-21 17:23:43,5264,esrv_svc.exe,,0.0,0.49,38.68,running,7:44:10.971013,7.63,Estável
-2026-05-21 17:23:43,5432,ipfsvc.exe,,0.0,0.04,2.93,running,"1 day, 8:08:36.598069",7.54,Estável
-2026-05-21 17:23:43,5448,AcerAgentService.exe,,0.0,0.02,1.85,running,"1 day, 8:08:36.746837",7.69,Estável
-2026-05-21 17:23:43,5456,python.exe,JORTIEKE\ricar,0.0,0.23,17.93,running,0:00:16.224921,0.01,Estável
-2026-05-21 17:23:43,5464,OfficeClickToRun.exe,,0.0,0.11,8.86,running,"1 day, 8:08:36.998896",7.42,Estável
-2026-05-21 17:23:43,5476,mysqld.exe,,0.0,0.02,1.64,running,"1 day, 8:08:37.152395",5.97,Estável
-2026-05-21 17:23:44,5492,svchost.exe,JORTIEKE\ricar,0.0,0.09,7.46,running,7:46:59.343358,0.01,Estável
-2026-05-21 17:23:44,5660,powershell.exe,JORTIEKE\ricar,0.0,0.34,27.21,running,0:49:36.034036,0.03,Estável
-2026-05-21 17:23:44,5940,WidgetService.exe,JORTIEKE\ricar,0.0,0.04,3.1,running,7:46:58.188909,0.02,Estável
-2026-05-21 17:23:44,6112,svchost.exe,,0.0,0.05,3.74,running,"1 day, 8:08:37.525594",6.35,Estável
-2026-05-21 17:23:44,6232,svchost.exe,,0.0,0.1,7.56,running,1:21:07.426997,7.26,Estável
-2026-05-21 17:23:44,6856,chrome.exe,JORTIEKE\ricar,0.0,0.1,8.11,running,1:20:12.001285,0.02,Estável
-2026-05-21 17:23:44,6952,mysqld.exe,,0.0,0.04,3.45,running,"1 day, 8:08:37.731371",6.24,Estável
-2026-05-21 17:23:44,7060,conhost.exe,,0.0,0.01,0.81,running,"1 day, 8:08:37.831036",6.24,Estável
-2026-05-21 17:23:45,7244,svchost.exe,,0.0,0.05,3.72,running,"1 day, 8:08:36.933823",7.19,Estável
-2026-05-21 17:23:45,7344,svchost.exe,,0.0,0.05,3.61,running,"1 day, 8:08:34.002384",6.73,Estável
-2026-05-21 17:23:45,7388,unsecapp.exe,,0.0,0.04,3.12,running,7:46:59.587338,6.76,Estável
-2026-05-21 17:23:45,7684,svchost.exe,,0.0,0.02,1.46,running,"1 day, 8:08:35.633641",7.52,Estável
-2026-05-21 17:23:45,7768,AcerService.exe,,0.0,0.04,3.21,running,"1 day, 8:08:38.293227",6.07,Estável
-2026-05-21 17:23:45,7816,conhost.exe,,0.0,0.01,0.79,running,"1 day, 8:08:38.420067",6.28,Estável
-2026-05-21 17:23:45,7852,svchost.exe,JORTIEKE\ricar,0.0,0.02,1.37,running,7:47:03.345962,0.1,Estável
-2026-05-21 17:23:46,7940,Code.exe,JORTIEKE\ricar,0.0,0.14,11.27,running,0:46:31.320722,0.03,Estável
-2026-05-21 17:23:46,7956,msedgewebview2.exe,JORTIEKE\ricar,0.0,0.03,2.15,running,7:44:58.244197,0.02,Estável
-2026-05-21 17:23:46,8184,dasHost.exe,,0.0,0.01,1.12,running,"1 day, 8:08:38.705092",7.19,Estável
-2026-05-21 17:23:46,8288,AcerHardwareService.exe,,0.0,0.04,3.29,running,7:47:00.984754,6.02,Estável
-2026-05-21 17:23:46,8344,PresentMonService.exe,,0.0,0.02,1.65,running,"1 day, 8:08:38.868036",5.49,Estável
-2026-05-21 17:23:46,8368,conhost.exe,,0.0,0.01,1.09,running,"1 day, 8:08:39.003836",6.8,Estável
-2026-05-21 17:23:46,8584,Rterm.exe,JORTIEKE\ricar,0.0,0.51,40.29,running,1:05:00.636560,0.03,Estável
-2026-05-21 17:23:47,8660,WmiPrvSE.exe,,0.0,0.08,6.52,running,"1 day, 8:08:39.154019",5.74,Estável
-2026-05-21 17:23:47,8884,AcerSysMonitorService.exe,,0.0,0.02,1.73,running,"1 day, 8:08:35.236654",5.19,Estável
-2026-05-21 17:23:47,9060,ipf_helper.exe,JORTIEKE\ricar,0.0,0.03,2.13,running,6:36:11.972207,0.08,Estável
-2026-05-21 17:23:47,9260,svchost.exe,JORTIEKE\ricar,0.0,0.04,2.87,running,7:47:01.548106,0.03,Estável
-2026-05-21 17:23:47,9476,telemetry_agent.exe,,0.0,0.16,12.39,running,"1 day, 8:08:39.080850",5.61,Estável
-2026-05-21 17:23:47,9616,CrossDeviceService.exe,JORTIEKE\ricar,0.0,0.19,15.1,running,7:47:03.804522,0.02,Estável
-2026-05-21 17:23:47,9796,chrome.exe,JORTIEKE\ricar,0.0,0.77,60.91,running,1:18:03.114617,0.02,Estável
-2026-05-21 17:23:47,10192,svchost.exe,,0.0,0.15,11.99,running,"1 day, 8:08:38.070409",6.92,Estável
-2026-05-21 17:23:48,10300,AggregatorHost.exe,,0.0,0.06,4.73,running,"1 day, 8:08:37.685546",7.97,Estável
-2026-05-21 17:23:48,10304,TabTip.exe,JORTIEKE\ricar,0.0,0.16,12.93,running,7:47:00.522011,0.02,Estável
-2026-05-21 17:23:48,10340,StartMenuExperienceHost.exe,JORTIEKE\ricar,0.0,0.17,13.75,running,7:47:02.853747,0.02,Estável
-2026-05-21 17:23:48,10432,svchost.exe,,0.0,0.14,11.42,running,"1 day, 8:08:38.406298",6.47,Estável
-2026-05-21 17:23:48,10536,ADESv2BW.exe,,0.0,0.01,1.13,running,7:46:50.807296,6.27,Estável
-2026-05-21 17:23:48,10768,svchost.exe,,0.0,0.02,1.71,running,"1 day, 8:08:38.628746",5.72,Estável
-2026-05-21 17:23:48,10968,svchost.exe,,0.0,0.37,29.5,running,"1 day, 8:06:27.549130",6.67,Estável
-2026-05-21 17:23:49,10976,svchost.exe,,0.0,0.04,3.09,running,1:46:56.712456,6.21,Estável
-2026-05-21 17:23:49,11224,nvcontainer.exe,JORTIEKE\ricar,0.0,0.25,20.1,running,7:47:06.639075,0.02,Estável
-2026-05-21 17:23:49,11244,WmiApSrv.exe,,0.0,0.03,2.25,running,7:36:54.063520,6.61,Estável
-2026-05-21 17:23:49,11256,svchost.exe,,0.0,0.13,10.21,running,"1 day, 8:08:39.036191",5.65,Estável
-2026-05-21 17:23:49,11520,R.exe,JORTIEKE\ricar,0.0,0.02,1.9,running,1:05:03.511739,0.01,Estável
-2026-05-21 17:23:49,11544,svchost.exe,JORTIEKE\ricar,0.0,0.08,6.5,running,7:47:07.012625,0.02,Estável
-2026-05-21 17:23:49,11588,svchost.exe,,0.0,0.05,3.99,running,"1 day, 8:08:39.289343",6.24,Estável
-2026-05-21 17:23:49,11832,ShellHost.exe,JORTIEKE\ricar,0.0,0.07,5.34,running,4:26:34.016574,0.02,Estável
-2026-05-21 17:23:50,11856,OpenConsole.exe,JORTIEKE\ricar,0.0,0.02,1.91,running,1:14:41.139676,0.02,Estável
-2026-05-21 17:23:50,12268,svchost.exe,,0.0,0.15,12.13,running,"1 day, 8:08:39.157453",5.03,Estável
-2026-05-21 17:23:50,12276,wlanext.exe,,0.0,0.02,1.25,running,"1 day, 8:08:39.296420",5.39,Estável
-2026-05-21 17:23:50,12412,RuntimeBroker.exe,JORTIEKE\ricar,0.0,0.11,8.89,running,7:47:01.708325,0.01,Estável
-2026-05-21 17:23:50,12472,svchost.exe,,0.0,0.03,2.03,running,"1 day, 8:08:37.661852",6.09,Estável
-2026-05-21 17:23:50,12504,unsecapp.exe,,0.0,0.04,3.09,running,"1 day, 8:08:34.032362",4.63,Estável
-2026-05-21 17:23:50,12572,nvcontainer.exe,,0.0,0.13,10.02,running,19:23:13.742431,5.72,Estável
-2026-05-21 17:23:50,12576,NgcIso.exe,,0.0,0.01,1.13,running,"1 day, 8:08:37.713102",6.37,Estável
-2026-05-21 17:23:51,12608,svchost.exe,,0.0,0.04,3.46,running,"1 day, 8:01:29.475792",4.33,Estável
-2026-05-21 17:23:51,12752,RtkAudUService64.exe,,0.0,0.03,2.67,running,7:47:05.777649,6.49,Estável
-2026-05-21 17:23:51,13092,svchost.exe,,0.0,0.03,2.41,running,"1 day, 8:08:06.243305",7.47,Estável
-2026-05-21 17:23:51,13520,svchost.exe,JORTIEKE\ricar,0.0,0.02,1.41,running,4:36:38.908806,0.02,Estável
-2026-05-21 17:23:51,13624,csrss.exe,,0.0,0.02,1.95,running,19:23:25.110552,6.65,Estável
-2026-05-21 17:23:51,13736,chrome.exe,JORTIEKE\ricar,0.0,0.07,5.49,running,1:20:15.982658,0.02,Estável
-2026-05-21 17:23:51,13916,msedgewebview2.exe,JORTIEKE\ricar,0.0,0.1,7.68,running,7:47:04.352201,0.03,Estável
-2026-05-21 17:23:52,14212,msedgewebview2.exe,JORTIEKE\ricar,0.0,0.03,2.45,running,7:45:03.765591,0.02,Estável
-2026-05-21 17:23:52,14328,svchost.exe,,0.0,0.02,1.92,running,22:49:48.272325,7.64,Estável
-2026-05-21 17:23:52,14460,RuntimeBroker.exe,JORTIEKE\ricar,0.0,0.11,8.34,running,7:47:06.433185,0.02,Estável
-2026-05-21 17:23:52,14528,Code.exe,JORTIEKE\ricar,0.0,0.03,2.74,running,1:10:24.780873,0.01,Estável
-2026-05-21 17:23:52,14732,svchost.exe,,0.0,0.02,1.73,running,"1 day, 8:07:48.086038",6.63,Estável
-2026-05-21 17:23:52,14912,WUDFHost.exe,,0.0,0.06,4.77,running,6:36:02.655191,6.89,Estável
-2026-05-21 17:23:52,14920,msedgewebview2.exe,JORTIEKE\ricar,0.0,0.13,9.92,running,7:45:05.045261,0.01,Estável
-2026-05-21 17:23:52,15040,winlogon.exe,,0.0,0.02,1.68,running,19:23:26.360344,7.05,Estável
-2026-05-21 17:23:53,15260,Code.exe,JORTIEKE\ricar,0.0,0.36,28.72,running,1:10:23.723170,0.02,Estável
-2026-05-21 17:23:53,15384,SearchIndexer.exe,,0.0,0.12,9.81,running,"1 day, 8:08:28.029692",8.11,Estável
-2026-05-21 17:23:53,15420,bash.exe,JORTIEKE\ricar,0.0,0.02,1.94,running,1:05:08.407363,0.03,Estável
-2026-05-21 17:23:53,15508,WindowsTerminal.exe,JORTIEKE\ricar,0.0,0.11,8.36,running,1:14:44.975731,0.02,Estável
-2026-05-21 17:23:53,15652,Code.exe,JORTIEKE\ricar,0.0,5.73,452.69,running,1:05:03.299530,0.02,Estável
-2026-05-21 17:23:53,15656,powershell.exe,JORTIEKE\ricar,0.0,0.13,9.94,running,1:05:08.740488,0.01,Estável
-2026-05-21 17:23:53,15704,svchost.exe,,0.0,0.07,5.48,running,"1 day, 8:08:27.636846",8.07,Estável
-2026-05-21 17:23:53,15752,dllhost.exe,JORTIEKE\ricar,0.0,0.03,2.21,running,7:28:28.009760,0.03,Estável
-2026-05-21 17:23:54,16200,Rterm.exe,JORTIEKE\ricar,0.0,1.96,154.85,running,1:05:07.777455,0.02,Estável
-2026-05-21 17:23:54,16456,bash.exe,JORTIEKE\ricar,0.0,0.02,1.53,running,1:10:37.202430,0.02,Estável
-2026-05-21 17:23:54,16492,ShellExperienceHost.exe,JORTIEKE\ricar,0.0,0.02,1.57,stopped,7:28:31.426072,0.12,Estável
-2026-05-21 17:23:54,16644,NisSrv.exe,,0.0,0.07,5.59,running,"1 day, 8:08:20.349457",6.5,Estável
-2026-05-21 17:23:54,16704,NVIDIA Overlay.exe,JORTIEKE\ricar,0.0,0.18,14.01,running,7:47:00.794528,0.25,Estável
-2026-05-21 17:23:54,16732,Code.exe,JORTIEKE\ricar,0.0,2.51,198.27,running,1:10:26.676066,0.02,Estável
-2026-05-21 17:23:54,16864,svchost.exe,,0.0,0.01,1.04,running,1:21:14.862362,6.09,Estável
-2026-05-21 17:23:54,16996,cmd.exe,JORTIEKE\ricar,0.0,0.05,3.79,running,0:38:25.422546,0.16,Estável
-2026-05-21 17:23:54,17072,AcerGAICameraW.exe,JORTIEKE\ricar,0.0,0.04,3.54,running,7:46:47.517971,0.02,Estável
-2026-05-21 17:23:55,17176,AcerSysHardwareService.exe,,0.0,0.03,2.38,running,7:47:08.109303,5.72,Estável
-2026-05-21 17:23:55,17444,OpenConsole.exe,JORTIEKE\ricar,0.0,0.04,2.77,running,1:05:10.465540,0.03,Estável
-2026-05-21 17:23:55,17488,ctfmon.exe,JORTIEKE\ricar,0.0,0.14,11.0,running,7:47:07.764116,0.02,Estável
-2026-05-21 17:23:55,17540,powershell.exe,JORTIEKE\ricar,0.0,0.12,9.17,running,1:05:10.528258,0.03,Estável
-2026-05-21 17:23:55,18052,Code.exe,JORTIEKE\ricar,0.0,0.21,16.74,running,1:10:24.675602,0.04,Estável
-2026-05-21 17:23:55,18376,conhost.exe,JORTIEKE\ricar,0.0,0.02,1.59,running,1:10:38.784207,0.03,Estável
-2026-05-21 17:23:55,18536,conhost.exe,JORTIEKE\ricar,0.0,0.02,1.62,running,1:05:09.730321,0.03,Estável
-2026-05-21 17:23:55,18540,SecurityHealthService.exe,,0.0,0.09,6.8,running,"1 day, 8:08:04.855837",5.59,Estável
-2026-05-21 17:23:56,18576,R.exe,JORTIEKE\ricar,0.0,0.02,1.72,running,1:05:09.999077,0.03,Estável
-2026-05-21 17:23:56,18652,svchost.exe,,0.0,0.07,5.73,running,"1 day, 8:08:03.629553",5.59,Estável
-2026-05-21 17:23:56,18744,node.exe,JORTIEKE\ricar,0.0,0.31,24.48,running,0:38:27.811546,0.05,Estável
-2026-05-21 17:23:56,18804,Code.exe,JORTIEKE\ricar,0.0,0.47,36.91,running,1:05:12.521808,0.02,Estável
-2026-05-21 17:23:56,18868,Widgets.exe,JORTIEKE\ricar,0.0,0.09,7.46,running,7:47:10.804229,0.03,Estável
-2026-05-21 17:23:56,18964,Code.exe,JORTIEKE\ricar,0.0,0.31,24.84,running,1:05:13.733961,0.02,Estável
-2026-05-21 17:23:56,18988,chrome.exe,JORTIEKE\ricar,0.0,0.09,6.86,running,1:20:23.056778,0.02,Estável
-2026-05-21 17:23:56,19320,Code.exe,JORTIEKE\ricar,0.0,0.19,15.17,running,1:10:29.143147,0.03,Estável
-2026-05-21 17:23:56,19504,powershell.exe,JORTIEKE\ricar,0.0,0.12,9.24,running,1:05:10.650443,0.03,Estável
-2026-05-21 17:23:57,19584,svchost.exe,,0.0,0.06,4.73,running,"1 day, 8:06:37.043048",5.01,Estável
-2026-05-21 17:23:57,19612,svchost.exe,,0.0,0.05,3.6,running,"1 day, 8:06:35.748716",5.64,Estável
-2026-05-21 17:23:57,19632,conhost.exe,JORTIEKE\ricar,0.0,0.02,1.68,running,1:05:12.202988,0.03,Estável
-2026-05-21 17:23:57,19668,nvcontainer.exe,JORTIEKE\ricar,0.0,0.06,4.76,running,7:47:14.964309,0.04,Estável
-2026-05-21 17:23:57,19880,RtkAudUService64.exe,JORTIEKE\ricar,0.0,0.04,2.87,running,7:46:52.153622,0.02,Estável
-2026-05-21 17:23:57,19892,svchost.exe,,0.0,0.05,3.65,running,"1 day, 8:06:37.052852",5.13,Estável
-2026-05-21 17:23:57,19908,svchost.exe,JORTIEKE\ricar,0.0,0.1,8.25,running,7:47:15.205847,0.02,Estável
-2026-05-21 17:23:57,19940,svchost.exe,,0.0,0.04,2.87,running,"1 day, 8:06:37.152391",6.17,Estável
-2026-05-21 17:23:58,20072,chrome.exe,JORTIEKE\ricar,0.0,2.7,213.36,running,0:23:14.083635,0.03,Estável
-2026-05-21 17:23:58,20980,msedgewebview2.exe,JORTIEKE\ricar,0.0,0.07,5.54,running,7:45:10.093803,0.03,Estável
-2026-05-21 17:23:58,21084,svchost.exe,,0.0,0.02,1.39,running,22:49:55.477216,5.57,Estável
-2026-05-21 17:23:58,21156,LockApp.exe,JORTIEKE\ricar,0.0,0.0,0.07,stopped,7:47:10.667686,0.05,Estável
-2026-05-21 17:23:58,21320,NVIDIA Overlay.exe,JORTIEKE\ricar,0.0,0.22,17.12,running,7:47:04.365350,0.03,Estável
-2026-05-21 17:23:58,21464,msedgewebview2.exe,JORTIEKE\ricar,0.0,0.17,13.42,running,7:47:11.286890,0.03,Estável
-2026-05-21 17:23:58,21484,svchost.exe,JORTIEKE\ricar,0.0,0.02,1.28,running,7:47:16.145472,0.03,Estável
-2026-05-21 17:23:58,21532,OVRServiceLauncher.exe,,0.0,0.02,1.28,running,7:45:39.764125,5.02,Estável
-2026-05-21 17:23:59,21840,svchost.exe,,0.0,0.03,2.36,running,"1 day, 5:52:24.683809",5.48,Estável
-2026-05-21 17:23:59,21868,ipf_uf.exe,,0.0,0.03,2.0,running,6:36:24.472025,5.64,Estável
-2026-05-21 17:23:59,22180,WUDFHost.exe,,0.0,0.03,2.11,running,6:36:09.242936,6.36,Estável
-2026-05-21 17:23:59,22372,conhost.exe,JORTIEKE\ricar,0.0,0.02,1.68,running,1:05:14.546069,0.02,Estável
-2026-05-21 17:23:59,22732,NVIDIA Overlay.exe,JORTIEKE\ricar,0.0,0.39,30.7,running,7:47:07.218216,0.02,Estável
-2026-05-21 17:23:59,22756,SecurityHealthSystray.exe,JORTIEKE\ricar,0.0,0.02,1.67,running,7:46:57.200855,0.02,Estável
-2026-05-21 17:23:59,22952,svchost.exe,JORTIEKE\ricar,0.0,0.02,1.71,running,7:45:17.106476,0.05,Estável
-2026-05-21 17:23:59,23116,SearchHost.exe,JORTIEKE\ricar,0.0,0.18,13.84,running,7:47:14.483678,0.02,Estável
-2026-05-21 17:24:00,23124,NVIDIA Overlay.exe,JORTIEKE\ricar,0.0,0.05,4.07,running,7:47:06.162809,0.01,Estável
-2026-05-21 17:24:00,23144,RuntimeBroker.exe,JORTIEKE\ricar,0.0,0.02,1.68,running,7:47:13.443062,0.02,Estável
-2026-05-21 17:24:00,23168,RemoteDesktopCompanion.exe,JORTIEKE\ricar,0.0,0.22,17.57,running,7:45:37.886554,0.02,Estável
-2026-05-21 17:24:00,23380,TextInputHost.exe,JORTIEKE\ricar,0.0,0.25,19.95,running,7:47:04.989212,0.02,Estável
-2026-05-21 17:24:00,23472,jusched.exe,JORTIEKE\ricar,0.0,0.02,1.54,running,7:46:53.182548,0.13,Estável
-2026-05-21 17:24:00,23704,RuntimeBroker.exe,JORTIEKE\ricar,0.0,0.04,3.1,running,7:28:37.555470,0.02,Estável
-2026-05-21 17:24:00,23924,msedgewebview2.exe,JORTIEKE\ricar,0.0,0.09,7.04,running,7:47:13.307254,0.02,Estável
-2026-05-21 17:24:00,23988,taskhostw.exe,JORTIEKE\ricar,0.0,0.07,5.64,running,7:47:17.979487,0.02,Estável
-2026-05-21 17:24:00,24072,OpenConsole.exe,JORTIEKE\ricar,0.0,0.03,2.68,running,1:05:16.142153,0.02,Estável
-2026-05-21 17:24:01,24384,OVRRedir.exe,,0.0,0.02,1.84,running,7:45:41.771346,7.58,Estável
-2026-05-21 17:24:01,24552,conhost.exe,JORTIEKE\ricar,0.0,0.02,1.54,running,7:45:41.901260,0.01,Estável
-2026-05-21 17:24:01,24664,powershell.exe,JORTIEKE\ricar,0.0,0.19,14.89,running,0:48:02.315273,0.02,Estável
-2026-05-21 17:24:01,24872,sihost.exe,JORTIEKE\ricar,0.0,0.16,12.39,running,7:47:18.786634,0.02,Estável
-2026-05-21 17:24:01,24924,msedgewebview2.exe,JORTIEKE\ricar,0.0,0.06,4.61,running,7:45:13.401076,0.01,Estável
-2026-05-21 17:24:01,25048,svchost.exe,,0.0,0.02,1.59,running,7:47:17.674145,5.29,Estável
-2026-05-21 17:24:01,25428,svchost.exe,,0.0,0.02,1.82,running,"1 day, 5:50:58.863632",6.77,Estável
-2026-05-21 17:24:01,25536,msedgewebview2.exe,JORTIEKE\ricar,0.0,0.03,2.0,running,7:45:13.760066,0.09,Estável
-2026-05-21 17:24:01,25712,node.exe,JORTIEKE\ricar,0.0,0.34,26.64,running,0:38:32.524790,0.02,Estável
-2026-05-21 17:24:02,25744,nvsphelper64.exe,JORTIEKE\ricar,0.0,0.03,2.5,running,7:47:09.773064,0.02,Estável
-2026-05-21 17:24:02,25828,dllhost.exe,JORTIEKE\ricar,0.0,0.03,2.13,running,7:28:36.465614,0.03,Estável
-2026-05-21 17:24:02,25964,powershell.exe,JORTIEKE\ricar,0.0,0.05,3.75,running,1:14:53.427940,0.02,Estável
-2026-05-21 17:24:02,26092,chrome.exe,JORTIEKE\ricar,0.0,0.24,18.72,running,1:00:00.126740,0.02,Estável
-2026-05-21 17:24:02,26328,conhost.exe,,0.0,0.02,1.66,running,7:47:19.629235,6.7,Estável
-2026-05-21 17:24:02,26396,OneDrive.Sync.Service.exe,JORTIEKE\ricar,0.0,0.08,6.25,running,6:31:48.328766,0.03,Estável
-2026-05-21 17:24:02,26484,esrv.exe,JORTIEKE\ricar,0.0,0.12,9.43,running,7:47:19.709761,0.02,Estável
-2026-05-21 17:24:02,26736,msedgewebview2.exe,JORTIEKE\ricar,0.0,0.03,2.13,running,7:47:15.844132,0.02,Estável
-2026-05-21 17:24:03,27196,fontdrvhost.exe,,0.0,0.01,0.96,running,19:23:36.373148,7.09,Estável
-2026-05-21 17:24:03,27208,dwm.exe,,0.91,0.47,37.04,running,19:23:36.514366,7.04,Estável
-2026-05-21 17:24:03,27312,svchost.exe,JORTIEKE\ricar,0.0,0.03,2.5,running,7:47:14.315921,0.1,Estável
-2026-05-21 17:24:03,27392,conhost.exe,JORTIEKE\ricar,0.0,0.02,1.61,running,1:05:17.395420,0.02,Estável
-2026-05-21 17:24:03,27448,Code.exe,JORTIEKE\ricar,0.0,1.22,96.29,running,1:10:36.335430,0.02,Estável
-2026-05-21 17:24:03,27564,svchost.exe,JORTIEKE\ricar,0.0,0.04,2.8,running,7:47:07.038742,0.04,Estável
-2026-05-21 17:24:03,27752,R.exe,JORTIEKE\ricar,0.0,0.02,1.84,running,1:05:17.607407,0.02,Estável
-2026-05-21 17:24:03,27796,chrome.exe,JORTIEKE\ricar,0.0,0.09,7.11,running,1:09:15.830951,0.02,Estável
-2026-05-21 17:24:03,27844,AppActions.exe,JORTIEKE\ricar,0.0,0.07,5.49,running,7:37:20.650520,0.02,Estável
-2026-05-21 17:24:04,27876,NVIDIA Overlay.exe,JORTIEKE\ricar,0.0,0.1,7.91,running,7:47:10.481121,0.02,Estável
-2026-05-21 17:24:04,27940,chrome.exe,JORTIEKE\ricar,0.0,0.29,23.28,running,1:09:32.425594,0.02,Estável
-2026-05-21 17:24:04,28148,NVDisplay.Container.exe,,0.0,0.14,11.15,running,19:23:27.359702,6.89,Estável
-2026-05-21 17:24:04,28272,chrome.exe,JORTIEKE\ricar,0.0,3.14,247.66,running,1:08:59.117651,0.01,Estável
-2026-05-21 17:24:04,28408,OpenConsole.exe,JORTIEKE\ricar,0.0,0.03,2.58,running,1:05:18.454577,0.02,Estável
-2026-05-21 17:24:04,28548,svchost.exe,,0.0,0.03,2.04,running,1:50:32.670416,6.38,Estável
-2026-05-21 17:24:04,28568,msedgewebview2.exe,JORTIEKE\ricar,0.0,0.05,3.72,running,7:47:17.421203,0.03,Estável
-2026-05-21 17:24:04,28620,OpenConsole.exe,JORTIEKE\ricar,0.0,0.03,2.68,running,1:05:20.176883,0.06,Estável
-2026-05-21 17:24:05,28732,bash.exe,JORTIEKE\ricar,0.0,0.03,2.66,running,1:05:20.080981,0.03,Estável
-2026-05-21 17:24:05,28872,CrossDeviceResume.exe,JORTIEKE\ricar,0.0,0.05,4.22,running,7:47:22.098543,0.02,Estável
-2026-05-21 17:24:05,28976,conhost.exe,JORTIEKE\ricar,0.0,0.02,1.56,running,1:06:41.833351,0.02,Estável
-2026-05-21 17:24:05,28984,AQAUserPS.exe,JORTIEKE\ricar,0.0,0.06,4.49,running,7:47:20.717027,0.02,Estável
-2026-05-21 17:24:05,29044,Code.exe,JORTIEKE\ricar,0.0,0.49,38.8,running,1:10:36.269573,0.02,Estável
-2026-05-21 17:24:05,29196,ACCUserPS.exe,JORTIEKE\ricar,0.0,0.02,1.65,running,7:47:20.671535,0.02,Estável
-2026-05-21 17:24:05,29208,chrome.exe,JORTIEKE\ricar,0.0,0.38,29.81,running,0:01:49.419696,0.04,Estável
-2026-05-21 17:24:05,29292,OVRServer_x64.exe,JORTIEKE\ricar,0.0,0.41,32.18,running,7:45:46.587364,0.03,Estável
-2026-05-21 17:24:05,29544,chrome.exe,JORTIEKE\ricar,0.0,1.01,79.39,running,0:47:31.372266,0.03,Estável
-2026-05-21 17:24:06,29708,OpenConsole.exe,JORTIEKE\ricar,0.0,0.05,3.86,running,0:48:07.216615,0.02,Estável
-2026-05-21 17:24:06,29716,cmd.exe,JORTIEKE\ricar,0.0,0.02,1.4,running,1:05:20.078405,0.07,Estável
-2026-05-21 17:24:06,29880,cmd.exe,JORTIEKE\ricar,0.0,0.06,4.58,running,0:38:38.779635,0.14,Estável
-2026-05-21 17:24:06,30216,cmd.exe,JORTIEKE\ricar,0.0,0.02,1.37,running,1:05:20.303793,0.06,Estável
-2026-05-21 17:24:06,30260,chrome.exe,JORTIEKE\ricar,0.0,0.52,40.69,running,1:20:33.951003,0.03,Estável
-2026-05-21 17:24:06,30600,Code.exe,JORTIEKE\ricar,0.0,0.08,6.24,running,1:10:29.479373,0.02,Estável
-2026-05-21 17:24:06,30712,mintty.exe,JORTIEKE\ricar,0.0,0.05,3.65,running,1:06:43.377339,0.02,Estável
-2026-05-21 17:24:06,30724,chrome.exe,JORTIEKE\ricar,0.0,0.11,8.65,running,1:08:41.371336,0.02,Estável
-2026-05-21 17:24:06,30744,R.exe,JORTIEKE\ricar,0.0,0.02,1.82,running,1:05:20.784803,0.02,Estável
-2026-05-21 17:24:07,30876,mintty.exe,JORTIEKE\ricar,0.0,0.04,3.52,running,1:10:50.277851,0.02,Estável
-2026-05-21 17:24:07,30956,Code.exe,JORTIEKE\ricar,0.0,2.86,226.18,running,1:05:24.331812,0.02,Estável
-2026-05-21 17:24:07,30996,chrome.exe,JORTIEKE\ricar,0.0,0.03,2.55,running,1:20:34.901867,0.03,Estável
-2026-05-21 17:24:07,31096,Code.exe,JORTIEKE\ricar,0.0,5.35,422.42,running,1:05:59.576268,0.02,Estável
-2026-05-21 17:24:07,31252,cmd.exe,JORTIEKE\ricar,0.0,0.02,1.33,running,1:05:21.288189,0.26,Estável
-2026-05-21 17:24:07,31476,chrome.exe,JORTIEKE\ricar,0.0,0.36,28.14,running,0:40:38.374162,0.02,Estável
-2026-05-21 17:24:07,31564,powershell.exe,JORTIEKE\ricar,0.0,0.12,9.8,running,1:05:22.835552,0.01,Estável
-2026-05-21 17:24:07,31632,Code.exe,JORTIEKE\ricar,0.0,0.07,5.67,running,0:46:52.603295,0.02,Estável
-2026-05-21 17:24:07,31768,git-bash.exe,JORTIEKE\ricar,0.0,0.02,1.3,running,1:10:51.194660,0.03,Estável
-2026-05-21 17:24:08,31964,chrome.exe,JORTIEKE\ricar,2.91,2.42,190.84,running,1:20:35.704039,0.02,Estável
-2026-05-21 17:24:08,31984,chrome.exe,JORTIEKE\ricar,0.0,0.4,31.77,running,1:09:18.966963,0.01,Estável
-2026-05-21 17:24:08,32040,Code.exe,JORTIEKE\ricar,0.0,0.95,74.76,running,0:35:06.941816,0.02,Estável
-2026-05-21 17:24:08,32356,cmd.exe,JORTIEKE\ricar,0.0,0.02,1.31,running,1:05:22.174649,0.16,Estável
-2026-05-21 17:24:08,32428,chrome.exe,JORTIEKE\ricar,0.0,0.3,23.77,running,1:10:11.108644,0.01,Estável
-2026-05-21 17:24:08,32804,Code.exe,JORTIEKE\ricar,0.0,0.21,16.93,running,0:46:53.864347,0.02,Estável
-2026-05-21 17:24:08,32872,bash.exe,JORTIEKE\ricar,0.0,0.02,1.86,running,1:06:45.205036,0.02,Estável
-2026-05-21 17:24:08,33092,OpenConsole.exe,JORTIEKE\ricar,0.0,0.05,3.97,running,0:50:00.836322,0.04,Estável
-2026-05-21 17:24:08,33140,Code.exe,JORTIEKE\ricar,0.0,0.26,20.8,running,1:10:39.564220,0.01,Estável
-2026-05-21 17:24:09,33152,chrome.exe,JORTIEKE\ricar,0.0,0.79,62.43,running,1:20:36.480870,0.01,Estável
-2026-05-21 17:24:09,33368,pet.exe,JORTIEKE\ricar,0.0,0.07,5.8,running,1:05:24.012100,0.02,Estável
+2026-05-22 21:40:28,0,System Idle Process,NT AUTHORITY\SYSTEM,78.78,0.0,0.01,running,"20596 days, 0:40:28.308388",6.35,Alerta
+2026-05-22 21:40:28,4,System,NT AUTHORITY\SYSTEM,0.0,0.01,0.24,running,"20596 days, 0:40:28.457426",6.73,Estável
+2026-05-22 21:40:28,92,,,0.0,0.53,20.73,stopped,"1 day, 14:14:05.052273",6.51,Estável
+2026-05-22 21:40:28,132,Registry,,0.0,0.08,3.03,running,"1 day, 14:14:05.181849",6.5,Estável
+2026-05-22 21:40:28,544,lsass.exe,,0.0,0.23,8.85,running,"1 day, 14:13:36.103994",6.61,Estável
+2026-05-22 21:40:29,560,smss.exe,,0.0,0.0,0.0,running,"1 day, 14:13:58.366359",7.83,Estável
+2026-05-22 21:40:29,636,services.exe,,0.0,0.1,3.92,running,"1 day, 14:13:36.492147",7.32,Estável
+2026-05-22 21:40:29,688,LsaIso.exe,,0.0,0.0,0.0,running,"1 day, 14:13:36.566957",6.48,Estável
+2026-05-22 21:40:29,828,csrss.exe,,0.0,0.01,0.55,running,"1 day, 14:13:40.669554",6.6,Estável
+2026-05-22 21:40:29,912,wininit.exe,,0.0,0.01,0.44,running,"1 day, 14:13:40.107067",6.32,Estável
+2026-05-22 21:40:29,924,Code.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.82,31.93,running,1:13:51.050899,0.05,Estável
+2026-05-22 21:40:29,1080,svchost.exe,,0.0,0.22,8.74,running,"1 day, 14:13:36.602762",7.63,Estável
+2026-05-22 21:40:30,1112,fontdrvhost.exe,,0.0,0.0,0.0,running,"1 day, 14:13:36.727497",8.85,Estável
+2026-05-22 21:40:30,1188,WUDFHost.exe,,0.0,0.0,0.0,running,"1 day, 14:13:36.806400",6.67,Estável
+2026-05-22 21:40:30,1252,svchost.exe,,0.0,0.21,8.36,running,"1 day, 14:13:36.839030",6.95,Estável
+2026-05-22 21:40:30,1296,svchost.exe,,0.0,0.05,1.95,running,"1 day, 14:13:36.896501",6.62,Estável
+2026-05-22 21:40:30,1444,RAVCpl64.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.0,0.01,running,23:03:26.710888,0.08,Estável
+2026-05-22 21:40:30,1456,msedgewebview2.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.02,0.78,running,23:00:48.850185,0.05,Estável
+2026-05-22 21:40:30,1500,svchost.exe,,0.0,0.02,0.61,running,"1 day, 14:13:36.850312",7.16,Estável
+2026-05-22 21:40:31,1616,svchost.exe,,0.0,0.02,0.75,running,"1 day, 14:13:36.937594",6.31,Estável
+2026-05-22 21:40:31,1648,msedgewebview2.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.48,18.75,running,23:00:41.485666,0.1,Estável
+2026-05-22 21:40:31,1672,svchost.exe,,0.0,0.08,3.17,running,"1 day, 14:13:37.160370",6.63,Estável
+2026-05-22 21:40:31,1684,IntelCpHDCPSvc.exe,,0.0,0.0,0.0,running,"1 day, 14:13:37.300421",6.82,Estável
+2026-05-22 21:40:31,1692,svchost.exe,,0.0,0.02,0.9,running,"1 day, 14:13:37.450501",6.6,Estável
+2026-05-22 21:40:31,1700,svchost.exe,,0.0,0.02,0.91,running,"1 day, 14:13:37.599143",6.51,Estável
+2026-05-22 21:40:31,1712,svchost.exe,,0.0,0.03,0.98,running,"1 day, 14:13:37.739906",6.53,Estável
+2026-05-22 21:40:32,1748,svchost.exe,,0.0,0.02,0.61,running,"1 day, 14:13:37.875389",6.93,Estável
+2026-05-22 21:40:32,1816,svchost.exe,,0.0,0.01,0.44,running,"1 day, 14:13:38.009761",6.94,Estável
+2026-05-22 21:40:32,1840,svchost.exe,,0.0,0.06,2.46,running,"1 day, 14:13:38.161827",6.59,Estável
+2026-05-22 21:40:32,1888,svchost.exe,,0.0,0.02,0.86,running,"1 day, 14:13:38.204417",6.72,Estável
+2026-05-22 21:40:32,1952,svchost.exe,,0.0,0.05,1.96,running,"1 day, 14:13:38.453078",7.49,Estável
+2026-05-22 21:40:32,1984,svchost.exe,,0.0,0.08,3.12,running,"1 day, 14:13:38.628098",6.88,Estável
+2026-05-22 21:40:33,2052,IntelCpHeciSvc.exe,,0.0,0.0,0.0,running,"1 day, 14:13:38.706797",6.88,Estável
+2026-05-22 21:40:33,2112,svchost.exe,,0.0,0.17,6.54,running,"1 day, 14:13:38.827123",10.43,Estável
+2026-05-22 21:40:33,2124,Code.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.43,16.78,running,1:17:32.750703,0.05,Estável
+2026-05-22 21:40:33,2180,svchost.exe,,0.0,0.01,0.45,running,"1 day, 14:13:39.115331",9.65,Estável
+2026-05-22 21:40:33,2316,Spotify.exe,DESKTOP-AARF97L\JOAQUIM,0.0,4.45,173.57,running,23:02:42.730621,0.05,Estável
+2026-05-22 21:40:33,2344,igfxCUIService.exe,,0.0,0.0,0.0,running,"1 day, 14:13:39.241248",6.86,Estável
+2026-05-22 21:40:34,2392,svchost.exe,,0.0,0.14,5.39,running,"1 day, 14:13:39.349196",8.93,Estável
+2026-05-22 21:40:34,2460,svchost.exe,,0.0,0.06,2.41,running,"1 day, 14:13:39.455634",10.52,Estável
+2026-05-22 21:40:34,2476,svchost.exe,,0.0,0.03,1.23,running,"1 day, 14:13:39.617054",9.59,Estável
+2026-05-22 21:40:34,2584,svchost.exe,,0.0,0.02,0.78,running,"1 day, 14:13:39.705443",6.44,Estável
+2026-05-22 21:40:34,2596,svchost.exe,,0.0,0.03,0.98,running,"1 day, 14:13:39.897790",6.73,Estável
+2026-05-22 21:40:34,2608,svchost.exe,,0.0,0.1,3.96,running,"1 day, 14:13:40.106164",13.56,Estável
+2026-05-22 21:40:35,2616,MemCompression,,0.0,2.09,82.12,running,"1 day, 14:13:40.303933",7.95,Estável
+2026-05-22 21:40:35,2736,svchost.exe,,0.0,0.02,0.66,running,"1 day, 14:13:40.331473",8.77,Estável
+2026-05-22 21:40:35,2792,svchost.exe,,0.0,0.02,0.97,running,"1 day, 14:13:40.530957",25.16,Estável
+2026-05-22 21:40:35,2848,WhatsApp.Root.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.51,20.07,running,23:01:01.140059,0.07,Estável
+2026-05-22 21:40:36,2876,svchost.exe,,0.0,0.05,2.01,running,"1 day, 14:13:40.832090",96.01,Alerta
+2026-05-22 21:40:36,2884,svchost.exe,,0.0,0.03,0.99,running,"1 day, 14:13:40.873872",14.18,Estável
+2026-05-22 21:40:36,2904,msedgewebview2.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.06,2.54,running,23:03:51.826418,0.05,Estável
+2026-05-22 21:40:36,2908,RtkAudioService64.exe,,0.0,0.0,0.0,running,"1 day, 14:13:41.632640",63.45,Alerta
+2026-05-22 21:40:37,2936,svchost.exe,,0.0,0.01,0.54,running,"1 day, 14:13:42.176505",10.78,Estável
+2026-05-22 21:40:37,2972,svchost.exe,,0.0,0.03,1.25,running,"1 day, 14:13:42.377868",17.41,Estável
+2026-05-22 21:40:37,3016,CrossDeviceService.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.21,8.07,running,23:04:22.297271,0.05,Estável
+2026-05-22 21:40:38,3168,svchost.exe,,0.0,0.19,7.46,running,"1 day, 14:13:42.515441",9.0,Estável
+2026-05-22 21:40:38,3176,svchost.exe,,0.0,0.01,0.34,running,"1 day, 14:13:42.686280",6.63,Estável
+2026-05-22 21:40:38,3184,svchost.exe,,0.0,0.06,2.28,running,"1 day, 14:13:42.894012",33.9,Estável
+2026-05-22 21:40:38,3200,svchost.exe,,0.0,0.01,0.62,running,"1 day, 14:12:05.255902",19.75,Estável
+2026-05-22 21:40:39,3280,svchost.exe,,0.0,0.04,1.61,running,"1 day, 14:13:43.324287",21.74,Estável
+2026-05-22 21:40:39,3292,SearchHost.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.23,8.8,running,23:03:57.279860,0.05,Estável
+2026-05-22 21:40:39,3316,svchost.exe,,0.0,0.14,5.65,running,"1 day, 14:13:42.530132",12.8,Estável
+2026-05-22 21:40:39,3320,svchost.exe,,0.0,0.02,0.93,running,"1 day, 14:13:43.839222",6.37,Estável
+2026-05-22 21:40:39,3408,RAVBg64.exe,,0.0,0.0,0.11,running,23:04:34.567696,7.28,Estável
+2026-05-22 21:40:39,3428,svchost.exe,,0.0,0.1,3.82,running,"1 day, 14:13:44.034758",8.71,Estável
+2026-05-22 21:40:40,3472,svchost.exe,,0.0,0.02,0.64,running,"1 day, 14:13:44.160796",6.51,Estável
+2026-05-22 21:40:40,3504,SearchProtocolHost.exe,,0.0,0.19,7.6,running,0:01:02.773400,6.56,Estável
+2026-05-22 21:40:40,3536,spoolsv.exe,,0.0,0.0,0.0,running,"1 day, 14:13:44.396907",8.49,Estável
+2026-05-22 21:40:40,3556,WidgetService.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.0,0.09,running,23:04:16.652363,0.05,Estável
+2026-05-22 21:40:40,3576,svchost.exe,,0.0,0.02,0.76,running,"1 day, 14:13:44.532412",7.62,Estável
+2026-05-22 21:40:40,3588,chrome.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.0,0.03,running,23:03:50.854855,0.05,Estável
+2026-05-22 21:40:40,3672,GameInputSvc.exe,,0.0,0.02,0.8,running,23:12:23.844206,6.37,Estável
+2026-05-22 21:40:41,3692,svchost.exe,,0.0,0.01,0.23,running,"1 day, 14:13:44.700954",6.62,Estável
+2026-05-22 21:40:41,3700,armsvc.exe,,0.0,0.0,0.0,running,"1 day, 14:13:44.853783",8.05,Estável
+2026-05-22 21:40:41,3716,svchost.exe,,0.0,0.07,2.75,running,"1 day, 14:13:45.000261",10.51,Estável
+2026-05-22 21:40:41,3732,svchost.exe,,0.0,0.39,15.09,running,"1 day, 14:13:45.173981",7.99,Estável
+2026-05-22 21:40:41,3752,svchost.exe,,0.0,0.41,16.07,running,"1 day, 14:13:45.320149",7.27,Estável
+2026-05-22 21:40:41,3780,GameInputRedistService.exe,,0.0,0.0,0.06,running,"1 day, 14:13:45.437514",8.14,Estável
+2026-05-22 21:40:42,3792,esif_uf.exe,,0.0,0.0,0.0,running,"1 day, 14:13:45.587944",6.56,Estável
+2026-05-22 21:40:42,3800,OfficeClickToRun.exe,,0.0,0.08,3.29,running,"1 day, 14:13:45.744225",9.15,Estável
+2026-05-22 21:40:42,3884,OneApp.IGCC.WinService.exe,,0.0,0.03,1.09,running,"1 day, 14:13:45.814607",6.58,Estável
+2026-05-22 21:40:42,3892,WidgetBoard.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.07,2.9,running,23:04:22.259931,0.05,Estável
+2026-05-22 21:40:42,3900,svchost.exe,,0.0,0.01,0.48,running,"1 day, 14:13:46.070008",9.46,Estável
+2026-05-22 21:40:42,3912,LGUWPService.exe,,0.0,0.04,1.69,running,"1 day, 14:13:46.216895",6.81,Estável
+2026-05-22 21:40:43,3944,MpDefenderCoreService.exe,,0.0,0.02,0.84,running,"1 day, 14:13:46.351563",7.03,Estável
+2026-05-22 21:40:43,3964,svchost.exe,,0.0,0.01,0.48,running,"1 day, 14:13:46.490389",7.11,Estável
+2026-05-22 21:40:43,3980,MsMpEng.exe,,0.0,4.39,171.27,running,"1 day, 14:13:46.389590",6.23,Estável
+2026-05-22 21:40:43,4012,PlatformMgrService.exe,,0.0,0.02,0.96,running,"1 day, 14:13:46.735982",8.25,Estável
+2026-05-22 21:40:43,4056,svchost.exe,,0.0,0.0,0.03,running,"1 day, 14:13:46.821730",6.43,Estável
+2026-05-22 21:40:43,4092,mysqld.exe,,0.0,0.0,0.0,running,"1 day, 14:13:46.917212",7.61,Estável
+2026-05-22 21:40:43,4184,svchost.exe,,0.0,0.04,1.62,running,"1 day, 14:13:46.926478",6.57,Estável
+2026-05-22 21:40:44,4416,wslservice.exe,,0.0,0.1,4.01,running,"1 day, 14:13:46.828181",8.23,Estável
+2026-05-22 21:40:44,4596,FileSyncHelper.exe,,0.0,0.0,0.0,running,"1 day, 14:11:53.115388",7.5,Estável
+2026-05-22 21:40:44,4848,GameInputSvc.exe,,0.0,0.0,0.0,running,"1 day, 14:13:07.843863",6.89,Estável
+2026-05-22 21:40:44,4900,mysqld.exe,,0.0,0.04,1.51,running,"1 day, 14:13:46.640881",8.85,Estável
+2026-05-22 21:40:44,4936,conhost.exe,,0.0,0.01,0.38,running,"1 day, 14:13:46.718531",6.58,Estável
+2026-05-22 21:40:44,4948,svchost.exe,,0.0,0.09,3.58,running,0:01:20.316712,6.83,Estável
+2026-05-22 21:40:45,4964,WmiPrvSE.exe,,0.0,0.1,3.8,running,0:01:45.348425,6.36,Estável
+2026-05-22 21:40:45,4984,ShellExperienceHost.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.0,0.01,stopped,23:03:21.525464,0.09,Estável
+2026-05-22 21:40:45,5068,svchost.exe,,0.0,0.02,0.77,running,"1 day, 14:13:31.395674",6.97,Estável
+2026-05-22 21:40:45,5148,OneDrive.exe,DESKTOP-AARF97L\JOAQUIM,0.0,1.09,42.45,running,23:03:38.092818,0.05,Estável
+2026-05-22 21:40:45,5184,XboxPcAppFT.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.06,2.37,running,23:00:40.380714,0.12,Estável
+2026-05-22 21:40:45,5212,OpenConsole.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.01,0.3,running,1:24:48.357343,0.05,Estável
+2026-05-22 21:40:45,5412,Code.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.0,0.01,running,1:13:38.144893,0.05,Estável
+2026-05-22 21:40:45,5444,svchost.exe,,0.0,0.03,1.25,running,"1 day, 14:13:46.405342",6.99,Estável
+2026-05-22 21:40:46,5532,RuntimeBroker.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.09,3.32,running,22:20:34.801718,0.11,Estável
+2026-05-22 21:40:46,5580,jusched.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.0,0.01,running,22:59:57.733243,0.18,Estável
+2026-05-22 21:40:46,5624,msedge.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.1,4.03,running,0:33:33.415635,0.05,Estável
+2026-05-22 21:40:46,5732,Code.exe,DESKTOP-AARF97L\JOAQUIM,0.0,1.54,60.08,running,1:17:56.986764,0.1,Estável
+2026-05-22 21:40:46,5744,conhost.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.0,0.04,running,1:17:29.425905,0.06,Estável
+2026-05-22 21:40:46,5824,chrome.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.37,14.55,running,23:03:55.268592,0.14,Estável
+2026-05-22 21:40:46,6096,svchost.exe,,0.0,0.23,8.96,running,"1 day, 14:13:39.237010",6.6,Estável
+2026-05-22 21:40:46,6192,msedgewebview2.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.29,11.29,running,23:04:02.587120,0.05,Estável
+2026-05-22 21:40:46,6464,wlanext.exe,,0.0,0.0,0.0,running,"1 day, 14:13:39.098782",7.15,Estável
+2026-05-22 21:40:47,6496,svchost.exe,,0.0,0.01,0.51,running,"1 day, 14:13:39.281586",7.29,Estável
+2026-05-22 21:40:47,6524,WmiPrvSE.exe,,0.0,0.01,0.23,running,"1 day, 14:13:42.665298",6.65,Estável
+2026-05-22 21:40:47,6684,svchost.exe,,0.0,0.15,5.77,running,"1 day, 14:13:40.629625",6.53,Estável
+2026-05-22 21:40:47,6696,pet.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.0,0.01,running,1:17:29.039481,0.05,Estável
+2026-05-22 21:40:47,6812,svchost.exe,,0.0,0.01,0.36,running,"1 day, 14:13:40.688334",6.67,Estável
+2026-05-22 21:40:47,6824,svchost.exe,,0.0,0.01,0.37,running,"1 day, 14:13:40.834721",7.08,Estável
+2026-05-22 21:40:48,6832,gamingservices.exe,,0.0,0.21,8.06,running,"1 day, 14:13:40.982361",7.19,Estável
+2026-05-22 21:40:48,6848,gamingservicesnet.exe,,0.0,0.01,0.2,running,"1 day, 14:13:41.126791",7.32,Estável
+2026-05-22 21:40:48,6876,jetbrainsd.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.17,6.52,running,23:01:27.522519,0.1,Estável
+2026-05-22 21:40:48,6904,chrome.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.24,9.18,running,1:07:42.888961,0.11,Estável
+2026-05-22 21:40:48,7140,msedgewebview2.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.01,0.45,running,23:04:04.190303,0.12,Estável
+2026-05-22 21:40:48,7144,Code.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.0,0.05,running,1:17:58.093537,0.05,Estável
+2026-05-22 21:40:48,7192,RuntimeBroker.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.0,0.14,running,23:04:13.300201,0.05,Estável
+2026-05-22 21:40:48,7200,svchost.exe,,0.0,0.02,0.76,running,"1 day, 10:22:56.383500",6.93,Estável
+2026-05-22 21:40:49,7276,svchost.exe,,0.0,0.01,0.42,running,"1 day, 14:13:39.938211",7.32,Estável
+2026-05-22 21:40:49,7308,msedgewebview2.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.1,3.9,running,23:04:04.021366,0.05,Estável
+2026-05-22 21:40:49,7324,svchost.exe,,0.0,0.06,2.15,running,"1 day, 14:13:40.149977",6.55,Estável
+2026-05-22 21:40:49,7344,XboxPcTray.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.02,0.78,running,23:00:44.689667,0.05,Estável
+2026-05-22 21:40:49,7368,svchost.exe,,0.0,0.01,0.54,running,"1 day, 14:13:36.707116",6.51,Estável
+2026-05-22 21:40:49,7384,svchost.exe,,0.0,0.01,0.25,running,"1 day, 14:09:35.250492",6.55,Estável
+2026-05-22 21:40:49,7424,svchost.exe,,0.0,0.02,0.78,running,"1 day, 14:13:36.425583",6.27,Estável
+2026-05-22 21:40:50,7468,svchost.exe,,0.0,0.0,0.02,running,1:34:11.858729,6.5,Estável
+2026-05-22 21:40:50,7676,AggregatorHost.exe,,0.0,0.01,0.44,running,"1 day, 14:13:39.682771",6.32,Estável
+2026-05-22 21:40:50,7876,chrome.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.57,22.12,running,23:04:00.403208,0.05,Estável
+2026-05-22 21:40:50,7952,svchost.exe,,0.0,0.02,0.75,running,"1 day, 14:13:38.300161",6.88,Estável
+2026-05-22 21:40:50,8036,chrome.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.11,4.37,running,0:11:07.237522,0.05,Estável
+2026-05-22 21:40:50,8088,RuntimeBroker.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.13,4.89,running,23:04:30.007554,0.11,Estável
+2026-05-22 21:40:50,8220,chrome.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.05,2.0,running,22:19:24.160074,0.05,Estável
+2026-05-22 21:40:50,8232,svchost.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.02,0.75,running,22:18:18.519109,0.05,Estável
+2026-05-22 21:40:50,8312,chrome.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.5,19.43,running,0:04:54.683826,0.05,Estável
+2026-05-22 21:40:51,8464,svchost.exe,,0.0,0.03,1.23,running,"1 day, 14:13:35.800206",6.24,Estável
+2026-05-22 21:40:51,8480,svchost.exe,,0.0,0.02,0.9,running,"1 day, 14:12:10.787921",6.72,Estável
+2026-05-22 21:40:51,8512,svchost.exe,,0.0,0.01,0.48,running,"1 day, 14:13:35.958948",6.24,Estável
+2026-05-22 21:40:51,8800,csrss.exe,,0.0,0.05,2.02,running,23:12:42.917900,7.88,Estável
+2026-05-22 21:40:51,8864,RuntimeBroker.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.01,0.5,running,23:01:12.871708,0.11,Estável
+2026-05-22 21:40:51,8888,msedgewebview2.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.47,18.53,running,23:01:10.158398,0.05,Estável
+2026-05-22 21:40:51,8904,ctfmon.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.07,2.74,running,23:04:19.279660,0.05,Estável
+2026-05-22 21:40:52,9012,Code.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.24,9.49,running,1:14:06.341654,0.05,Estável
+2026-05-22 21:40:52,9096,msedge.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.11,4.18,running,0:33:39.349628,0.05,Estável
+2026-05-22 21:40:52,9208,RuntimeBroker.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.03,1.02,running,23:03:27.767988,0.12,Estável
+2026-05-22 21:40:52,9212,chrome.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.08,3.1,running,0:11:11.887887,0.05,Estável
+2026-05-22 21:40:52,9348,RAVBg64.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.0,0.01,running,23:03:45.782472,0.17,Estável
+2026-05-22 21:40:52,9424,Code.exe,DESKTOP-AARF97L\JOAQUIM,0.0,11.81,461.23,running,1:17:24.093671,0.11,Alerta
+2026-05-22 21:40:52,9480,Spotify.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.0,0.02,running,23:03:14.779188,0.12,Estável
+2026-05-22 21:40:52,9528,svchost.exe,,0.0,0.16,6.12,running,0:01:12.391281,6.29,Estável
+2026-05-22 21:40:53,9532,svchost.exe,,0.0,0.03,1.34,running,"1 day, 14:13:30.589361",8.05,Estável
+2026-05-22 21:40:53,9660,Code.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.21,8.35,running,1:18:02.003771,0.05,Estável
+2026-05-22 21:40:53,9700,igfxEM.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.0,0.02,running,23:04:47.552480,0.09,Estável
+2026-05-22 21:40:53,9724,FileCoAuth.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.02,0.73,running,23:03:30.146690,0.05,Estável
+2026-05-22 21:40:53,9800,msedgewebview2.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.17,6.68,running,23:01:10.462539,0.05,Estável
+2026-05-22 21:40:53,9992,taskhostw.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.06,2.32,running,23:04:47.639803,0.05,Estável
+2026-05-22 21:40:53,10444,audiodg.exe,,0.0,0.18,7.07,running,"1 day, 14:13:24.183401",0.05,Estável
+2026-05-22 21:40:53,10460,msedgewebview2.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.04,1.57,running,23:04:08.911484,0.05,Estável
+2026-05-22 21:40:53,10612,Code.exe,DESKTOP-AARF97L\JOAQUIM,0.0,1.32,51.69,running,1:17:53.250518,0.05,Estável
+2026-05-22 21:40:54,10752,UserOOBEBroker.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.0,0.01,running,23:04:28.747762,0.09,Estável
+2026-05-22 21:40:54,10796,chrome.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.17,6.5,running,0:11:16.176877,0.04,Estável
+2026-05-22 21:40:54,10992,winlogon.exe,,0.0,0.0,0.13,running,23:12:45.592036,6.32,Estável
+2026-05-22 21:40:54,11096,ShellHost.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.03,1.07,running,22:08:18.453399,0.11,Estável
+2026-05-22 21:40:54,11156,WindowsTerminal.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.14,5.66,running,1:24:58.438603,0.04,Estável
+2026-05-22 21:40:54,11212,SecurityHealthService.exe,,0.0,0.03,1.05,running,"1 day, 14:12:55.111990",6.29,Estável
+2026-05-22 21:40:54,11368,powershell.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.03,1.15,running,1:17:25.720106,0.07,Estável
+2026-05-22 21:40:54,11456,SearchIndexer.exe,,0.0,0.16,6.19,running,"1 day, 14:13:11.231982",6.57,Estável
+2026-05-22 21:40:55,11544,svchost.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.01,0.54,running,23:02:49.192753,0.11,Estável
+2026-05-22 21:40:55,11568,SecurityHealthSystray.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.0,0.01,running,23:03:55.364101,0.19,Estável
+2026-05-22 21:40:55,11580,svchost.exe,,0.0,0.04,1.42,running,0:03:34.869647,6.76,Estável
+2026-05-22 21:40:55,11592,svchost.exe,,0.0,0.03,1.09,running,"1 day, 14:13:10.599382",6.77,Estável
+2026-05-22 21:40:55,11688,dwm.exe,,0.0,0.4,15.46,running,23:12:46.629284,6.7,Estável
+2026-05-22 21:40:55,11724,msedge.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.0,0.16,running,0:33:48.392112,0.05,Estável
+2026-05-22 21:40:55,11884,powershell.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.03,1.12,running,1:13:58.186660,0.05,Estável
+2026-05-22 21:40:56,11932,StartMenuExperienceHost.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.11,4.3,running,23:04:37.088564,0.05,Estável
+2026-05-22 21:40:56,12096,explorer.exe,DESKTOP-AARF97L\JOAQUIM,0.0,1.41,55.22,running,23:04:48.722579,0.05,Estável
+2026-05-22 21:40:56,12192,svchost.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.07,2.61,running,23:04:50.509749,0.05,Estável
+2026-05-22 21:40:56,12276,powershell.exe,DESKTOP-AARF97L\JOAQUIM,0.0,1.99,77.74,running,0:00:37.217857,0.05,Estável
+2026-05-22 21:40:56,12480,Code.exe,DESKTOP-AARF97L\JOAQUIM,15.55,1.7,66.23,running,1:18:05.534581,0.05,Estável
+2026-05-22 21:40:56,12576,AppActions.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.09,3.59,running,22:54:48.525894,0.05,Estável
+2026-05-22 21:40:56,12592,Code.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.04,1.67,running,1:13:16.246373,0.05,Estável
+2026-05-22 21:40:56,12628,conhost.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.0,0.01,running,1:17:38.163904,0.09,Estável
+2026-05-22 21:40:56,12676,svchost.exe,,0.0,0.05,1.91,running,"1 day, 11:12:41.736546",6.7,Estável
+2026-05-22 21:40:57,12940,NisSrv.exe,,0.0,0.06,2.32,running,"1 day, 14:12:40.269149",15.18,Estável
+2026-05-22 21:40:57,13172,RuntimeBroker.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.17,6.67,running,23:00:47.955139,0.06,Estável
+2026-05-22 21:40:57,13308,Spotify.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.09,3.49,running,23:03:12.602102,0.05,Estável
+2026-05-22 21:40:57,13324,msedgewebview2.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.06,2.36,running,23:01:14.341324,0.05,Estável
+2026-05-22 21:40:57,13340,svchost.exe,,0.0,0.18,7.15,running,"1 day, 14:11:50.294305",9.67,Estável
+2026-05-22 21:40:57,13556,sihost.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.13,5.1,running,23:04:52.597400,0.04,Estável
+2026-05-22 21:40:57,13664,svchost.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.03,0.98,running,23:03:05.131042,0.05,Estável
+2026-05-22 21:40:58,13668,OpenConsole.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.22,8.69,running,0:00:39.612563,0.05,Estável
+2026-05-22 21:40:58,13700,svchost.exe,,0.0,0.01,0.56,running,"1 day, 14:11:47.629315",9.28,Estável
+2026-05-22 21:40:58,13776,svchost.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.06,2.3,running,23:04:52.941808,0.05,Estável
+2026-05-22 21:40:58,13824,Spotify.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.89,34.86,running,23:03:21.017914,0.05,Estável
+2026-05-22 21:40:58,13852,svchost.exe,,0.0,0.01,0.37,running,"1 day, 14:11:46.972559",6.4,Estável
+2026-05-22 21:40:58,13964,svchost.exe,,0.0,0.37,14.58,running,"1 day, 14:11:46.430910",6.52,Estável
+2026-05-22 21:40:58,14012,svchost.exe,,0.0,0.02,0.94,running,"1 day, 14:11:46.408868",6.92,Estável
+2026-05-22 21:40:59,14028,Code.exe,DESKTOP-AARF97L\JOAQUIM,0.0,1.04,40.47,running,1:17:52.726700,0.05,Estável
+2026-05-22 21:40:59,14072,OpenConsole.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.0,0.02,running,1:14:08.113392,0.05,Estável
+2026-05-22 21:40:59,14368,msedgewebview2.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.11,4.41,running,23:04:14.526783,0.1,Estável
+2026-05-22 21:40:59,14376,svchost.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.06,2.34,running,23:04:38.456730,0.1,Estável
+2026-05-22 21:40:59,14400,jetbrains-toolbox.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.97,37.87,running,23:02:51.152505,0.1,Estável
+2026-05-22 21:40:59,14572,svchost.exe,,0.0,0.01,0.54,running,"1 day, 14:04:08.094108",6.88,Estável
+2026-05-22 21:40:59,14648,Code.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.04,1.66,running,1:13:29.750249,0.1,Estável
+2026-05-22 21:40:59,14868,svchost.exe,,0.0,0.0,0.13,running,"1 day, 14:04:09.355855",6.29,Estável
+2026-05-22 21:40:59,14876,pet.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.02,0.62,running,1:17:43.032400,0.05,Estável
+2026-05-22 21:41:00,15168,chrome.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.04,1.7,running,22:18:12.246717,0.14,Estável
+2026-05-22 21:41:00,15252,Spotify.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.38,14.82,running,23:03:15.388001,0.12,Estável
+2026-05-22 21:41:00,15308,MicrosoftStartFeedProvider.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.09,3.33,running,23:04:24.092500,0.14,Estável
+2026-05-22 21:41:00,15320,Code.exe,DESKTOP-AARF97L\JOAQUIM,3.88,5.61,218.89,running,1:18:08.102009,0.05,Estável
+2026-05-22 21:41:00,15372,Spotify.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.05,1.88,running,23:03:15.596956,0.05,Estável
+2026-05-22 21:41:00,15448,msedge.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.3,11.54,running,0:33:55.527768,0.04,Estável
+2026-05-22 21:41:00,15460,Code.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.24,9.36,running,1:14:14.588862,0.1,Estável
+2026-05-22 21:41:00,15496,jucheck.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.0,0.01,running,22:55:11.765924,0.09,Estável
+2026-05-22 21:41:00,15660,powershell.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.07,2.59,running,1:14:55.303801,0.05,Estável
+2026-05-22 21:41:01,15740,OpenConsole.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.0,0.02,running,1:17:33.668654,0.05,Estável
+2026-05-22 21:41:01,15792,svchost.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.0,0.02,running,23:04:55.601637,0.09,Estável
+2026-05-22 21:41:01,15812,Spotify.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.05,1.79,running,23:02:55.255632,0.11,Estável
+2026-05-22 21:41:01,15960,fontdrvhost.exe,,0.0,0.0,0.0,running,23:12:52.269894,7.26,Estável
+2026-05-22 21:41:01,16016,LockApp.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.0,0.01,stopped,22:34:26.774953,0.24,Estável
+2026-05-22 21:41:01,16124,svchost.exe,,0.0,0.01,0.37,running,"1 day, 14:02:50.116424",6.66,Estável
+2026-05-22 21:41:01,16160,CrossDeviceResume.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.09,3.51,running,23:04:52.415746,0.05,Estável
+2026-05-22 21:41:01,16288,EP64.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.0,0.0,running,23:03:55.860921,0.08,Estável
+2026-05-22 21:41:02,16360,chrome.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.05,2.0,running,23:04:10.733656,0.11,Estável
+2026-05-22 21:41:02,16368,XboxPcApp.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.56,21.71,running,23:00:53.251857,0.05,Estável
+2026-05-22 21:41:02,16520,msedge.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.03,1.11,running,0:33:47.973831,0.1,Estável
+2026-05-22 21:41:02,16628,GameInputRedistService.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.0,0.07,running,23:04:57.293509,0.05,Estável
+2026-05-22 21:41:02,16684,chrome.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.52,20.15,running,23:04:11.218337,0.05,Estável
+2026-05-22 21:41:02,16824,svchost.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.02,0.67,running,23:04:45.567547,0.05,Estável
+2026-05-22 21:41:02,16848,Code.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.42,16.35,running,1:18:02.129014,0.05,Estável
+2026-05-22 21:41:02,16872,OpenConsole.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.0,0.02,running,1:14:57.182014,0.05,Estável
+2026-05-22 21:41:02,16980,msedgewebview2.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.07,2.6,running,23:01:19.925209,0.05,Estável
+2026-05-22 21:41:03,17324,ApplicationFrameHost.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.01,0.2,running,23:00:54.126773,0.05,Estável
+2026-05-22 21:41:03,17456,Code.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.22,8.43,running,0:01:39.299298,0.05,Estável
+2026-05-22 21:41:03,17468,python.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.44,17.33,running,0:00:36.427313,0.04,Estável
+2026-05-22 21:41:03,17940,Code.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.02,0.95,running,1:13:49.922904,0.11,Estável
+2026-05-22 21:41:03,18088,chrome.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.07,2.91,running,0:04:21.540563,0.1,Estável
+2026-05-22 21:41:03,18380,Code.exe,DESKTOP-AARF97L\JOAQUIM,0.0,0.0,0.01,running,1:13:56.151883,0.05,Estável

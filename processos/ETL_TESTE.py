@@ -11,7 +11,7 @@ AWS_CONFIG = {
     "aws_secret_access_key": "",
     "aws_session_token": "",
     "region_name": "us-east-1",
-    "bucket_name": "horus-monitoring"
+    "bucket_name": "horus-monitoring-leticia"
 }
 
 
@@ -343,44 +343,44 @@ def criticos_24h_em_blocos_4h(dfProcessos):
 
     df = dfProcessos.copy()
 
-    # garantir datetime
     df["timestamp"] = pandas.to_datetime(df["timestamp"])
 
     agora = pandas.Timestamp.now()
 
-    # filtrar últimas 24h
     df_24h = df[
         df["timestamp"] >= agora - pandas.Timedelta(hours=24)
     ]
 
-    # só críticos
     df_24h = df_24h[df_24h["criticidade"] == "Crítico"]
 
-    # cria "horas desde agora"
     df_24h["horas_atras"] = (agora - df_24h["timestamp"]).dt.total_seconds() / 3600
 
     # função para definir bucket de 4h
     def bucket(horas):
-        if horas <= 4:
-            return "0-4h"
-        elif horas <= 8:
-            return "4-8h"
-        elif horas <= 12:
-            return "8-12h"
-        elif horas <= 16:
-            return "12-16h"
-        elif horas <= 20:
-            return "16-20h"
+        if horas < (5/60):
+            return "atual"
+        if horas < 3:
+            return "0-2h59min"
+        elif horas < 6:
+            return "3-5h59min"
+        elif horas < 9:
+            return "6-8h59min"
+        elif horas < 12:
+            return "9-11h59min"
+        elif horas < 15:
+            return "12-14h59min"
+        elif horas < 18:
+            return "15-17h59min"
+        elif horas < 21:
+            return "18-20h59min"
         else:
-            return "20-24h"
+            return "21-23h59min"
 
     df_24h["bloco"] = df_24h["horas_atras"].apply(bucket)
 
-    # contar por bloco
     resultado = df_24h["bloco"].value_counts().to_dict()
 
-    # garantir todas as chaves mesmo se zeradas
-    blocos = ["0-4h", "4-8h", "8-12h", "12-16h", "16-20h", "20-24h"]
+    blocos = ["atual", "3h", "6h", "9h", "12h", "15h", "18h", "21h", "24h"]
 
     final = {b: resultado.get(b, 0) for b in blocos}
 
@@ -430,7 +430,7 @@ def main():
 
         print(f"Processando arquivo: {arquivo}")
 
-        key = "raw/empresa_1/c0:35:32:c7:0b:59/process_raw.csv"
+        key = "raw/process_raw.csv"
 
         dfRaw = ler_csv_s3(key)
 
