@@ -43,6 +43,12 @@ PERIODOS = {
     "30d": timedelta(days=30),
 }
 
+PESOS_COMPONENTES = {
+    "CPU": 0.8,
+    "RAM": 1.0,
+    "DISCO": 1.3
+}
+
 CPU_CRITICA = 80
 CPU_ALERTA = 50
 
@@ -738,6 +744,117 @@ def consumo_banda_servico(df):
         "Banco de Dados": round(df["bd_mbps"].mean(), 2),
         "Sync Service": round(df["sync_service_mbps"].mean(), 2)
     }
+
+def detectar_incidentes(df):
+
+    incidentes = []
+
+    if df.empty:
+        return incidentes
+
+    ultima = df.iloc[-1]
+
+    hostname = ultima.get(
+        "hostname",
+        "desconhecido"
+    )
+
+    componentes_criticos = 0
+
+    # =========================
+    # LATÊNCIA
+    # =========================
+
+    if ultima["status_servidor_latencia"] in [
+        "critico",
+        "alto"
+    ]:
+
+        incidentes.append({
+            "tipo": "latencia",
+            "componente": "rede",
+            "servidor": hostname,
+            "severidade": ultima["status_servidor_latencia"],
+            "mensagem": "Latência elevada no servidor",
+            "valor": float(
+                ultima["latency_avg_ms"]
+            ),
+            "timestamp": str(
+                ultima["timestamp"]
+            )
+        })
+
+    if ultima["status_servidor_latencia"] == "critico":
+        componentes_criticos += 1
+
+    # =========================
+    # PACKET LOSS
+    # =========================
+
+    if ultima["status_servidor_pacotes"] in [
+        "critico",
+        "alto"
+    ]:
+
+        incidentes.append({
+            "tipo": "packet_loss",
+            "componente": "rede",
+            "servidor": hostname,
+            "severidade": ultima["status_servidor_pacotes"],
+            "mensagem": "Perda de pacotes elevada",
+            "valor": float(
+                ultima["packet_loss_internet"]
+            ),
+            "timestamp": str(
+                ultima["timestamp"]
+            )
+        })
+
+    if ultima["status_servidor_pacotes"] == "critico":
+        componentes_criticos += 1
+
+    # =========================
+    # ADS-B
+    # =========================
+
+    if ultima["avg_adsb_update_seconds"] > 10:
+
+        incidentes.append({
+            "tipo": "adsb",
+            "componente": "rede",
+            "servidor": hostname,
+            "severidade": "critico",
+            "mensagem": "Delay elevado no ADS-B",
+            "valor": float(
+                ultima["avg_adsb_update_seconds"]
+            ),
+            "timestamp": str(
+                ultima["timestamp"]
+            )
+        })
+
+        componentes_criticos += 1
+
+    # =========================
+    # INCIDENTE SISTÊMICO
+    # =========================
+
+    if componentes_criticos >= 2:
+
+        incidentes.append({
+            "tipo": "degradacao_sistemica",
+            "componente": "rede",
+            "servidor": hostname,
+            "severidade": "critico",
+            "mensagem": "Servidor em degradação sistêmica",
+            "valor": componentes_criticos,
+            "timestamp": str(
+                ultima["timestamp"]
+            )
+        })
+
+    return incidentes
+
 #Processos
 
 def processos_tratados_s3(df_raw):
@@ -776,7 +893,6 @@ def processos_tratados_s3(df_raw):
 
 def processos_criticidade(cpu, ram_percent, latencia):
 
-    # cpu (%), ram (%) e latencia (ms)
     if (
         cpu >= CPU_CRITICA
         or ram_percent > RAM_CRITICA_PERCENT
@@ -796,9 +912,6 @@ def processos_criticidade(cpu, ram_percent, latencia):
 
 def top5cpu(dfProcessos):
 
-    # arrumar cpu nucleos
-    # top5 = sorted(processos_tratados, key=lambda x: x['cpu'], reverse=True)[:5]
-
     dfTop5 = dfProcessos.sort_values(
         'cpu',
         ascending=False
@@ -813,9 +926,6 @@ def top5cpu(dfProcessos):
 
 
 def top5ram(dfProcessos):
-
-    # arrumar cpu nucleos
-    # top5 = sorted(processos_tratados, key=lambda x: x['cpu'], reverse=True)[:5]
 
     dfTop5 = dfProcessos.sort_values(
         'ram_percent',
@@ -838,7 +948,6 @@ def processos_criticos(df_processos):
 
 
 def maior_latencia(df):
-
     if df.empty:
         return {
             "nome": None,
@@ -853,10 +962,7 @@ def maior_latencia(df):
         "latencia_ms": float(linha_maior["latencia_ms"]),
         "pid": int(linha_maior["pid"])
     }
-
-
     return maior_latencia
-
 
 def limites_processos(processos_tratados):
     return {"limite": len(processos_tratados) * 0.30}
@@ -966,7 +1072,6 @@ def contar_status(df):
         "stopped": contagem.get("stopped", 0)
     }
 
-
 def contar_criticos(df):
 
     criticos = df[
@@ -991,7 +1096,6 @@ def contar_criticos(df):
     }
 
 #Temperatura 
-
 def gerar_alerta(row):
 
     alertas = []
@@ -1070,7 +1174,6 @@ def gerar_alerta(row):
     return " | ".join(alertas)
 
 # DIA COM MAIS ALERTAS
-
 def calcular_dia_mais_alertas(df):
 
     df_alertas = df[
@@ -1090,8 +1193,6 @@ def calcular_dia_mais_alertas(df):
     return contador.most_common(1)[0][0]
 
 #Gestor
-
-
 
 def filtrar_periodo(leituras, periodo):
 
@@ -1271,30 +1372,104 @@ def grafico_estabilidade(leituras, limites):
     return valores
 
 def calcular_impacto_componente(leituras, limites):
-    cpu = []
-    ram = []
-    disco = []
 
+    por_servidor = {}
+
+    # Agrupa impactos por servidor
     for r in leituras:
-        s = r["servidor_id"]
-        m = r["metricas"]
+        servidor = r["servidor_id"]
 
-        cpu.append(
-            m["cpu"] / limites[s]["CPU"] * 100
+        if servidor not in por_servidor:
+            por_servidor[servidor] = {
+                "cpu": [],
+                "ram": [],
+                "disco": []
+            }
+
+        metricas = r["metricas"]
+
+        impacto_cpu = min(
+            (metricas["cpu"] / limites[servidor]["CPU"]) * 100,
+            100
         )
 
-        ram.append(
-            m["ram"] / limites[s]["RAM"] * 100
+        impacto_ram = min(
+            (metricas["ram"] / limites[servidor]["RAM"]) * 100,
+            100
         )
 
-        disco.append(
-            m["disco"] / limites[s]["DISCO"] * 100
+        impacto_disco = min(
+            (metricas["disco"] / limites[servidor]["DISCO"]) * 100,
+            100
         )
+
+        por_servidor[servidor]["cpu"].append(impacto_cpu)
+        por_servidor[servidor]["ram"].append(impacto_ram)
+        por_servidor[servidor]["disco"].append(impacto_disco)
+
+    # Médias por componente
+    medias = {
+        "CPU": [],
+        "RAM": [],
+        "DISCO": []
+    }
+
+    for _, dados in por_servidor.items():
+
+        medias["CPU"].append(
+            sum(dados["cpu"]) / len(dados["cpu"])
+        )
+
+        medias["RAM"].append(
+            sum(dados["ram"]) / len(dados["ram"])
+        )
+
+        medias["DISCO"].append(
+            sum(dados["disco"]) / len(dados["disco"])
+        )
+
+    # Média final global
+    cpu_final = round(
+        sum(medias["CPU"]) / len(medias["CPU"]), 1
+    ) if medias["CPU"] else 0
+
+    ram_final = round(
+        sum(medias["RAM"]) / len(medias["RAM"]), 1
+    ) if medias["RAM"] else 0
+
+    disco_final = round(
+        sum(medias["DISCO"]) / len(medias["DISCO"]), 1
+    ) if medias["DISCO"] else 0
+
+    # Faixa de severidade
+    def faixa_severidade(valor):
+
+        if valor >= 80:
+            return "crítico"
+
+        elif valor >= 60:
+            return "alto"
+
+        elif valor >= 40:
+            return "moderado"
+
+        return "baixo"
 
     return {
-        "CPU": sum(cpu) / len(cpu),
-        "RAM": sum(ram) / len(ram),
-        "DISCO": sum(disco) / len(disco)
+        "CPU": {
+            "valor": cpu_final,
+            "severidade": faixa_severidade(cpu_final)
+        },
+
+        "RAM": {
+            "valor": ram_final,
+            "severidade": faixa_severidade(ram_final)
+        },
+
+        "DISCO": {
+            "valor": disco_final,
+            "severidade": faixa_severidade(disco_final)
+        }
     }
 
 def listar_info_servidores(leituras, limites, servidores, analistas):
@@ -1902,7 +2077,7 @@ def main():
     # =========================================================
     # PIPELINE 2 - EMPRESAS (DASHBOARD + TRUSTED + KPIs)
     # =========================================================
-    print("\n=== PIPELINE EMPRESAS ===")
+    print("\n=== PIPELINE COMUNICAÇÃO ===")
 
     empresas = obter_empresas()
 
@@ -1923,7 +2098,8 @@ def main():
         dfV_24h = df_flights[df_flights["timestamp_coleta"] >= agora - pandas.Timedelta(hours=24)]
 
         dfN_24h = enriquecer_dados(dfN_24h)
-
+        incidentes = detectar_incidentes(dfN_24h)
+        
         salvar_s3_unificado(s3, f"trusted/empresa_{empresa_id}/{mac_address}/network_trusted.csv", df_network, formato="csv")
         salvar_s3_unificado(s3, f"trusted/empresa_{empresa_id}/{mac_address}/flights_trusted.csv", df_flights, formato="csv")
 
@@ -1942,30 +2118,18 @@ def main():
 
         base_path = f"client/empresa_{empresa_id}/{mac_address}"
 
-        salvar_s3_unificado(
-            s3,
-            f"{base_path}/dashboard_rede_24h.json",
-            dashboard,
-            formato="json"
-        )
+        salvar_s3_unificado(s3,f"{base_path}/dashboard_rede_24h.json",dashboard,formato="json")
 
-        salvar_s3_unificado(
-            s3,
-            f"{base_path}/dashboard_rede_3d.json",
-            dashboard_3d,
-            formato="json"
-        )
+        salvar_s3_unificado(s3,f"{base_path}/dashboard_rede_3d.json",dashboard_3d,formato="json")
 
-        salvar_s3_unificado(
-            s3,
-            f"{base_path}/dashboard_rede_7d.json",
-            dashboard_7d,
-            formato="json"
-        )
+        salvar_s3_unificado( s3,f"{base_path}/dashboard_rede_7d.json",dashboard_7d,formato="json")
+
+        salvar_s3_unificado(s3, f"client/alertas/empresa_{empresa_id}/{mac_address}incidentes_rede_24h.json",incidentes,formato="json")
 
         # =========================
         # DASHBOARD GESTOR
         # =========================
+        print("\n=== PIPELINE GESTOR ===")
 
         arquivos = listar_arquivos_client(s3, empresa_id)
 
