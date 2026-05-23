@@ -1437,39 +1437,42 @@ def calcular_previsao_falhas(leituras, limites):
     for servidor_id, series in por_servidor.items():
         for metrica in ["cpu", "ram", "disco"]:
             valores = series[metrica]
-
+            
             if len(valores) < 3:
                 continue
 
             valores_recentes = valores[-JANELA_PREVISAO:]
+            limite = limites[servidor_id][metrica.upper()]
 
+            # mudança pra gerar alerta se o estado ja estiver crítico ou alto
+            nivel_atual = classificar(valores_recentes[-1], limite)
+            if nivel_atual in ["crítico", "alta"]:
+                alertas_previsao.append({
+                    "servidor_id": servidor_id,
+                    "metrica": metrica.upper(),
+                    "nivel_previsao": nivel_atual,
+                    "mensagem": gerar_mensagem(metrica.upper(), nivel_atual, valores_recentes[-1], limite)
+                })
+                continue
+            # fim da alteração
             x = np.arange(len(valores_recentes))
             a, b = np.polyfit(x, valores_recentes, 1)
             previsao = a * len(valores_recentes) + b
 
-            limite = limites[servidor_id][metrica.upper()]
-
             atual = valores_recentes[-1] / limite
             nivel_previsao = previsao / limite
-            print(
-                    servidor_id,
-                    metrica,
-                    "inclinação:", round(a, 2),
-                    "atual:", round(atual * 100, 1),
-                    "previsto:", round((previsao / limite) * 100, 1)
-                )
-            
-            if a > 0 and nivel_previsao > 0.60 and nivel_previsao > atual:
-                nivel_previsao = classificar(previsao, limite)
 
-                if nivel_previsao == "normal":
+            if a > 0 and nivel_previsao > 0.60 and nivel_previsao > atual:
+                nivel_classificado = classificar(previsao, limite)
+
+                if nivel_classificado == "normal":
                     continue
 
                 alertas_previsao.append({
                     "servidor_id": servidor_id,
                     "metrica": metrica.upper(),
-                    "nivel_previsao": nivel_previsao,
-                    "mensagem": gerar_mensagem(metrica.upper(), nivel_previsao, previsao, limite)
+                    "nivel_previsao": nivel_classificado,
+                    "mensagem": gerar_mensagem(metrica.upper(), nivel_classificado, previsao, limite)
                 })
 
     return alertas_previsao
