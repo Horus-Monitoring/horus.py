@@ -8,15 +8,15 @@ AWS_CONFIG = {
     "aws_access_key_id": "",
     "aws_secret_access_key": "",
     "aws_session_token": "",
-    "region_name": "",
-    "bucket_name": ""
+    "region_name": "us-east-1",
+    "bucket_name": "bucket-teste-sprint-3-2026"
 }
 
 DB_CONFIG = {
-    "host": "",
-    "user": "",
+    "host": "localhost",
+    "user": "root",
     "password": "",
-    "database": ""
+    "database": "horus_db"
 }
 
 def get_s3():
@@ -293,6 +293,14 @@ def grafico_estabilidade(leituras, limites):
 
     return {"labels": labels[-7:], "valores": valores[-7:]}
 
+# adiocionado peso para os componentes pro calculo de impacto
+PESOS_COMPONENTES = {
+    "CPU": 0.8,
+    "RAM": 1.0,
+    "DISCO": 1.3
+}
+
+# alteração no calculo de impacto para utilizar uma faixa de severidade 
 def calcular_impacto_componente(leituras, limites):
     por_servidor = {}
 
@@ -307,12 +315,14 @@ def calcular_impacto_componente(leituras, limites):
             }
 
         metricas = r["metricas"]
+        
+        impacto_cpu = min((metricas["cpu"] / limites[servidor]["CPU"]) * 100 * PESOS_COMPONENTES["CPU"], 100)
+        impacto_ram = min((metricas["ram"] / limites[servidor]["RAM"]) * 100 * PESOS_COMPONENTES["RAM"], 100)
+        impacto_disco = min((metricas["disco"] / limites[servidor]["DISCO"]) * 100 * PESOS_COMPONENTES["DISCO"], 100)
 
-        por_servidor[servidor]["cpu"].append(metricas["cpu"] / limites[servidor]["CPU"] * 100)
-
-        por_servidor[servidor]["ram"].append(metricas["ram"] / limites[servidor]["RAM"] * 100)
-
-        por_servidor[servidor]["disco"].append(metricas["disco"] / limites[servidor]["DISCO"] * 100)
+        por_servidor[servidor]["cpu"].append(impacto_cpu)
+        por_servidor[servidor]["ram"].append(impacto_ram)
+        por_servidor[servidor]["disco"].append(impacto_disco)
 
     medias = {
         "CPU": [],
@@ -323,15 +333,41 @@ def calcular_impacto_componente(leituras, limites):
     for servidor, dados in por_servidor.items():
 
         medias["CPU"].append(sum(dados["cpu"]) / len(dados["cpu"]))
-
         medias["RAM"].append(sum(dados["ram"]) / len(dados["ram"]))
-
         medias["DISCO"].append(sum(dados["disco"]) / len(dados["disco"]))
 
+    cpu_final = round(sum(medias["CPU"]) / len(medias["CPU"]), 1) if medias["CPU"] else 0
+    ram_final = round(sum(medias["RAM"]) / len(medias["RAM"]), 1) if medias["RAM"] else 0
+    disco_final = round(sum(medias["DISCO"]) / len(medias["DISCO"]), 1) if medias["DISCO"] else 0
+
+# adiocionada função para calcular a faixa de severidade
+    def faixa_severidade(valor):
+        if valor >= 80:
+            return "crítico"
+
+        elif valor >= 60:
+            return "alto"
+
+        elif valor >= 40:
+            return "moderado"
+
+        return "baixo"
+
     return {
-        "CPU": round(sum(medias["CPU"]) / len(medias["CPU"]), 1),
-        "RAM": round(sum(medias["RAM"]) / len(medias["RAM"]), 1),
-        "DISCO": round(sum(medias["DISCO"]) / len(medias["DISCO"]), 1)
+        "CPU": {
+            "valor": cpu_final,
+            "severidade": faixa_severidade(cpu_final)
+        },
+
+        "RAM": {
+            "valor": ram_final,
+            "severidade": faixa_severidade(ram_final)
+        },
+
+        "DISCO": {
+            "valor": disco_final,
+            "severidade": faixa_severidade(disco_final)
+        }
     }
 
 def listar_info_servidores(leituras, limites, servidores, analistas):
@@ -429,8 +465,14 @@ def calcular_previsao_falhas(leituras, limites):
             atual = valores_recentes[-1] / limite
             nivel_previsao = previsao / limite
 
-            print(f"{metrica}: valores={valores}, previsto={round(previsao,1)}, atual={atual}, previsto_nivel={nivel_previsao}")
-
+            print(
+                    servidor_id,
+                    metrica,
+                    "inclinação:", round(a, 2),
+                    "atual:", round(atual * 100, 1),
+                    "previsto:", round((previsao / limite) * 100, 1)
+                )
+            
             if a > 0 and nivel_previsao > 0.60 and nivel_previsao > atual:
                 nivel_previsao = classificar(previsao, limite)
 
