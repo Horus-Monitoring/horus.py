@@ -1,6 +1,7 @@
 CREATE DATABASE IF NOT EXISTS horus_db;
 USE horus_db;
 
+
 CREATE TABLE empresa (
     id_empresa INT PRIMARY KEY AUTO_INCREMENT,
     razao_social VARCHAR(100) NOT NULL,
@@ -87,7 +88,7 @@ INSERT INTO componente (tipo) VALUES
 ('CPU'),
 ('RAM'),
 ('DISCO'),
-('LATENCIA'),
+('REDE'),
 ('PROCESSOS');
 
 insert into funcionario VALUES 
@@ -152,7 +153,7 @@ INSERT INTO servidor (
 )
 VALUES
     ('NeithaNitro',
-    '7C:8AE1:DA:FC:F7',
+    '7C:8A:E1:DA:FC:F7',
     '192.168.0.10',
     'Data Center SP',
     'Linux/Windows',
