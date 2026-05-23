@@ -2124,7 +2124,7 @@ def main():
 
         salvar_s3_unificado( s3,f"{base_path}/dashboard_rede_7d.json",dashboard_7d,formato="json")
 
-        salvar_s3_unificado(s3, f"client/alertas/empresa_{empresa_id}/{mac_address}incidentes_rede_24h.json",incidentes,formato="json")
+        salvar_s3_unificado(s3, f"client/alertas/empresa_{empresa_id}/{mac_address}/incidentes_rede_24h.json",incidentes,formato="json")
 
         # =========================
         # DASHBOARD GESTOR
