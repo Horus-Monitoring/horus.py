@@ -10,6 +10,7 @@ from collections import defaultdict
 from getmac import get_mac_address
 import os
 from collections import Counter
+import numpy as np
 
 load_dotenv()
 env = os.getenv
@@ -765,17 +766,28 @@ def detectar_incidentes(df):
     # LATÊNCIA
     # =========================
 
-    if ultima["status_servidor_latencia"] in [
+    severidade_latencia = ultima[
+        "status_servidor_latencia"
+    ]
+
+    if severidade_latencia in [
         "critico",
         "alto"
     ]:
 
+        if severidade_latencia == "critico":
+            componentes_criticos += 1
+
         incidentes.append({
-            "tipo": "latencia",
-            "componente": "rede",
+
+            # compatibilidade Java
+            "titulo": "Latência elevada no servidor",
+            "criticidade": severidade_latencia,
             "servidor": hostname,
-            "severidade": ultima["status_servidor_latencia"],
-            "mensagem": "Latência elevada no servidor",
+            "componente": "rede",
+
+            # extras úteis
+            "tipo": "latencia",
             "valor": float(
                 ultima["latency_avg_ms"]
             ),
@@ -784,24 +796,30 @@ def detectar_incidentes(df):
             )
         })
 
-    if ultima["status_servidor_latencia"] == "critico":
-        componentes_criticos += 1
-
     # =========================
     # PACKET LOSS
     # =========================
 
-    if ultima["status_servidor_pacotes"] in [
+    severidade_pacotes = ultima[
+        "status_servidor_pacotes"
+    ]
+
+    if severidade_pacotes in [
         "critico",
         "alto"
     ]:
 
+        if severidade_pacotes == "critico":
+            componentes_criticos += 1
+
         incidentes.append({
-            "tipo": "packet_loss",
-            "componente": "rede",
+
+            "titulo": "Perda de pacotes elevada",
+            "criticidade": severidade_pacotes,
             "servidor": hostname,
-            "severidade": ultima["status_servidor_pacotes"],
-            "mensagem": "Perda de pacotes elevada",
+            "componente": "rede",
+
+            "tipo": "packet_loss",
             "valor": float(
                 ultima["packet_loss_internet"]
             ),
@@ -810,30 +828,33 @@ def detectar_incidentes(df):
             )
         })
 
-    if ultima["status_servidor_pacotes"] == "critico":
-        componentes_criticos += 1
-
     # =========================
     # ADS-B
     # =========================
 
-    if ultima["avg_adsb_update_seconds"] > 10:
+    if ultima[
+        "avg_adsb_update_seconds"
+    ] > 10:
+
+        componentes_criticos += 1
 
         incidentes.append({
-            "tipo": "adsb",
-            "componente": "rede",
+
+            "titulo": "Delay elevado no ADS-B",
+            "criticidade": "critico",
             "servidor": hostname,
-            "severidade": "critico",
-            "mensagem": "Delay elevado no ADS-B",
+            "componente": "rede",
+
+            "tipo": "adsb",
             "valor": float(
-                ultima["avg_adsb_update_seconds"]
+                ultima[
+                    "avg_adsb_update_seconds"
+                ]
             ),
             "timestamp": str(
                 ultima["timestamp"]
             )
         })
-
-        componentes_criticos += 1
 
     # =========================
     # INCIDENTE SISTÊMICO
@@ -842,11 +863,13 @@ def detectar_incidentes(df):
     if componentes_criticos >= 2:
 
         incidentes.append({
-            "tipo": "degradacao_sistemica",
-            "componente": "rede",
+
+            "titulo": "Múltiplos componentes críticos na rede",
+            "criticidade": "critico",
             "servidor": hostname,
-            "severidade": "critico",
-            "mensagem": "Servidor em degradação sistêmica",
+            "componente": "rede",
+
+            "tipo": "infraestrutura",
             "valor": componentes_criticos,
             "timestamp": str(
                 ultima["timestamp"]
@@ -1352,6 +1375,7 @@ def calcular_tendencia(leituras, limites):
 def grafico_estabilidade(leituras, limites):
     valores = []
     grupos = {}
+    labels = []
 
     for r in leituras:
         hora = r["data_hora"][:13]
@@ -1361,15 +1385,94 @@ def grafico_estabilidade(leituras, limites):
 
         grupos[hora].append(r)
 
-    for hora in grupos:
-        estabilidade = calcular_estabilidade_operacional(
-            grupos[hora],
-            limites
-        )
-
+    for hora in sorted(grupos.keys()):
+        estabilidade = calcular_estabilidade_operacional(grupos[hora], limites)
+        labels.append(hora[11:] + ":00")
         valores.append(estabilidade)
 
-    return valores
+    return {"labels": labels[-7:], "valores": valores[-7:]}
+
+def gerar_mensagem(metrica, nivel, previsao, limite):
+        pct = round(previsao / limite * 100, 1)
+
+        mensagens = {
+            "CPU": {
+                "baixa": f"CPU prevista em {pct}% do limite - Leve aumento na carga de processamento. Monitore a tendência.",
+                "média": f"CPU prevista em {pct}% do limite - Carga de processamento em elevação. Verifique rotinas de cálculo de rotas e separação de aeronaves em execução.",
+                "alta": f"CPU prevista em {pct}% do limite - Processamento de dados de radar pode ser impactado. Considere redistribuir carga entre os nós do Sagitário.",
+                "crítico": f"CPU prevista em {pct}% do limite - Risco de atraso no processamento de dados de voo. Notifique um analista responsável imediatamente."
+            },
+            "RAM": {
+                "baixa": f"RAM prevista em {pct}% do limite - Leve crescimento no consumo de memória. Monitore a tendência.",
+                "média": f"RAM prevista em {pct}% do limite - Consumo de memória crescente. Verifique buffers de dados de radar e faixas de voo ativas.",
+                "alta": f"RAM prevista em {pct}% do limite - Risco de degradação no gerenciamento de planos de voo. Verifique processos de correlação de pistas.",
+                "crítico": f"RAM prevista em {pct}% do limite - Risco de falha no rastreamento de aeronaves. Reinicie processos não essenciais e acione o sistema de contingência do Sagitário."
+            },
+            "DISCO": {
+                "baixa": f"Disco previsto em {pct}% do limite - Leve crescimento no uso de armazenamento. Monitore a tendência.",
+                "média": f"Disco previsto em {pct}% do limite - Crescimento no volume de logs operacionais. Verifique retenção de gravações de voz e registros de radar.",
+                "alta": f"Disco previsto em {pct}% do limite - Armazenamento de dados de voo pode ser comprometido. Realize purga de arquivos temporários e logs antigos.",
+                "crítico": f"Disco previsto em {pct}% do limite - Risco de interrupção no registro de dados operacionais. Arquive ou remova gravações antigas imediatamente e acione o suporte técnico."
+            }
+        }
+
+        return mensagens[metrica][nivel]
+
+JANELA_PREVISAO = 12
+
+def calcular_previsao_falhas(leituras, limites):
+    por_servidor = {}
+
+    for r in sorted(leituras, key=lambda r: r["data_hora"]):
+        servidor = r["servidor_id"]
+        if servidor not in por_servidor:
+            por_servidor[servidor] = {"cpu": [], "ram": [], "disco": []}
+
+        por_servidor[servidor]["cpu"].append(r["metricas"]["cpu"])
+        por_servidor[servidor]["ram"].append(r["metricas"]["ram"])
+        por_servidor[servidor]["disco"].append(r["metricas"]["disco"])
+
+    alertas_previsao = []
+
+    for servidor_id, series in por_servidor.items():
+        for metrica in ["cpu", "ram", "disco"]:
+            valores = series[metrica]
+
+            if len(valores) < 3:
+                continue
+
+            valores_recentes = valores[-JANELA_PREVISAO:]
+
+            x = np.arange(len(valores_recentes))
+            a, b = np.polyfit(x, valores_recentes, 1)
+            previsao = a * len(valores_recentes) + b
+
+            limite = limites[servidor_id][metrica.upper()]
+
+            atual = valores_recentes[-1] / limite
+            nivel_previsao = previsao / limite
+            print(
+                    servidor_id,
+                    metrica,
+                    "inclinação:", round(a, 2),
+                    "atual:", round(atual * 100, 1),
+                    "previsto:", round((previsao / limite) * 100, 1)
+                )
+            
+            if a > 0 and nivel_previsao > 0.60 and nivel_previsao > atual:
+                nivel_previsao = classificar(previsao, limite)
+
+                if nivel_previsao == "normal":
+                    continue
+
+                alertas_previsao.append({
+                    "servidor_id": servidor_id,
+                    "metrica": metrica.upper(),
+                    "nivel_previsao": nivel_previsao,
+                    "mensagem": gerar_mensagem(metrica.upper(), nivel_previsao, previsao, limite)
+                })
+
+    return alertas_previsao
 
 def calcular_impacto_componente(leituras, limites):
 
@@ -2173,9 +2276,25 @@ def main():
                     "estabilidade_operacional": calcular_estabilidade_operacional(leituras, limites),
                     "tendencia_operacional": calcular_tendencia(leituras, limites)
                 },
+
                 "grafico_estabilidade": grafico_estabilidade(leituras, limites),
-                "impacto_por_componente": calcular_impacto_componente(leituras, limites),
-                "info_servidores": listar_info_servidores(leituras, limites, servidores, analistas)
+
+                "impacto_por_componente": calcular_impacto_componente(
+                    leituras,
+                    limites
+                ),
+
+                "previsao_falhas": calcular_previsao_falhas(
+                    leituras,
+                    limites
+                ),
+
+                "info_servidores": listar_info_servidores(
+                    leituras,
+                    limites,
+                    servidores,
+                    analistas
+                )
             }
 
         salvar_s3_unificado(s3, f"client/gestor/empresa_{empresa_id}/dashboard_gestor.json", resultado)
