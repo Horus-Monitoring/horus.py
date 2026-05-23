@@ -1,25 +1,22 @@
 import boto3
-import csv
 import json
-import os
 import mysql.connector
 from datetime import datetime, timedelta
-from io import StringIO
-from collections import defaultdict
+import numpy as np
 
 AWS_CONFIG = {
     "aws_access_key_id": "",
     "aws_secret_access_key": "",
     "aws_session_token": "",
-    "region_name": "us-east-1",
-    "bucket_name": "bucket-teste-sprint-3-2026"
+    "region_name": "",
+    "bucket_name": ""
 }
 
 DB_CONFIG = {
-    "host": "localhost",
-    "user": "root",
+    "host": "",
+    "user": "",
     "password": "",
-    "database": "horus_db"
+    "database": ""
 }
 
 def get_s3():
@@ -40,7 +37,7 @@ def listar_arquivos_client(s3, empresa_id):
     return [
         obj["Key"]
         for obj in res.get("Contents", [])
-        if obj["Key"].endswith(".json")
+        if obj["Key"].endswith("metricas.json")
         and "/alertas/" not in obj["Key"]
         and "/resumo/" not in obj["Key"]
     ]
@@ -136,7 +133,7 @@ def classificar(valor, limite):
     if limite == 0:
         return "normal"
     if valor == 0 and limite > 0:
-        return "crítico"
+        return "offline"
     
     razao = valor / limite
 
@@ -150,21 +147,30 @@ def classificar(valor, limite):
         return "baixa"
     return "normal"
 
+# alteração para agrupar por servidores na hora de realizar o calculo
 def calcular_disponibilidade(leituras, limites):
-    online = 0
+    por_servidor = {}
 
     for r in leituras:
         servidor = r["servidor_id"]
-        m = r["metricas"]
+        if servidor not in por_servidor:
+            por_servidor[servidor] = {"total": 0, "online": 0}
 
-        cpu = classificar(m["cpu"], limites[servidor]["CPU"])
-        ram = classificar(m["ram"], limites[servidor]["RAM"])
-        disco = classificar(m["disco"], limites[servidor]["DISCO"])
+        metricas = r["metricas"]
+        cpu = classificar(metricas["cpu"], limites[servidor]["CPU"])
+        ram = classificar(metricas["ram"], limites[servidor]["RAM"])
+        disco = classificar(metricas["disco"], limites[servidor]["DISCO"])
 
-        if cpu != "crítico" and ram != "crítico" and disco != "crítico":
-            online += 1
+        por_servidor[servidor]["total"] += 1
+        if cpu not in ["crítico", "offline"] and ram not in ["crítico", "offline"] and disco not in ["crítico", "offline"]:
+            por_servidor[servidor]["online"] += 1
 
-    return (online / len(leituras)) * 100
+    disponibilidade = [
+        servidor["online"] / servidor["total"] * 100
+        for servidor in por_servidor.values() if servidor["total"] > 0
+    ]
+
+    return sum(disponibilidade) / len(disponibilidade)
 
 def calcular_nivel_risco(leituras, limites):
     total = 0
@@ -172,21 +178,21 @@ def calcular_nivel_risco(leituras, limites):
 
     for r in leituras:
         servidor = r["servidor_id"]
-        m = r["metricas"]
+        metricas = r["metricas"]
 
-        cpu = classificar(m["cpu"], limites[servidor]["CPU"])
-        ram = classificar(m["ram"], limites[servidor]["RAM"])
-        disco = classificar(m["disco"], limites[servidor]["DISCO"])
+        cpu = classificar(metricas["cpu"], limites[servidor]["CPU"])
+        ram = classificar(metricas["ram"], limites[servidor]["RAM"])
+        disco = classificar(metricas["disco"], limites[servidor]["DISCO"])
 
         total += SEVERIDADE[cpu]
         total += SEVERIDADE[ram]
         total += SEVERIDADE[disco]
 
         quantidade += 3
-
+    # correção no valor da divisão pro calculo
     if quantidade > 0:
         media = total / quantidade
-        return ((media - 1) / 4) * 100
+        return (media / 5) * 100
     
     else:
         return 0
@@ -211,23 +217,31 @@ def calcular_incidentes_criticos(leituras, limites):
 
     return criticos
 
+# agrupamento por servidor na hora de realizar o calculo
 def calcular_estabilidade_operacional(leituras, limites):
-    estaveis = 0
+    por_servidor = {}
 
     for r in leituras:
-        s = r["servidor_id"]
-        m = r["metricas"]
+        servidor = r["servidor_id"]
+        
+        if servidor not in por_servidor:
+            por_servidor[servidor] = {"total": 0, "estaveis": 0}
 
-        cpu = m["cpu"] / limites[s]["CPU"]
-        ram = m["ram"] / limites[s]["RAM"]
-        disco = m["disco"] / limites[s]["DISCO"]
+        metricas = r["metricas"]
+        cpu = metricas["cpu"] / limites[servidor]["CPU"]
+        ram = metricas["ram"] / limites[servidor]["RAM"]
+        disco = metricas["disco"] / limites[servidor]["DISCO"]
 
+        por_servidor[servidor]["total"] += 1
         if cpu < 0.80 and ram < 0.80 and disco < 0.80:
-            estaveis += 1
+            por_servidor[servidor]["estaveis"] += 1
 
-    return (estaveis / len(leituras)) * 100
+    estabilidade = [
+        servidor["estaveis"] / servidor["total"] * 100
+        for servidor in por_servidor.values()
+    ]
 
-# def calcular_mttr(leituras, limites):
+    return sum(estabilidade) / len(estabilidade)
 
 def calcular_tendencia(leituras, limites):
 
@@ -261,77 +275,88 @@ def calcular_tendencia(leituras, limites):
         return "Estável"
 
 def grafico_estabilidade(leituras, limites):
-    valores = []
     grupos = {}
 
     for r in leituras:
         hora = r["data_hora"][:13]
-
         if hora not in grupos:
             grupos[hora] = []
-
         grupos[hora].append(r)
 
-    for hora in grupos:
-        estabilidade = calcular_estabilidade_operacional(
-            grupos[hora],
-            limites
-        )
+    labels = []
+    valores = []
 
+    for hora in sorted(grupos.keys()):
+        estabilidade = calcular_estabilidade_operacional(grupos[hora], limites)
+        labels.append(hora[11:] + ":00")
         valores.append(estabilidade)
 
-    return valores
+    return {"labels": labels[-7:], "valores": valores[-7:]}
 
 def calcular_impacto_componente(leituras, limites):
-    cpu = []
-    ram = []
-    disco = []
+    por_servidor = {}
 
     for r in leituras:
-        s = r["servidor_id"]
-        m = r["metricas"]
+        servidor = r["servidor_id"]
 
-        cpu.append(
-            m["cpu"] / limites[s]["CPU"] * 100
-        )
+        if servidor not in por_servidor:
+            por_servidor[servidor] = {
+                "cpu": [],
+                "ram": [],
+                "disco": []
+            }
 
-        ram.append(
-            m["ram"] / limites[s]["RAM"] * 100
-        )
+        metricas = r["metricas"]
 
-        disco.append(
-            m["disco"] / limites[s]["DISCO"] * 100
-        )
+        por_servidor[servidor]["cpu"].append(metricas["cpu"] / limites[servidor]["CPU"] * 100)
+
+        por_servidor[servidor]["ram"].append(metricas["ram"] / limites[servidor]["RAM"] * 100)
+
+        por_servidor[servidor]["disco"].append(metricas["disco"] / limites[servidor]["DISCO"] * 100)
+
+    medias = {
+        "CPU": [],
+        "RAM": [],
+        "DISCO": []
+    }
+
+    for servidor, dados in por_servidor.items():
+
+        medias["CPU"].append(sum(dados["cpu"]) / len(dados["cpu"]))
+
+        medias["RAM"].append(sum(dados["ram"]) / len(dados["ram"]))
+
+        medias["DISCO"].append(sum(dados["disco"]) / len(dados["disco"]))
 
     return {
-        "CPU": sum(cpu) / len(cpu),
-        "RAM": sum(ram) / len(ram),
-        "DISCO": sum(disco) / len(disco)
+        "CPU": round(sum(medias["CPU"]) / len(medias["CPU"]), 1),
+        "RAM": round(sum(medias["RAM"]) / len(medias["RAM"]), 1),
+        "DISCO": round(sum(medias["DISCO"]) / len(medias["DISCO"]), 1)
     }
 
 def listar_info_servidores(leituras, limites, servidores, analistas):
     resultado = []
 
     for srv in servidores:
-        sid = srv["id_servidor"]
+        servidor = srv["id_servidor"]
         incidentes = 0
 
         for r in leituras:
-            if r["servidor_id"] != sid:
+            if r["servidor_id"] != servidor:
                 continue
 
-            m = r["metricas"]
+            metricas = r["metricas"]
 
             if (
-                m["cpu"] >= limites[sid]["CPU"]
+                metricas["cpu"] >= limites[servidor]["CPU"]
                 or
-                m["ram"] >= limites[sid]["RAM"]
+                metricas["ram"] >= limites[servidor]["RAM"]
                 or
-                m["disco"] >= limites[sid]["DISCO"]
+                metricas["disco"] >= limites[servidor]["DISCO"]
             ):
                 incidentes += 1
 
-        qtd_analistas = analistas.get(sid, 0)
+        qtd_analistas = analistas.get(servidor, 0)
 
         status = srv["status_servidor"]
 
@@ -344,7 +369,110 @@ def listar_info_servidores(leituras, limites, servidores, analistas):
 
     return resultado
 
-# def calcular_previsao_falhas(leituras, limites):
+def gerar_mensagem(metrica, nivel, previsao, limite):
+        pct = round(previsao / limite * 100, 1)
+
+        mensagens = {
+            "CPU": {
+                "baixa": f"CPU prevista em {pct}% do limite - Leve aumento na carga de processamento. Monitore a tendência.",
+                "média": f"CPU prevista em {pct}% do limite - Carga de processamento em elevação. Verifique rotinas de cálculo de rotas e separação de aeronaves em execução.",
+                "alta": f"CPU prevista em {pct}% do limite - Processamento de dados de radar pode ser impactado. Considere redistribuir carga entre os nós do Sagitário.",
+                "crítico": f"CPU prevista em {pct}% do limite - Risco de atraso no processamento de dados de voo. Notifique um analista responsável imediatamente."
+            },
+            "RAM": {
+                "baixa": f"RAM prevista em {pct}% do limite - Leve crescimento no consumo de memória. Monitore a tendência.",
+                "média": f"RAM prevista em {pct}% do limite - Consumo de memória crescente. Verifique buffers de dados de radar e faixas de voo ativas.",
+                "alta": f"RAM prevista em {pct}% do limite - Risco de degradação no gerenciamento de planos de voo. Verifique processos de correlação de pistas.",
+                "crítico": f"RAM prevista em {pct}% do limite - Risco de falha no rastreamento de aeronaves. Reinicie processos não essenciais e acione o sistema de contingência do Sagitário."
+            },
+            "DISCO": {
+                "baixa": f"Disco previsto em {pct}% do limite - Leve crescimento no uso de armazenamento. Monitore a tendência.",
+                "média": f"Disco previsto em {pct}% do limite - Crescimento no volume de logs operacionais. Verifique retenção de gravações de voz e registros de radar.",
+                "alta": f"Disco previsto em {pct}% do limite - Armazenamento de dados de voo pode ser comprometido. Realize purga de arquivos temporários e logs antigos.",
+                "crítico": f"Disco previsto em {pct}% do limite - Risco de interrupção no registro de dados operacionais. Arquive ou remova gravações antigas imediatamente e acione o suporte técnico."
+            }
+        }
+
+        return mensagens[metrica][nivel]
+
+JANELA_PREVISAO = 12
+
+def calcular_previsao_falhas(leituras, limites):
+    por_servidor = {}
+
+    for r in sorted(leituras, key=lambda r: r["data_hora"]):
+        servidor = r["servidor_id"]
+        if servidor not in por_servidor:
+            por_servidor[servidor] = {"cpu": [], "ram": [], "disco": []}
+
+        por_servidor[servidor]["cpu"].append(r["metricas"]["cpu"])
+        por_servidor[servidor]["ram"].append(r["metricas"]["ram"])
+        por_servidor[servidor]["disco"].append(r["metricas"]["disco"])
+
+    alertas_previsao = []
+
+    for servidor_id, series in por_servidor.items():
+        for metrica in ["cpu", "ram", "disco"]:
+            valores = series[metrica]
+            
+            if len(valores) < 3:
+                continue
+
+            valores_recentes = valores[-JANELA_PREVISAO:]
+
+            x = np.arange(len(valores_recentes))
+            a, b = np.polyfit(x, valores_recentes, 1)
+            previsao = a * len(valores_recentes) + b
+
+            limite = limites[servidor_id][metrica.upper()]
+
+            atual = valores_recentes[-1] / limite
+            nivel_previsao = previsao / limite
+
+            print(f"{metrica}: valores={valores}, previsto={round(previsao,1)}, atual={atual}, previsto_nivel={nivel_previsao}")
+
+            if a > 0 and nivel_previsao > 0.60 and nivel_previsao > atual:
+                nivel_previsao = classificar(previsao, limite)
+
+                if nivel_previsao == "normal":
+                    continue
+
+                alertas_previsao.append({
+                    "servidor_id": servidor_id,
+                    "metrica": metrica.upper(),
+                    "nivel_previsao": nivel_previsao,
+                    "mensagem": gerar_mensagem(metrica.upper(), nivel_previsao, previsao, limite)
+                })
+
+    return alertas_previsao
+
+def calcular_mttr(leituras, limites):
+    tempos_recuperacao = []
+    inicio_incidente = None
+
+    for r in sorted(leituras, key=lambda r: r["data_hora"]):
+        servidor = r["servidor_id"]
+        metricas = r["metricas"]
+
+        cpu = classificar(metricas["cpu"], limites[servidor]["CPU"])
+        ram = classificar(metricas["ram"], limites[servidor]["RAM"])
+        disco = classificar(metricas["disco"], limites[servidor]["DISCO"])
+
+        chamado_aberto = cpu == "crítico" or ram == "crítico" or disco == "crítico"
+        horario = datetime.strptime(r["data_hora"], "%Y-%m-%d %H:%M:%S")
+
+        if chamado_aberto and inicio_incidente is None:
+            inicio_incidente = horario
+
+        elif not chamado_aberto and inicio_incidente is not None:
+            tempo = (horario - inicio_incidente).total_seconds() / 60
+            tempos_recuperacao.append(tempo)
+            inicio_incidente = None
+
+    if not tempos_recuperacao:
+        return None
+
+    return round(sum(tempos_recuperacao) / len(tempos_recuperacao), 1)
 
 def processar():
     s3 = get_s3()
@@ -352,9 +480,10 @@ def processar():
 
     for empresa in empresas:
         empresa_id = empresa["id_empresa"]
-        print(f"\n── Empresa {empresa_id}: {empresa['razao_social']}")
+        print(f"\nEmpresa {empresa_id}: {empresa['razao_social']}")
 
         arquivos = listar_arquivos_client(s3, empresa_id)
+        
         todas_leituras = []
         for key in arquivos:
             dados = ler_json_s3(s3, key)
@@ -382,29 +511,19 @@ def processar():
                 resultado["periodos"][periodo] = {"sem_dados": True}
                 continue
 
-            # mttr = calcular_mttr(leituras, limites)
-
             resultado["periodos"][periodo] = {
                 "kpis": {
-                    "disponibilidade_global": {
-                        "valor": calcular_disponibilidade(leituras, limites),
-                        "meta": 99.5
-                    },
-                    "nivel_risco": {
-                        "valor": calcular_nivel_risco(leituras, limites)
-                    },
-                    "incidentes_criticos": {
-                        "valor": calcular_incidentes_criticos(leituras, limites)
-                    },
-                    "estabilidade_operacional": {
-                        "valor": calcular_estabilidade_operacional(leituras, limites)
-                    },
+                    "disponibilidade_global": calcular_disponibilidade(leituras, limites),
+                    "nivel_risco": calcular_nivel_risco(leituras, limites),
+                    "incidentes_criticos": calcular_incidentes_criticos(leituras, limites),
+                    "estabilidade_operacional": calcular_estabilidade_operacional(leituras, limites),
                     "tendencia_operacional": calcular_tendencia(leituras, limites)
                 },
-
-                "grafico_estabilidade": grafico_estabilidade(leituras, limites),
-                "impacto_por_componente": calcular_impacto_componente(leituras, limites),
-
+                "gráficos": {
+                    "grafico_estabilidade": grafico_estabilidade(leituras, limites),
+                    "impacto_por_componente": calcular_impacto_componente(leituras, limites),
+                },
+                "predicoes": calcular_previsao_falhas(leituras, limites),
                 "info_servidores": listar_info_servidores(
                     leituras, limites, servidores, analistas
                 )

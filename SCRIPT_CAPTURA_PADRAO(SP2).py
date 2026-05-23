@@ -12,18 +12,18 @@ AWS_CONFIG = {
     "aws_access_key_id": "",
     "aws_secret_access_key": "",
     "aws_session_token": "",
-    "region_name": "us-east-1",
-    "bucket_name": "horus-monitoring"
+    "region_name": "",
+    "bucket_name": ""
 }
 
 DB_CONFIG = {
-    "host": "localhost",
-    "user": "root",
+    "host": "",
+    "user": "",
     "password": "",
     "database": ""
 }
 
-INTERVALO = 10
+INTERVALO = 5
 
 def conectar_s3():
     return boto3.client(

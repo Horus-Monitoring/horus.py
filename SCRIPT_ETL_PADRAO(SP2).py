@@ -9,13 +9,13 @@ AWS_CONFIG = {
     "aws_access_key_id": "",
     "aws_secret_access_key": "",
     "aws_session_token": "",
-    "region_name": "us-east-1",
-    "bucket_name": "horus-monitoring"
+    "region_name": "",
+    "bucket_name": ""
 }
 
 DB_CONFIG = {
-    "host": "localhost",
-    "user": "root",
+    "host": "",
+    "user": "",
     "password": "",
     "database": ""
 }
@@ -136,6 +136,9 @@ def processar():
     arquivos = listar_raw()
 
     for key in arquivos:
+        if not key.endswith("metricas.csv"):
+            continue
+
         csv_content = ler_csv_s3(key)
         reader = csv.DictReader(StringIO(csv_content))
 
@@ -151,6 +154,7 @@ def processar():
         severidades_detectadas = []
 
         for row in reader:
+            
             servidor_id = int(row["servidor_id"])
             empresa_id = int(row["id_empresa"])
 

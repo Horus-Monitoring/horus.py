@@ -1,0 +1,13 @@
+data_hora,hostname,id_empresa,servidor_id,cpu,ram,disco,rede_rx,rede_tx,processos
+2026-05-23 02:53:02,DESKTOP-N99CUBI,1,4,10.1,52.1,50.3,,,System Idle Process(84.54%); AMDRSServ.exe(1.78%); python.exe(1.48%); dwm.exe(1.18%); chrome.exe(1.11%)
+2026-05-23 11:02:01,DESKTOP-N99CUBI,1,4,10.9,45.0,50.4,,,System Idle Process(95.54%); AMDRSServ.exe(1.39%); python.exe(1.16%); Discord.exe(0.78%); dwm.exe(0.54%)
+2026-05-23 11:09:45,DESKTOP-N99CUBI,1,4,35.3,45.3,50.4,,,System Idle Process(83.56%); AMDRSServ.exe(2.81%); System(1.69%); python.exe(1.36%); RobloxPlayerBeta.exe(0.91%)
+2026-05-23 11:09:51,DESKTOP-N99CUBI,1,4,54.8,45.1,50.4,,,System Idle Process(91.16%); AMDRSServ.exe(1.44%); python.exe(1.12%); iot_driver_v193.exe(0.8%); Discord.exe(0.72%)
+2026-05-23 11:09:59,DESKTOP-N99CUBI,1,4,61.7,45.2,50.4,,,System Idle Process(90.79%); AMDRSServ.exe(2.55%); python.exe(1.24%); Discord.exe(0.88%); System(0.62%)
+2026-05-23 11:13:10,DESKTOP-N99CUBI,1,4,75.4,58.2,50.4,,,CrimsonDesert.exe(43.67%); System Idle Process(26.2%); AMDRSServ.exe(3.0%); python.exe(2.8%); chrome.exe(2.59%)
+2026-05-23 11:13:35,DESKTOP-N99CUBI,1,4,84.0,55.6,50.4,,,System Idle Process(48.94%); CrimsonDesert.exe(30.81%); python.exe(2.33%); dwm.exe(1.84%); Code.exe(1.43%)
+2026-05-23 12:08:46,DESKTOP-N99CUBI,1,4,9.1,49.6,50.4,,,System Idle Process(84.27%); python.exe(1.24%); AMDRSServ.exe(1.16%); System(0.68%); EpicGamesLauncher.exe(0.62%)
+2026-05-23 12:15:17,DESKTOP-N99CUBI,1,4,9.4,50.4,50.4,,,System Idle Process(94.08%); python.exe(1.12%); Discord.exe(0.64%); AMDRSServ.exe(0.56%); EpicGamesLauncher.exe(0.47%)
+2026-05-23 12:15:26,DESKTOP-N99CUBI,1,4,24.8,50.4,50.4,,,System Idle Process(79.08%); chrome.exe(2.59%); dwm.exe(2.16%); Discord.exe(1.99%); AMDRSServ.exe(1.61%)
+2026-05-23 12:15:35,DESKTOP-N99CUBI,1,4,14.4,50.4,50.4,,,System Idle Process(84.3%); AMDRSServ.exe(3.19%); python.exe(1.25%); dwm.exe(0.93%); Code.exe(0.93%)
+2026-05-23 12:18:08,DESKTOP-N99CUBI,1,4,18.0,50.4,50.4,13257387466,33318625202,System Idle Process(88.46%); AMDRSServ.exe(1.52%); python.exe(1.12%); EpicGamesLauncher.exe(0.8%); Discord.exe(0.72%)
