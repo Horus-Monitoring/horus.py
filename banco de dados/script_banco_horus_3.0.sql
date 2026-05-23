@@ -65,7 +65,7 @@ CREATE TABLE registro_alerta(
     status_alerta ENUM("Ativo", "Resolvido"),
     criticidade ENUM("Baixo", "Medio", "Alto", "Crítico"),
     data_alerta DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    data_resolucao DATETIME DEFAULT CURRENT_TIMESTAMP,    
+    data_resolucao DATETIME NULL,    
     fk_servidor INT,
     fk_componente INT,
     FOREIGN KEY (fk_servidor, fk_componente)
