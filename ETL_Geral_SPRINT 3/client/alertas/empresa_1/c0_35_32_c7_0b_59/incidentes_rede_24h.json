@@ -1,0 +1,11 @@
+[
+    {
+        "titulo": "Delay elevado no ADS-B",
+        "criticidade": "critico",
+        "servidor": "Jortieke",
+        "componente": "rede",
+        "tipo": "adsb",
+        "valor": 42.333333333333336,
+        "timestamp": "2026-05-24 00:04:10"
+    }
+]

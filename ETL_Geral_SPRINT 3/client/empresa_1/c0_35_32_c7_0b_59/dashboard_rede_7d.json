@@ -1,0 +1,50 @@
+{
+    "periodo": "7d",
+    "kpis": {
+        "perda_pacotes": 0.34,
+        "latencia_media": 62.87,
+        "adsb_update": 19.3,
+        "rotas_sem_atualizacao": 0
+    },
+    "grafico_transferencia": {
+        "labels": [
+            "23/05",
+            "24/05"
+        ],
+        "rastreamento": [
+            33.69,
+            38.81
+        ],
+        "rotas": [
+            17.14,
+            24.95
+        ],
+        "correlacao": [
+            25.4,
+            18.08
+        ]
+    },
+    "grafico_latencia_componentes": {
+        "ADS-B": 38.73,
+        "Correlação": 65.13,
+        "Rotas": 22.94,
+        "Banco de Dados": 124.1,
+        "Sync Service": 63.12
+    },
+    "consumo_banda": {
+        "Rastreamento": 36.25,
+        "Rotas": 21.04,
+        "Correlacao": 21.74,
+        "API Gateway": 7.25,
+        "Banco de Dados": 21.06,
+        "Sync Service": 17.8
+    },
+    "perda_pacotes_servico": {
+        "Rastreamento": 0.45,
+        "Rotas": 0.26,
+        "Correlação": 0.74,
+        "API Gateway": 0.26,
+        "Banco de Dados": 0.39,
+        "Sync Service": 0.28
+    }
+}

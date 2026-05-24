@@ -1,0 +1,66 @@
+{
+    "1h": {
+        "score": 30,
+        "status": "Crítico",
+        "penalidades": {
+            "cpu": 0,
+            "ram": 30,
+            "disco": 15,
+            "adsb": 25
+        },
+        "persistencias": {
+            "cpu": 0.0,
+            "ram": 1.0,
+            "disco": 1.0,
+            "adsb": 1.0
+        }
+    },
+    "12h": {
+        "score": 30,
+        "status": "Crítico",
+        "penalidades": {
+            "cpu": 0,
+            "ram": 30,
+            "disco": 15,
+            "adsb": 25
+        },
+        "persistencias": {
+            "cpu": 0.0,
+            "ram": 1.0,
+            "disco": 1.0,
+            "adsb": 1.0
+        }
+    },
+    "24h": {
+        "score": 30,
+        "status": "Crítico",
+        "penalidades": {
+            "cpu": 0,
+            "ram": 30,
+            "disco": 15,
+            "adsb": 25
+        },
+        "persistencias": {
+            "cpu": 0.0,
+            "ram": 1.0,
+            "disco": 1.0,
+            "adsb": 1.0
+        }
+    },
+    "7d": {
+        "score": 30,
+        "status": "Crítico",
+        "penalidades": {
+            "cpu": 0,
+            "ram": 30,
+            "disco": 15,
+            "adsb": 25
+        },
+        "persistencias": {
+            "cpu": 0.0,
+            "ram": 1.0,
+            "disco": 1.0,
+            "adsb": 1.0
+        }
+    }
+}

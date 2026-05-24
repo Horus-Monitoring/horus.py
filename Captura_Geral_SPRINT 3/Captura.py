@@ -921,6 +921,7 @@ def capturar_processos():
 
             processo = {
                 "timestamp": timestamp,
+                "hostname": socket.gethostname(),
                 "pid": proc.info['pid'],
                 "nome": proc.info['name'],
                 "usuario": proc.info['username'],
@@ -952,6 +953,7 @@ def salvar_processos_csv(processos):
             file,
             fieldnames=[
                 "timestamp",
+                "hostname",
                 "pid",
                 "nome",
                 "usuario",

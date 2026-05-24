@@ -12,8 +12,38 @@ import os
 from collections import Counter
 import numpy as np
 
+USAR_LOCAL = True
+
 load_dotenv()
 env = os.getenv
+
+def ler_csv(key):
+
+    if USAR_LOCAL:
+
+        caminho_local = normalizar_path(
+            key.replace("/", os.sep)
+        )
+
+        if not os.path.exists(caminho_local):
+            print(f"Arquivo não encontrado: {caminho_local}")
+            return pandas.DataFrame()
+
+        return pandas.read_csv(caminho_local, on_bad_lines='skip')
+
+    else:
+
+        obj = s3.get_object(
+            Bucket=AWS_CONFIG["bucket_name"],
+            Key=key
+        )
+
+        conteudo = obj['Body'].read().decode('utf-8')
+
+        return pandas.read_csv(
+            StringIO(conteudo),
+            on_bad_lines='skip'
+        )
 
 AWS_CONFIG = {
     "aws_access_key_id": env("AWS_ACCESS_KEY_ID"),
@@ -99,6 +129,27 @@ def salvar_s3(conteudo, key):
     )
 
 def listar_arquivos_client(s3, empresa_id):
+
+    if USAR_LOCAL:
+
+        base = normalizar_path(
+            f"client/empresa_{empresa_id}"
+        )
+
+        arquivos = []
+
+        for root, _, files in os.walk(base):
+
+            for file in files:
+
+                if file.endswith(".json"):
+
+                    caminho = os.path.join(root, file)
+
+                    arquivos.append(caminho)
+
+        return arquivos
+
     prefix = f"client/empresa_{empresa_id}/"
     
     res = s3.list_objects_v2(
@@ -114,6 +165,18 @@ def listar_arquivos_client(s3, empresa_id):
 
 
 def ler_json_s3(s3, key):
+
+    if USAR_LOCAL:
+
+        caminho = normalizar_path(key)
+
+        if not os.path.exists(caminho):
+            print(f"JSON não encontrado: {caminho}")
+            return []
+
+        with open(caminho, "r", encoding="utf-8") as f:
+            return json.load(f)
+        
     obj = s3.get_object(Bucket=AWS_CONFIG["bucket_name"], Key=key)
     content = obj["Body"].read().decode("utf-8")
     return json.loads(content)
@@ -518,11 +581,11 @@ def classificar_latencia(valor):
     if valor > 250:
         return "critico"
     elif valor > 200:
-        return "alto"
+        return "alta"
     elif valor > 150:
-        return "medio"
+        return "media"
     elif valor > 100:
-        return "baixo"
+        return "baixa"
     else:
         return "normal"
     
@@ -1648,7 +1711,31 @@ def gerar_json_dashboard(df_network, df_flights, periodo):
 
     return dashboard
 
+def normalizar_path(path):
+    return path.replace(":", "_")
+
 def salvar_s3_unificado(s3, key, data, formato="json", bucket=None):
+    if USAR_LOCAL:
+
+        caminho = normalizar_path(key.replace("/", os.sep))
+
+        pasta = os.path.dirname(caminho)
+
+        os.makedirs(pasta, exist_ok=True)
+
+        if formato == "csv":
+
+            data.to_csv(caminho, index=False)
+
+        else:
+
+            with open(caminho, "w", encoding="utf-8") as f:
+                json.dump(data, f, ensure_ascii=False, indent=4)
+
+        print(f"Arquivo salvo localmente: {caminho}")
+
+        return
+
     bucket = bucket or AWS_CONFIG["bucket_name"]
 
     if formato == "json":
@@ -1767,10 +1854,10 @@ def main():
     # =========================================================
     print("\n=== PIPELINE SCORE SERVIDOR ===")
 
-    raw_key_score = f"raw/empresa_{EMPRESA_ID}/{mac_address}/raw.csv"
+    raw_key_score = f"raw/raw.csv"
 
 
-    df_score = ler_csv_s3(raw_key_score)
+    df_score = ler_csv(raw_key_score)
 
     if df_score.empty:
         print("CSV vazio para score.")
@@ -1796,9 +1883,9 @@ def main():
     # =========================================================
     print("\n=== PIPELINE TEMPERATURA ===")
 
-    raw_key_temp = f"raw/empresa_{EMPRESA_ID}/{mac_address}/raw.csv"
+    raw_key_temp = f"raw/raw.csv"
 
-    df_temp = ler_csv_s3(raw_key_temp)
+    df_temp = ler_csv(raw_key_temp)
 
     if df_temp.empty:
         print("CSV temperatura vazio.")
@@ -1850,10 +1937,10 @@ def main():
     # ==================
     #Processos
     #====================
-    raw_key_processos = f"raw/empresa_{EMPRESA_ID}/{mac_address}/process_raw.csv"
+    raw_key_processos = f"raw/process_raw.csv"
 
     # 2. ler RAW
-    df_raw = ler_csv_s3(raw_key_processos)
+    df_raw = ler_csv(raw_key_processos)
 
     if df_raw.empty:
         print("CSV processos vazio.")
@@ -1927,9 +2014,9 @@ def main():
     # =========================================================
     print("\n=== PIPELINE RAW → CLIENT/ALERTAS ===")
 
-    key = f"raw/empresa_{EMPRESA_ID}/{mac_address}/raw.csv"
+    key = f"raw/raw.csv"
 
-    df = ler_csv_s3(key)
+    df = ler_csv(key)
 
      
 
@@ -2138,11 +2225,11 @@ def main():
         empresa_id = empresa["id_empresa"]
         print(f"\n── Processando empresa {empresa_id}")
 
-        network_key = f"raw/empresa_{empresa_id}/{mac_address}/raw.csv"
-        flights_key = f"raw/empresa_{empresa_id}/{mac_address}/flights_raw.csv"
+        network_key = f"raw/raw.csv"
+        flights_key = f"raw/flights_raw.csv"
 
-        df_network = ler_csv_s3(network_key)
-        df_flights = ler_csv_s3(flights_key)
+        df_network = ler_csv(network_key)
+        df_flights = ler_csv(flights_key)
 
         df_network = limpar_dados(df_network)
         df_flights = limpar_voos(df_flights)
