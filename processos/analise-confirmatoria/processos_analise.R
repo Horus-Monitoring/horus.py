@@ -218,7 +218,7 @@ plot(
   df_radar$timestamp,
   df_radar$cpu_n,
   type = "l",
-  col = "#e63946",
+  col = "#d62828",
   lwd = 3,
   ylim = range(c(df_radar$cpu_n, df_radar$ram_n, df_radar$lat_n)),
   xlab = "Hora do Dia",
@@ -233,13 +233,13 @@ axis(
   labels = format(df_radar$timestamp[seq(1, nrow(df_radar), by = 5)], "%H:%M")
 )
 
-lines(df_radar$timestamp, df_radar$ram_n, col = "#2196f3", lwd = 3)
-lines(df_radar$timestamp, df_radar$lat_n, col = "#2a9d8f", lwd = 3)
+lines(df_radar$timestamp, df_radar$ram_n, col = "#faa307", lwd = 3)
+lines(df_radar$timestamp, df_radar$lat_n, col = "#003049", lwd = 3)
 
 legend(
   "topleft",
   legend = c("Latência", "CPU", "RAM"),
-  col = c("#2a9d8f", "#e63946", "#2196f3"),
+  col = c("#003049", "#d62828", "#faa307"),
   lwd = 3,
   bty = "n"
 )
