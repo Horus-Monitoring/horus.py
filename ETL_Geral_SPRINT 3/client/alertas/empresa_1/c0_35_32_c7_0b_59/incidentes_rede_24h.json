@@ -2,10 +2,10 @@
     {
         "titulo": "Delay elevado no ADS-B",
         "criticidade": "critico",
-        "servidor": "Jortieke",
+        "servidor": "Server-4",
         "componente": "rede",
         "tipo": "adsb",
-        "valor": 42.333333333333336,
-        "timestamp": "2026-05-24 00:04:10"
+        "valor": 56.68,
+        "timestamp": "2026-05-24 04:49:59"
     }
 ]

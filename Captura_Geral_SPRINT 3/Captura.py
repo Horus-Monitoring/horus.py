@@ -632,9 +632,9 @@ def atualizar_csv_local(
     metricas_temp
 ):
 
-    os.makedirs("raw", exist_ok=True)
+    os.makedirs("raw2", exist_ok=True)
 
-    arquivo = "raw/raw.csv"
+    arquivo = "raw2/raw.csv"
 
     existe = (
         os.path.exists(arquivo)
@@ -852,9 +852,9 @@ def atualizar_csv_local(
 
 def salvar_voos_csv(voos): #Conselho da Profa. Giu 
     
-    os.makedirs("raw", exist_ok=True)
+    os.makedirs("raw2", exist_ok=True)
 
-    arquivo = "raw/flights_raw.csv"
+    arquivo = "raw2/flights_raw.csv"
     existe = os.path.exists(arquivo)
 
     with open(arquivo, mode="a", newline="", encoding="utf-8") as file:
@@ -942,9 +942,9 @@ def capturar_processos():
 
 def salvar_processos_csv(processos):
 
-    os.makedirs("raw", exist_ok=True)
+    os.makedirs("raw2", exist_ok=True)
 
-    arquivo = "raw/process_raw.csv"
+    arquivo = "raw2/process_raw.csv"
     existe = os.path.exists(arquivo)
 
     with open(arquivo, mode="a", newline="", encoding="utf-8") as file:
@@ -1039,7 +1039,7 @@ def main():
 
     print("Iniciando coleta local...")
 
-    os.makedirs("raw", exist_ok=True)
+    os.makedirs("raw2", exist_ok=True)
 
     # ==========================
     # AWS
@@ -1075,17 +1075,17 @@ def main():
     # ==========================
 
     key = (
-        f"raw/empresa_{empresa_id}/"
+        f"raw2/empresa_{empresa_id}/"
         f"{mac_address}/raw.csv"
     )
 
     process_key = (
-        f"raw/empresa_{empresa_id}/"
+        f"raw2/empresa_{empresa_id}/"
         f"{mac_address}/process_raw.csv"
     )
 
     flights_key = (
-        f"raw/empresa_{empresa_id}/"
+        f"raw2/empresa_{empresa_id}/"
         f"{mac_address}/flights_raw.csv"
     )
 
@@ -1098,7 +1098,7 @@ def main():
         baixar_csv_s3(
             s3,
             key,
-            "raw/raw.csv"
+            "raw2/raw.csv"
         )
 
     else:
@@ -1112,7 +1112,7 @@ def main():
         baixar_csv_s3(
             s3,
             flights_key,
-            "raw/flights_raw.csv"
+            "raw2/flights_raw.csv"
         )
 
     else:
@@ -1126,7 +1126,7 @@ def main():
         baixar_csv_s3(
             s3,
             process_key,
-            "raw/process_raw.csv"
+            "raw2/process_raw.csv"
         )
 
     else:
@@ -1516,32 +1516,32 @@ def main():
 
                 enviar_csv_s3(
                     s3,
-                    "raw/raw.csv",
+                    "raw2/raw.csv",
                     key
                 )
 
                 if os.path.exists(
-                    "raw/process_raw.csv"
+                    "raw2/process_raw.csv"
                 ):
 
                     enviar_csv_s3(
 
                         s3,
 
-                        "raw/process_raw.csv",
+                        "raw2/process_raw.csv",
 
                         process_key
                     )
 
                 if os.path.exists(
-                    "raw/flights_raw.csv"
+                    "raw2/flights_raw.csv"
                 ):
 
                     enviar_csv_s3(
 
                         s3,
 
-                        "raw/flights_raw.csv",
+                        "raw2/flights_raw.csv",
 
                         flights_key
                     )

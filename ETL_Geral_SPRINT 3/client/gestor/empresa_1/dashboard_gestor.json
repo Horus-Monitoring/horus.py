@@ -1,6 +1,6 @@
 {
     "empresa_id": 1,
-    "gerado_em": "2026-05-24 01:07:11",
+    "gerado_em": "2026-05-24 19:10:03",
     "periodos": {
         "24h": {
             "kpis": {
@@ -8,7 +8,7 @@
                 "nivel_risco": 66.66666666666666,
                 "incidentes_criticos": 2,
                 "estabilidade_operacional": 0.0,
-                "tendencia_operacional": "Caindo"
+                "tendencia_operacional": "Estável"
             },
             "grafico_estabilidade": {
                 "labels": [
@@ -74,7 +74,7 @@
                 "nivel_risco": 66.66666666666666,
                 "incidentes_criticos": 2,
                 "estabilidade_operacional": 0.0,
-                "tendencia_operacional": "Caindo"
+                "tendencia_operacional": "Estável"
             },
             "grafico_estabilidade": {
                 "labels": [
@@ -140,7 +140,7 @@
                 "nivel_risco": 66.66666666666666,
                 "incidentes_criticos": 2,
                 "estabilidade_operacional": 0.0,
-                "tendencia_operacional": "Caindo"
+                "tendencia_operacional": "Estável"
             },
             "grafico_estabilidade": {
                 "labels": [

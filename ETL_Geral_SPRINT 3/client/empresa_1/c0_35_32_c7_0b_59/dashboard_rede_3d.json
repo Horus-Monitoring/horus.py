@@ -1,50 +1,66 @@
 {
     "periodo": "3d",
     "kpis": {
-        "perda_pacotes": 0.34,
-        "latencia_media": 62.87,
-        "adsb_update": 19.3,
+        "perda_pacotes": 1.64,
+        "latencia_media": 54.8,
+        "adsb_update": 22.4,
         "rotas_sem_atualizacao": 0
     },
     "grafico_transferencia": {
         "labels": [
             "23/05 23h",
-            "24/05 00h"
+            "24/05 00h",
+            "24/05 01h",
+            "24/05 02h",
+            "24/05 03h",
+            "24/05 04h"
         ],
         "rastreamento": [
-            33.69,
-            38.81
+            26.51,
+            25.77,
+            24.47,
+            26.88,
+            25.16,
+            26.74
         ],
         "rotas": [
-            17.14,
-            24.95
+            22.43,
+            26.55,
+            24.9,
+            26.66,
+            26.41,
+            27.46
         ],
         "correlacao": [
-            25.4,
-            18.08
+            22.64,
+            21.64,
+            23.25,
+            25.74,
+            25.49,
+            24.44
         ]
     },
     "grafico_latencia_componentes": {
-        "ADS-B": 38.73,
-        "Correlação": 65.13,
-        "Rotas": 22.94,
-        "Banco de Dados": 124.1,
-        "Sync Service": 63.12
+        "ADS-B": 56.15,
+        "Correlação": 59.17,
+        "Rotas": 53.04,
+        "Banco de Dados": 55.8,
+        "Sync Service": 55.58
     },
     "consumo_banda": {
-        "Rastreamento": 36.25,
-        "Rotas": 21.04,
-        "Correlacao": 21.74,
-        "API Gateway": 7.25,
-        "Banco de Dados": 21.06,
-        "Sync Service": 17.8
+        "Rastreamento": 25.92,
+        "Rotas": 25.74,
+        "Correlacao": 23.87,
+        "API Gateway": 27.57,
+        "Banco de Dados": 25.27,
+        "Sync Service": 25.22
     },
     "perda_pacotes_servico": {
-        "Rastreamento": 0.45,
-        "Rotas": 0.26,
-        "Correlação": 0.74,
-        "API Gateway": 0.26,
-        "Banco de Dados": 0.39,
-        "Sync Service": 0.28
+        "Rastreamento": 1.59,
+        "Rotas": 1.5,
+        "Correlação": 1.44,
+        "API Gateway": 1.56,
+        "Banco de Dados": 1.42,
+        "Sync Service": 1.5
     }
 }

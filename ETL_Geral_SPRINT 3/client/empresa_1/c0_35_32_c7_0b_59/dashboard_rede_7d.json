@@ -1,9 +1,9 @@
 {
     "periodo": "7d",
     "kpis": {
-        "perda_pacotes": 0.34,
-        "latencia_media": 62.87,
-        "adsb_update": 19.3,
+        "perda_pacotes": 1.6,
+        "latencia_media": 55.06,
+        "adsb_update": 24.1,
         "rotas_sem_atualizacao": 0
     },
     "grafico_transferencia": {
@@ -12,39 +12,39 @@
             "24/05"
         ],
         "rastreamento": [
-            33.69,
-            38.81
+            26.51,
+            25.77
         ],
         "rotas": [
-            17.14,
-            24.95
+            22.43,
+            26.36
         ],
         "correlacao": [
-            25.4,
-            18.08
+            22.64,
+            24.1
         ]
     },
     "grafico_latencia_componentes": {
-        "ADS-B": 38.73,
-        "Correlação": 65.13,
-        "Rotas": 22.94,
-        "Banco de Dados": 124.1,
-        "Sync Service": 63.12
+        "ADS-B": 56.64,
+        "Correlação": 64.61,
+        "Rotas": 51.33,
+        "Banco de Dados": 56.88,
+        "Sync Service": 52.16
     },
     "consumo_banda": {
-        "Rastreamento": 36.25,
-        "Rotas": 21.04,
-        "Correlacao": 21.74,
-        "API Gateway": 7.25,
-        "Banco de Dados": 21.06,
-        "Sync Service": 17.8
+        "Rastreamento": 26.14,
+        "Rotas": 24.39,
+        "Correlacao": 23.37,
+        "API Gateway": 30.7,
+        "Banco de Dados": 25.66,
+        "Sync Service": 23.79
     },
     "perda_pacotes_servico": {
-        "Rastreamento": 0.45,
-        "Rotas": 0.26,
-        "Correlação": 0.74,
-        "API Gateway": 0.26,
-        "Banco de Dados": 0.39,
-        "Sync Service": 0.28
+        "Rastreamento": 1.78,
+        "Rotas": 1.5,
+        "Correlação": 1.32,
+        "API Gateway": 1.45,
+        "Banco de Dados": 1.2,
+        "Sync Service": 1.48
     }
 }
