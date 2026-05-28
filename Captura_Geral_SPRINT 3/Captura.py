@@ -57,7 +57,7 @@ URL_CLIMA = (
 )
 URL_SENSOR = "http://localhost:8085/data.json"
 TEMP_MAX_CPU = 90
-INTERVALO = 600
+INTERVALO = 6
 
 def conectar_s3():
     return boto3.client(
@@ -134,15 +134,15 @@ def coletar_mac_address(): #Coleta o MAC Adress
 def classificar(temp_max):
 
     if temp_max < 65:
-        return "normal"
+        return "Normal"
 
     elif temp_max < 75:
-        return "alert"
+        return "Alerta"
 
     elif temp_max < 85:
-        return "medium"
+        return "Medio"
 
-    return "critical"
+    return "Critico"
 
 # MARGEM TÉRMICA
 
@@ -158,18 +158,18 @@ def calcular_margem_termica(temp_max):
 def classificar_margem(margem):
 
     if margem > 30:
-        return "excelente"
+        return "Excelente"
 
     elif margem > 20:
-        return "boa"
+        return "Boa"
 
     elif margem > 10:
-        return "atencao"
+        return "Atencao"
 
     elif margem > 0:
-        return "critica"
+        return "Critico"
 
-    return "throttling"
+    return "Throttling"
 
 # LATÊNCIA
 
@@ -410,15 +410,15 @@ def calcular_ier(
 def classificar_ier(ier):
 
     if ier > 80:
-        return "excelente"
+        return "Excelente"
 
     elif ier > 50:
-        return "boa"
+        return "Boa"
 
     elif ier > 30:
-        return "atencao"
+        return "Atencao"
 
-    return "critica"
+    return "Critico"
 
 #=========================
 #REDE
@@ -632,9 +632,9 @@ def atualizar_csv_local(
     metricas_temp
 ):
 
-    os.makedirs("raw2", exist_ok=True)
+    os.makedirs("raw", exist_ok=True)
 
-    arquivo = "raw2/raw.csv"
+    arquivo = "raw/raw.csv"
 
     existe = (
         os.path.exists(arquivo)
@@ -852,9 +852,9 @@ def atualizar_csv_local(
 
 def salvar_voos_csv(voos): #Conselho da Profa. Giu 
     
-    os.makedirs("raw2", exist_ok=True)
+    os.makedirs("raw", exist_ok=True)
 
-    arquivo = "raw2/flights_raw.csv"
+    arquivo = "raw/flights_raw.csv"
     existe = os.path.exists(arquivo)
 
     with open(arquivo, mode="a", newline="", encoding="utf-8") as file:
@@ -942,9 +942,9 @@ def capturar_processos():
 
 def salvar_processos_csv(processos):
 
-    os.makedirs("raw2", exist_ok=True)
+    os.makedirs("raw", exist_ok=True)
 
-    arquivo = "raw2/process_raw.csv"
+    arquivo = "raw/process_raw.csv"
     existe = os.path.exists(arquivo)
 
     with open(arquivo, mode="a", newline="", encoding="utf-8") as file:
@@ -979,10 +979,10 @@ def salvar_processos_csv(processos):
 
 def gerar_status(valor):
     if valor >= 85:
-        return "critico"
+        return "Critico"
     elif valor >= 70:
-        return "atencao"
-    return "estavel"
+        return "Atencao"
+    return "Estavel"
 
 def coletar_metricas(componentes):
     dados = {}
@@ -1039,7 +1039,7 @@ def main():
 
     print("Iniciando coleta local...")
 
-    os.makedirs("raw2", exist_ok=True)
+    os.makedirs("raw", exist_ok=True)
 
     # ==========================
     # AWS
@@ -1075,17 +1075,17 @@ def main():
     # ==========================
 
     key = (
-        f"raw2/empresa_{empresa_id}/"
+        f"raw/empresa_{empresa_id}/"
         f"{mac_address}/raw.csv"
     )
 
     process_key = (
-        f"raw2/empresa_{empresa_id}/"
+        f"raw/empresa_{empresa_id}/"
         f"{mac_address}/process_raw.csv"
     )
 
     flights_key = (
-        f"raw2/empresa_{empresa_id}/"
+        f"raw/empresa_{empresa_id}/"
         f"{mac_address}/flights_raw.csv"
     )
 
@@ -1098,7 +1098,7 @@ def main():
         baixar_csv_s3(
             s3,
             key,
-            "raw2/raw.csv"
+            "raw/raw.csv"
         )
 
     else:
@@ -1112,7 +1112,7 @@ def main():
         baixar_csv_s3(
             s3,
             flights_key,
-            "raw2/flights_raw.csv"
+            "raw/flights_raw.csv"
         )
 
     else:
@@ -1126,7 +1126,7 @@ def main():
         baixar_csv_s3(
             s3,
             process_key,
-            "raw2/process_raw.csv"
+            "raw/process_raw.csv"
         )
 
     else:
@@ -1516,32 +1516,32 @@ def main():
 
                 enviar_csv_s3(
                     s3,
-                    "raw2/raw.csv",
+                    "raw/raw.csv",
                     key
                 )
 
                 if os.path.exists(
-                    "raw2/process_raw.csv"
+                    "raw/process_raw.csv"
                 ):
 
                     enviar_csv_s3(
 
                         s3,
 
-                        "raw2/process_raw.csv",
+                        "raw/process_raw.csv",
 
                         process_key
                     )
 
                 if os.path.exists(
-                    "raw2/flights_raw.csv"
+                    "raw/flights_raw.csv"
                 ):
 
                     enviar_csv_s3(
 
                         s3,
 
-                        "raw2/flights_raw.csv",
+                        "raw/flights_raw.csv",
 
                         flights_key
                     )
@@ -1560,7 +1560,7 @@ def main():
         # ESPERA
         # ==========================
 
-        minutos_total = INTERVALO // 60
+        minutos_total = INTERVALO // 6
 
         print(
             f"Nova coleta em "

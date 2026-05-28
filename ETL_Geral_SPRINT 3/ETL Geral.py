@@ -31,11 +31,11 @@ DB_CONFIG = {
 }
 
 SEVERIDADE = {
-    "crítico": 5,
-    "alta": 4, 
-    "média": 3, 
-    "baixa": 2, 
-    "normal": 1
+    "Critico": 5,
+    "Alto": 4, 
+    "Medio": 3, 
+    "Baixo": 2, 
+    "Normal": 1
     }
 
 PERIODOS = {
@@ -220,19 +220,19 @@ def obter_limites_servidor(servidor_id, dict_cursor=False):
 def classificar_metrica(valor, limite):
 
     if limite == 0:
-        return "Online", "normal"
+        return "Online", "Normal"
     if valor == 0 and limite > 0:
-        return "Offline", "crítico"
+        return "Offline", "Critico"
     if valor >= limite:
-        return "Crítico", "crítico"
+        return "Critico", "Critico"
     elif valor >= 0.9 * limite:
-        return "Crítico", "alta"
+        return "Critico", "Alto"
     elif valor >= 0.8 * limite:
-        return "Atenção", "média"
+        return "Atencao", "Medio"
     elif valor >= 0.7 * limite:
-        return "Online", "baixa"
+        return "Online", "Baixo"
     else:
-        return "Online", "normal"
+        return "Online", "Normal"
 
 #Limpeza de Dados para o Trusted
 def limpar_dados(df):
@@ -316,13 +316,13 @@ def determinar_status_servidor(severidades):
 
     pior = max(severidades, key=lambda s: prioridade.get(s, 0))
 
-    if pior == "crítico":
-        return "Crítico"
-    elif pior == "alta":
-        return "Crítico"
-    elif pior == "média":
-        return "Atenção"
-    elif pior == "baixa":
+    if pior == "Critico":
+        return "Critico"
+    elif pior == "Alto":
+        return "Critico"
+    elif pior == "Medio":
+        return "Atencao"
+    elif pior == "Baixo":
         return "Online"
     else:
         return "Online"
@@ -350,12 +350,12 @@ def calcular_penalidade(persistencia, peso_maximo):
 def classificar_status(score):
 
     if score >= 90:
-        return "Saudável"
+        return "Saudavel"
 
     elif score >= 80:
-        return "Atenção"
+        return "Atencao"
 
-    return "Crítico"
+    return "Critico"
 
 
 def calcular_persistencia_alertas(df, hostname, coluna_tempo="timestamp"):
@@ -516,15 +516,15 @@ def classificar_latencia(valor):
     valor = float(valor)
 
     if valor > 250:
-        return "critico"
+        return "Critico"
     elif valor > 200:
-        return "alto"
+        return "Alto"
     elif valor > 150:
-        return "medio"
+        return "Medio"
     elif valor > 100:
-        return "baixo"
+        return "Baixo"
     else:
-        return "normal"
+        return "Normal"
     
 def severidade_servidor_latencia(linha):
     status = [
@@ -546,15 +546,15 @@ def classificar_pacotes(valor):
     valor = float(valor)
 
     if valor > 20:
-        return "critico"
+        return "Critico"
     elif valor > 15:
-        return "alto"
+        return "Alto"
     elif valor > 10:
-        return "medio"
+        return "Medio"
     elif valor > 5:
-        return "baixo"
+        return "Baixo"
     else:
-        return "normal"
+        return "Normal"
 
 def severidade_servidor_pacotes(linha):
     status = [
@@ -764,11 +764,11 @@ def detectar_incidentes(df):
     ]
 
     if severidade_latencia in [
-        "critico",
-        "alto"
+        "Critico",
+        "Alto"
     ]:
 
-        if severidade_latencia == "critico":
+        if severidade_latencia == "Critico":
             componentes_criticos += 1
 
         incidentes.append({
@@ -798,11 +798,11 @@ def detectar_incidentes(df):
     ]
 
     if severidade_pacotes in [
-        "critico",
-        "alto"
+        "Critico",
+        "Alto"
     ]:
 
-        if severidade_pacotes == "critico":
+        if severidade_pacotes == "Critico":
             componentes_criticos += 1
 
         incidentes.append({
@@ -834,7 +834,7 @@ def detectar_incidentes(df):
         incidentes.append({
 
             "titulo": "Delay elevado no ADS-B",
-            "criticidade": "critico",
+            "criticidade": "Critico",
             "servidor": hostname,
             "componente": "rede",
 
@@ -858,7 +858,7 @@ def detectar_incidentes(df):
         incidentes.append({
 
             "titulo": "Múltiplos componentes críticos na rede",
-            "criticidade": "critico",
+            "criticidade": "Critico",
             "servidor": hostname,
             "componente": "rede",
 
@@ -914,7 +914,7 @@ def processos_criticidade(cpu, ram_percent, latencia):
         or ram_percent > RAM_CRITICA_PERCENT
         or latencia > LATENCIA_CRITICA
     ):
-        return "Crítico"
+        return "Critico"
 
     elif (
         cpu > CPU_ALERTA
@@ -923,7 +923,7 @@ def processos_criticidade(cpu, ram_percent, latencia):
     ):
         return "Alerta"
 
-    return "Estável"
+    return "Estavel"
 
 
 def top5cpu(dfProcessos):
@@ -959,7 +959,7 @@ def top5ram(dfProcessos):
 
 def processos_criticos(df_processos):
     # Como True vale 1 e False vale 0, a soma dá o total de acertos
-    total_criticos = (df_processos['criticidade'] == 'Crítico').sum()
+    total_criticos = (df_processos['criticidade'] == 'Critico').sum()
     return {"totalCriticos": int(total_criticos)}
 
 
@@ -1013,13 +1013,13 @@ def gerar_raw_criticos_4h(df):
 
     # apenas críticos
     df_criticos = df[
-        df["criticidade"] == "Crítico"
+        df["criticidade"] == "Critico"
     ]
 
     def bucket(horas):
 
         if horas < (5 / 60):
-            return "atual"
+            return "Atual"
 
         elif horas < 3:
             return "0-2h59min"
@@ -1091,7 +1091,7 @@ def contar_status(df):
 def contar_criticos(df):
 
     criticos = df[
-        df["criticidade"] == "Crítico"
+        df["criticidade"] == "Critico"
     ]
 
     cpu = (criticos["cpu"] >= CPU_CRITICA).sum()
@@ -1139,7 +1139,7 @@ def gerar_alerta(row):
 
     throttling = str(
         row.get(
-            "throttling",
+            "Throttling",
             ""
         )
     ).lower()
@@ -1147,9 +1147,9 @@ def gerar_alerta(row):
     # TEMPERATURA
 
     if status_temp in [
-        "critical",
-        "medium",
-        "alert"
+        "Critico",
+        "Medio",
+        "Alerta"
     ]:
 
         alertas.append(
@@ -1159,9 +1159,9 @@ def gerar_alerta(row):
     # MARGEM
 
     if status_margem in [
-        "critica",
-        "atencao",
-        "throttling"
+        "Critico",
+        "Atencao",
+        "Throttling"
     ]:
 
         alertas.append(
@@ -1171,8 +1171,8 @@ def gerar_alerta(row):
     # RESFRIAMENTO
 
     if status_resfriamento in [
-        "critica",
-        "atencao"
+        "Critico",
+        "Atencao"
     ]:
 
         alertas.append(
@@ -1236,21 +1236,21 @@ def filtrar_periodo(leituras, periodo):
 
 def classificar(valor, limite):
     if limite == 0:
-        return "normal"
+        return "Normal"
     if valor == 0 and limite > 0:
-        return "crítico"
+        return "Critico"
     
     razao = valor / limite
 
     if razao >= 1.0:
-        return "crítico"
+        return "Critico"
     if razao >= 0.90:
-        return "alta"
+        return "Alto"
     if razao >= 0.80:
-        return "média"
+        return "Medio"
     if razao >= 0.70:
-        return "baixa"
-    return "normal"
+        return "Baixo"
+    return "Normal"
 
 def calcular_disponibilidade(leituras, limites):
     online = 0
@@ -1263,7 +1263,7 @@ def calcular_disponibilidade(leituras, limites):
         ram = classificar(m["ram"], limites[servidor]["RAM"])
         disco = classificar(m["disco"], limites[servidor]["DISCO"])
 
-        if cpu != "crítico" and ram != "crítico" and disco != "crítico":
+        if cpu != "Critico" and ram != "Critico" and disco != "Critico":
             online += 1
 
         if not leituras:
@@ -1308,9 +1308,9 @@ def calcular_incidentes_criticos(leituras, limites):
         disco = classificar(m["disco"], limites[s]["DISCO"])
 
         if (
-            cpu == "crítico" or
-            ram == "crítico" or
-            disco == "crítico"
+            cpu == "Critico" or
+            ram == "Critico" or
+            disco == "Critico"
         ):
             criticos += 1
 
@@ -1363,7 +1363,7 @@ def calcular_tendencia(leituras, limites):
         return "Caindo"
 
     else:
-        return "Estável"
+        return "Estavel"
 
 def grafico_estabilidade(leituras, limites):
     valores = []
@@ -1390,22 +1390,22 @@ def gerar_mensagem(metrica, nivel, previsao, limite):
 
         mensagens = {
             "CPU": {
-                "baixa": f"CPU prevista em {pct}% do limite - Leve aumento na carga de processamento. Monitore a tendência.",
-                "média": f"CPU prevista em {pct}% do limite - Carga de processamento em elevação. Verifique rotinas de cálculo de rotas e separação de aeronaves em execução.",
-                "alta": f"CPU prevista em {pct}% do limite - Processamento de dados de radar pode ser impactado. Considere redistribuir carga entre os nós do Sagitário.",
-                "crítico": f"CPU prevista em {pct}% do limite - Risco de atraso no processamento de dados de voo. Notifique um analista responsável imediatamente."
+                "Baixo": f"CPU prevista em {pct}% do limite - Leve aumento na carga de processamento. Monitore a tendência.",
+                "Medio": f"CPU prevista em {pct}% do limite - Carga de processamento em elevação. Verifique rotinas de cálculo de rotas e separação de aeronaves em execução.",
+                "Alto": f"CPU prevista em {pct}% do limite - Processamento de dados de radar pode ser impactado. Considere redistribuir carga entre os nós do Sagitário.",
+                "Critico": f"CPU prevista em {pct}% do limite - Risco de atraso no processamento de dados de voo. Notifique um analista responsável imediatamente."
             },
             "RAM": {
-                "baixa": f"RAM prevista em {pct}% do limite - Leve crescimento no consumo de memória. Monitore a tendência.",
-                "média": f"RAM prevista em {pct}% do limite - Consumo de memória crescente. Verifique buffers de dados de radar e faixas de voo ativas.",
-                "alta": f"RAM prevista em {pct}% do limite - Risco de degradação no gerenciamento de planos de voo. Verifique processos de correlação de pistas.",
-                "crítico": f"RAM prevista em {pct}% do limite - Risco de falha no rastreamento de aeronaves. Reinicie processos não essenciais e acione o sistema de contingência do Sagitário."
+                "Baixo": f"RAM prevista em {pct}% do limite - Leve crescimento no consumo de memória. Monitore a tendência.",
+                "Medio": f"RAM prevista em {pct}% do limite - Consumo de memória crescente. Verifique buffers de dados de radar e faixas de voo ativas.",
+                "Alto": f"RAM prevista em {pct}% do limite - Risco de degradação no gerenciamento de planos de voo. Verifique processos de correlação de pistas.",
+                "Critico": f"RAM prevista em {pct}% do limite - Risco de falha no rastreamento de aeronaves. Reinicie processos não essenciais e acione o sistema de contingência do Sagitário."
             },
             "DISCO": {
-                "baixa": f"Disco previsto em {pct}% do limite - Leve crescimento no uso de armazenamento. Monitore a tendência.",
-                "média": f"Disco previsto em {pct}% do limite - Crescimento no volume de logs operacionais. Verifique retenção de gravações de voz e registros de radar.",
-                "alta": f"Disco previsto em {pct}% do limite - Armazenamento de dados de voo pode ser comprometido. Realize purga de arquivos temporários e logs antigos.",
-                "crítico": f"Disco previsto em {pct}% do limite - Risco de interrupção no registro de dados operacionais. Arquive ou remova gravações antigas imediatamente e acione o suporte técnico."
+                "Baixo": f"Disco previsto em {pct}% do limite - Leve crescimento no uso de armazenamento. Monitore a tendência.",
+                "Medio": f"Disco previsto em {pct}% do limite - Crescimento no volume de logs operacionais. Verifique retenção de gravações de voz e registros de radar.",
+                "Alto": f"Disco previsto em {pct}% do limite - Armazenamento de dados de voo pode ser comprometido. Realize purga de arquivos temporários e logs antigos.",
+                "Critico": f"Disco previsto em {pct}% do limite - Risco de interrupção no registro de dados operacionais. Arquive ou remova gravações antigas imediatamente e acione o suporte técnico."
             }
         }
 
@@ -1439,7 +1439,7 @@ def calcular_previsao_falhas(leituras, limites):
 
             # mudança pra gerar alerta se o estado ja estiver crítico ou alto
             nivel_atual = classificar(valores_recentes[-1], limite)
-            if nivel_atual in ["crítico", "alta"]:
+            if nivel_atual in ["Critico", "Alto"]:
                 alertas_previsao.append({
                     "servidor_id": servidor_id,
                     "metrica": metrica.upper(),
@@ -1458,7 +1458,7 @@ def calcular_previsao_falhas(leituras, limites):
             if a > 0 and nivel_previsao > 0.60 and nivel_previsao > atual:
                 nivel_classificado = classificar(previsao, limite)
 
-                if nivel_classificado == "normal":
+                if nivel_classificado == "Normal":
                     continue
 
                 alertas_previsao.append({
@@ -1544,15 +1544,15 @@ def calcular_impacto_componente(leituras, limites):
     def faixa_severidade(valor):
 
         if valor >= 80:
-            return "crítico"
+            return "Critico"
 
         elif valor >= 60:
-            return "alto"
+            return "Alto"
 
         elif valor >= 40:
-            return "moderado"
+            return "Moderado"
 
-        return "baixo"
+        return "Baixo"
 
     return {
         "CPU": {
@@ -1800,6 +1800,8 @@ def main():
 
     df_temp = ler_csv_s3(raw_key_temp)
 
+    print(df_temp)
+
     if df_temp.empty:
         print("CSV temperatura vazio.")
         return
@@ -1815,6 +1817,8 @@ def main():
 
     # TRUSTED
     trusted_df = df_temp.copy()
+
+    print(trusted_df)
 
     # CLIENT JSON
     client_temp_json = {
@@ -1888,7 +1892,7 @@ def main():
         "hostname": HOSTNAME,
         "mac_address": mac_address,
         "total_processos": int(len(dfProcessos)),
-        "processos_criticos": int(dfProcessos[dfProcessos["criticidade"] != "normal"].shape[0]),
+        "processos_criticos": int(dfProcessos[dfProcessos["criticidade"] != "Normal"].shape[0]),
         "maior_latencia": float(dfProcessos["latencia_ms"].max()),
         "kpis": kpis,
         "dados": dfProcessos.to_dict(orient="records")
@@ -1993,9 +1997,9 @@ def main():
         health_score = round(max(0, min(100, health_score)), 2)
 
         status_health = (
-            "estavel" if health_score >= 70 else
-            "atencao" if health_score >= 40 else
-            "critico"
+            "Estavel" if health_score >= 70 else
+            "Atencao" if health_score >= 40 else
+            "Critico"
         )
 
         # =========================
@@ -2080,7 +2084,7 @@ def main():
 
                 severidades_detectadas.append(severidade)
 
-                if severidade != "normal":
+                if severidade != "Normal":
 
                     alertas.append({
                         "data_hora": row.timestamp,
