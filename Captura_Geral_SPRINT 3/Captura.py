@@ -896,7 +896,9 @@ def capturar_processos():
     ]):
 
         try:
-            cpu = proc.cpu_percent(interval=0.1)
+            cpu_percent = proc.cpu_percent(interval=0.1)
+            num_cpu = psutil.cpu_count(logical=True)
+            cpu = cpu_percent / num_cpu
             ram_percent = proc.memory_percent()
             ram_mb = proc.memory_info().rss / 1024 / 1024 # transforma bytes para KB e depois para MB
             tempo_execucao = (
