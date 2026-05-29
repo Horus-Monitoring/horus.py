@@ -57,7 +57,7 @@ URL_CLIMA = (
 )
 URL_SENSOR = "http://localhost:8085/data.json"
 TEMP_MAX_CPU = 90
-INTERVALO = 6
+INTERVALO = 600
 
 def conectar_s3():
     return boto3.client(

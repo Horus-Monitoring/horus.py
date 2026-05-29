@@ -1096,15 +1096,15 @@ def gerar_raw_criticos_4h(df):
 def contar_status(df):
     if df.empty or "status" not in df.columns:
         return {
-            "RUNNING": 0,
-            "SLEEPING": 0,
-            "STOPPED": 0,
+            "Running": 0,
+            "Sleeping": 0,
+            "Stopped": 0,
         }
     contagem = df["status"].fillna("").str.upper().value_counts().to_dict()
     return {
-        "RUNNING": contagem.get("RUNNING", 0),
-        "SLEEPING": contagem.get("SLEEPING", 0),
-        "STOPPED": contagem.get("STOPPED", 0),
+        "Running": contagem.get("Running", 0),
+        "Sleeping": contagem.get("Sleeping", 0),
+        "Stopped": contagem.get("Stopped", 0),
     }
 
 
