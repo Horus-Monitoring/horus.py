@@ -1,7 +1,7 @@
 import boto3
 import json
 import mysql.connector
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from io import StringIO
 import pandas
 import math
@@ -67,7 +67,7 @@ def coletar_mac():
     if not mac:
         raise Exception("MAC Address não encontrado.")
 
-    return (mac.lower().replace("-", ":"))
+    return (mac.upper().replace("-", ":"))
 
 #Informações da S3
 def get_s3():
@@ -925,7 +925,7 @@ def processos_criticidade(cpu, ram_percent, latencia):
 
     return "Estavel"
 
-
+#-----------------------------------------------------------------------------------------------------
 def top5cpu(dfProcessos):
 
     dfTop5 = dfProcessos.sort_values(
@@ -935,12 +935,24 @@ def top5cpu(dfProcessos):
 
     cpu5 = {}
 
-    for i in range (5):
-        cpu5[f"nome_cpu_{i+1}"] = dfTop5["nome"].iloc[i]
-        cpu5[f"cpu_{i+1}"] = float(dfTop5["cpu"].iloc[i])
+    idx = 0
+    posicao = 1
+
+    while posicao <= 5 and idx < len(dfTop5):
+
+        nome = dfTop5["nome"].iloc[idx]
+
+        if nome != "System Idle Process":
+
+            cpu5[f"nome_cpu_{posicao}"] = nome
+            cpu5[f"cpu_{posicao}"] = float(dfTop5["cpu"].iloc[idx])
+
+            posicao += 1
+
+        idx += 1
+
     return cpu5
-
-
+#--------------------------------------------------------------------------------------
 def top5ram(dfProcessos):
 
     dfTop5 = dfProcessos.sort_values(
@@ -1121,28 +1133,28 @@ def gerar_alerta(row):
             "status_temperatura",
             ""
         )
-    ).lower()
+    )
 
     status_margem = str(
         row.get(
             "status_margem",
             ""
         )
-    ).lower()
+    )
 
     status_resfriamento = str(
         row.get(
             "status_resfriamento",
             ""
         )
-    ).lower()
+    )
 
     throttling = str(
         row.get(
             "Throttling",
             ""
         )
-    ).lower()
+    )
 
     # TEMPERATURA
 
@@ -1212,21 +1224,26 @@ def calcular_dia_mais_alertas(df):
 
 def filtrar_periodo(leituras, periodo):
 
-    delta = PERIODOS[periodo]
-    corte = datetime.now() - delta
+    if periodo not in PERIODOS:
+        return []
 
+    delta = PERIODOS[periodo]
+    corte = pandas.Timestamp.now(tz="UTC") - delta
     filtradas = []
 
     for r in leituras:
         if not isinstance(r, dict):
             continue
-        data_str = r.get("data_hora")
 
+        if "metricas" not in r or "servidor_id" not in r:
+            continue
+
+        data_str = r.get("data_hora")
         if not data_str:
             continue
-        try:
-            data = pandas.to_datetime(data_str)
-        except:
+
+        data = pandas.to_datetime(data_str, errors="coerce", utc=True)
+        if pandas.isna(data):
             continue
 
         if data >= corte:
@@ -1336,34 +1353,40 @@ def calcular_estabilidade_operacional(leituras, limites):
 
 def calcular_tendencia(leituras, limites):
 
-    agora = datetime.now()
+    agora = pandas.Timestamp.now(tz="UTC")
 
-    atual = []
-    anterior = []
+    atual = [
+        r for r in leituras
+        if pandas.to_datetime(
+            r.get("data_hora"),
+            errors="coerce",
+            utc=True,
+        ) >= agora - timedelta(hours=1)
+    ]
 
-    for r in leituras:
-        horario = datetime.strptime(
-            r["data_hora"],
-            "%Y-%m-%d %H:%M:%S"
+    anterior = [
+        r for r in leituras
+        if (
+            agora - timedelta(hours=2)
+            <= pandas.to_datetime(
+                r.get("data_hora"),
+                errors="coerce",
+                utc=True,
+            )
+            < agora - timedelta(hours=1)
         )
+    ]
 
-        if horario >= agora - timedelta(hours=1):
-            atual.append(r)
+    ra = calcular_nivel_risco(atual, limites)
+    rb = calcular_nivel_risco(anterior, limites)
 
-        elif horario >= agora - timedelta(hours=2):
-            anterior.append(r)
-
-    risco_atual = calcular_nivel_risco(atual, limites)
-    risco_anterior = calcular_nivel_risco(anterior, limites)
-
-    if risco_atual > risco_anterior:
+    if ra > rb:
         return "Subindo"
 
-    elif risco_atual < risco_anterior:
+    if ra < rb:
         return "Caindo"
 
-    else:
-        return "Estavel"
+    return "Estavel"
 
 def grafico_estabilidade(leituras, limites):
     valores = []
@@ -1769,6 +1792,7 @@ def main():
 
     raw_key_score = f"raw/empresa_{EMPRESA_ID}/{mac_address}/raw.csv"
 
+    print(f"Key procurada: {raw_key_score}")
 
     df_score = ler_csv_s3(raw_key_score)
 
@@ -2059,6 +2083,9 @@ def main():
                 "cpu": cpu,
                 "ram": ram,
                 "disco": disco,
+                "heatmap_cpu": classificar(cpu, limites["CPU"]),
+                "heatmap_ram": classificar(ram, limites["RAM"]),
+                "heatmap_disco": classificar(disco, limites["DISCO"]),
                 "health_score": health_score,
                 "status_health": status_health,
                 "linha_real": linha_real,

@@ -1,4 +1,5 @@
 import psutil 
+import json
 import random
 import time
 import boto3
@@ -125,8 +126,8 @@ def tempo_atual(): #Coleta a data-hora
 
 def coletar_mac_address(): #Coleta o MAC Adress
     mac = get_mac_address()
-    print(mac)
-    return mac.lower().replace("-", ":")
+    print(mac.upper())
+    return mac.upper().replace("-", ":")
 
 
 # CLASSIFICAÇÃO TEMPERATURA
@@ -682,6 +683,9 @@ def atualizar_csv_local(
                 "indice_resfriamento",
                 "status_resfriamento",
                 "throttling",
+                
+                "quantidade_cores",
+                "temperaturas_cores",
 
                 "bytes_recv",
                 "bytes_sent",
@@ -749,6 +753,13 @@ def atualizar_csv_local(
             metricas_temp["indice_resfriamento"],
             metricas_temp["status_resfriamento"],
             metricas_temp["throttling"],
+            len(metricas_temp["temperaturas_cores"])
+            if metricas_temp.get("temperaturas_cores")
+            else 0,
+
+            json.dumps(
+                 metricas_temp.get("temperaturas_cores", {})
+            ),
 
             rede["bytes_recv"],
             rede["bytes_sent"],
@@ -1337,6 +1348,9 @@ def main():
 
                         "temp_max":
                             temp_max,
+                        
+                        "temperaturas_cores": 
+                            temperaturas,
 
                         "status":
                             classificar(
@@ -1388,6 +1402,7 @@ def main():
                     metricas_temp = {
 
                         "temp_max": None,
+                        "temperaturas_cores": {},
                         "status": None,
                         "margem_termica": None,
                         "status_margem": None,
@@ -1562,7 +1577,7 @@ def main():
         # ESPERA
         # ==========================
 
-        minutos_total = INTERVALO // 6
+        minutos_total = INTERVALO // 60
 
         print(
             f"Nova coleta em "
