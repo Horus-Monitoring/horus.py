@@ -1575,34 +1575,25 @@ def calcular_disponibilidade(leituras, limites):
         return 0
 
     online = 0
-    validas = 0
+    total = 0
 
     for r in leituras:
-        s = r.get("servidor_id")
-        if s is None or s not in limites:
+        sid = r.get("servidor_id")
+        if sid not in limites:
             continue
 
         m = r.get("metricas", {})
-        validas += 1
 
-        cpu_lim   = safe_float(limites[s].get("CPU",   0))
-        ram_lim   = safe_float(limites[s].get("RAM",   0))
-        disco_lim = safe_float(limites[s].get("DISCO", 0))
+        cpu = safe_float(m.get("cpu"))
+        ram = safe_float(m.get("ram"))
+        disco = safe_float(m.get("disco"))
 
-        cpu   = safe_float(m.get("cpu",   0))
-        ram   = safe_float(m.get("ram",   0))
-        disco = safe_float(m.get("disco", 0))
+        total += 1
 
-        if (
-            classificar_gestor(cpu,   cpu_lim)   != "Critico"
-            and classificar_gestor(ram,   ram_lim)   != "Critico"
-            and classificar_gestor(disco, disco_lim) != "Critico"
-        ):
+        if cpu > 0 and ram > 0 and disco > 0:
             online += 1
 
-    if validas == 0:
-        return 0
-    return round((online / validas) * 100, 2)
+    return round((online / total) * 100, 2) if total else 0
 
 def calcular_nivel_risco(leituras, limites):
     leituras = ultimas_leituras_por_servidor(leituras)
@@ -1652,34 +1643,29 @@ def calcular_estabilidade_operacional(leituras, limites):
     if not leituras:
         return 0
 
-    estaveis = 0
-    validas = 0
+    scores = []
 
     for r in leituras:
-        s = r.get("servidor_id")
-        if s is None or s not in limites:
-            continue
-
-        cpu_lim   = safe_float(limites[s].get("CPU",   0))
-        ram_lim   = safe_float(limites[s].get("RAM",   0))
-        disco_lim = safe_float(limites[s].get("DISCO", 0))
-
-        if cpu_lim <= 0 or ram_lim <= 0 or disco_lim <= 0:
+        sid = r.get("servidor_id")
+        if sid not in limites:
             continue
 
         m = r.get("metricas", {})
-        validas += 1
 
-        if (
-            safe_float(m.get("cpu")) < cpu_lim
-            and safe_float(m.get("ram")) < ram_lim
-            and safe_float(m.get("disco")) < disco_lim
-        ):
-            estaveis += 1
+        cpu = safe_float(m.get("cpu"))
+        ram = safe_float(m.get("ram"))
+        disco = safe_float(m.get("disco"))
 
-    if validas == 0:
-        return 0
-    return round((estaveis / validas) * 100, 2)
+        if cpu <= 0 or ram <= 0 or disco <= 0:
+            scores.append(0)
+            continue
+
+        carga_media = (cpu + ram + disco) / 3
+        estabilidade = max(0, 100 - carga_media)
+
+        scores.append(estabilidade)
+
+    return round(sum(scores) / len(scores), 2) if scores else 0
 
 def calcular_tendencia(leituras, limites):
     agora = pandas.Timestamp.now(tz="UTC")
@@ -1844,54 +1830,47 @@ def calcular_previsao_falhas(leituras, limites):
 def calcular_impacto_componente(leituras, limites):
     leituras = ultimas_leituras_por_servidor(leituras)
 
-    por_servidor = {}
+    medias = {"CPU": [], "RAM": [], "DISCO": []}
+
     for r in leituras:
-        s = r.get("servidor_id")
-        if s not in limites:
-            continue
-
-        cpu_lim = safe_float(limites[s].get("CPU"))
-        ram_lim = safe_float(limites[s].get("RAM"))
-        disco_lim = safe_float(limites[s].get("DISCO"))
-
-        if cpu_lim <= 0 or ram_lim <= 0 or disco_lim <= 0:
+        sid = r.get("servidor_id")
+        if sid not in limites:
             continue
 
         m = r.get("metricas", {})
-        por_servidor.setdefault(s, {"cpu": [], "ram": [], "disco": []})
-        por_servidor[s]["cpu"].append(min((safe_float(m.get("cpu")) / cpu_lim) * 100, 100))
-        por_servidor[s]["ram"].append(min((safe_float(m.get("ram")) / ram_lim) * 100, 100))
-        por_servidor[s]["disco"].append(min((safe_float(m.get("disco")) / disco_lim) * 100, 100))
 
-    medias = {"CPU": [], "RAM": [], "DISCO": []}
-    for dados in por_servidor.values():
-        if dados["cpu"]:
-            medias["CPU"].append(sum(dados["cpu"]) / len(dados["cpu"]))
-        if dados["ram"]:
-            medias["RAM"].append(sum(dados["ram"]) / len(dados["ram"]))
-        if dados["disco"]:
-            medias["DISCO"].append(sum(dados["disco"]) / len(dados["disco"]))
+        for comp in ("CPU", "RAM", "DISCO"):
+            valor = safe_float(m.get(comp.lower()))
+            limite = safe_float(limites[sid].get(comp))
+
+            if limite <= 0:
+                continue
+
+            uso_relativo = (valor / limite) * 100
+            impacto = min(uso_relativo, 120)
+
+            medias[comp].append(impacto)
+
+    def media(lst):
+        return round(sum(lst) / len(lst), 1) if lst else 0
 
     def faixa(v):
-        if v >= 80:
+        if v >= 100:
             return "Critico"
-        if v >= 60:
+        if v >= 90:
             return "Alto"
-        if v >= 40:
+        if v >= 75:
             return "Moderado"
         return "Baixo"
 
-    def media_final(lst):
-        return round(sum(lst) / len(lst), 1) if lst else 0
-
-    cpu_f = media_final(medias["CPU"])
-    ram_f = media_final(medias["RAM"])
-    disco_f = media_final(medias["DISCO"])
+    cpu = media(medias["CPU"])
+    ram = media(medias["RAM"])
+    disco = media(medias["DISCO"])
 
     return {
-        "CPU": {"valor": cpu_f, "severidade": faixa(cpu_f)},
-        "RAM": {"valor": ram_f, "severidade": faixa(ram_f)},
-        "DISCO": {"valor": disco_f, "severidade": faixa(disco_f)},
+        "CPU": {"valor": cpu, "severidade": faixa(cpu)},
+        "RAM": {"valor": ram, "severidade": faixa(ram)},
+        "DISCO": {"valor": disco, "severidade": faixa(disco)},
     }
 
 def listar_info_servidores(leituras, limites, servidores, analistas):
