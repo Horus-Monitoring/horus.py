@@ -1548,17 +1548,24 @@ def ultimas_leituras_por_servidor(leituras):
 def classificar_gestor(valor, limite):
     valor = safe_float(valor)
     limite = safe_float(limite)
-    if limite == 0 or valor == 0:
+
+    if limite <= 0:
         return "Normal"
+
+    if valor <= 0:
+        return "Critico"
+
     razao = valor / limite
+
     if razao >= 1.0:
         return "Critico"
-    if razao >= 0.90:
+    if razao >= 0.95:
         return "Alto"
-    if razao >= 0.80:
+    if razao >= 0.90:
         return "Medio"
-    if razao >= 0.70:
+    if razao >= 0.80:
         return "Baixo"
+
     return "Normal"
 
 def calcular_disponibilidade(leituras, limites):
@@ -1664,9 +1671,9 @@ def calcular_estabilidade_operacional(leituras, limites):
         validas += 1
 
         if (
-            safe_float(m.get("cpu"))   / cpu_lim   < 0.80
-            and safe_float(m.get("ram"))   / ram_lim   < 0.80
-            and safe_float(m.get("disco")) / disco_lim < 0.80
+            safe_float(m.get("cpu")) < cpu_lim
+            and safe_float(m.get("ram")) < ram_lim
+            and safe_float(m.get("disco")) < disco_lim
         ):
             estaveis += 1
 
@@ -1889,7 +1896,7 @@ def calcular_impacto_componente(leituras, limites):
 
 def listar_info_servidores(leituras, limites, servidores, analistas):
     leituras = ultimas_leituras_por_servidor(leituras)
-    
+
     resultado = []
     for srv in servidores:
         sid = srv["id_servidor"]
