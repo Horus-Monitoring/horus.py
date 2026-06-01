@@ -1512,9 +1512,6 @@ def filtrar_periodo(leituras, periodo):
     filtradas = []
 
     for r in leituras:
-        if not isinstance(r, dict):
-            continue
-
         if "metricas" not in r or "servidor_id" not in r:
             continue
 
@@ -1530,6 +1527,22 @@ def filtrar_periodo(leituras, periodo):
             filtradas.append(r)
 
     return filtradas
+
+def classificar_gestor(valor, limite):
+    valor = safe_float(valor)
+    limite = safe_float(limite)
+    if limite == 0 or valor == 0:
+        return "Normal"
+    razao = valor / limite
+    if razao >= 1.0:
+        return "Critico"
+    if razao >= 0.90:
+        return "Alto"
+    if razao >= 0.80:
+        return "Medio"
+    if razao >= 0.70:
+        return "Baixo"
+    return "Normal"
 
 def calcular_disponibilidade(leituras, limites):
     if not leituras:
@@ -1555,9 +1568,9 @@ def calcular_disponibilidade(leituras, limites):
         disco = safe_float(m.get("disco", 0))
 
         if (
-            classificar(cpu,   cpu_lim)   != "Critico"
-            and classificar(ram,   ram_lim)   != "Critico"
-            and classificar(disco, disco_lim) != "Critico"
+            classificar_gestor(cpu,   cpu_lim)   != "Critico"
+            and classificar_gestor(ram,   ram_lim)   != "Critico"
+            and classificar_gestor(disco, disco_lim) != "Critico"
         ):
             online += 1
 
@@ -1579,7 +1592,7 @@ def calcular_nivel_risco(leituras, limites):
         for chave in ("CPU", "RAM", "DISCO"):
             lim = safe_float(limites[s].get(chave, 0))
             val = safe_float(m.get(chave.lower(), 0))
-            total += SEVERIDADE.get(classificar(val, lim), 0)
+            total += SEVERIDADE.get(classificar_gestor(val, lim), 0)
 
         qtd += 3
 
@@ -1596,9 +1609,9 @@ def calcular_incidentes_criticos(leituras, limites):
 
         m = r.get("metricas", {})
         if (
-            classificar(safe_float(m.get("cpu")),   safe_float(limites[s].get("CPU",   0))) == "Critico"
-            or classificar(safe_float(m.get("ram")),   safe_float(limites[s].get("RAM",   0))) == "Critico"
-            or classificar(safe_float(m.get("disco")), safe_float(limites[s].get("DISCO", 0))) == "Critico"
+            classificar_gestor(safe_float(m.get("cpu")),   safe_float(limites[s].get("CPU",   0))) == "Critico"
+            or classificar_gestor(safe_float(m.get("ram")),   safe_float(limites[s].get("RAM",   0))) == "Critico"
+            or classificar_gestor(safe_float(m.get("disco")), safe_float(limites[s].get("DISCO", 0))) == "Critico"
         ):
             criticos += 1
     return criticos
@@ -1766,7 +1779,7 @@ def calcular_previsao_falhas(leituras, limites):
             if limite <= 0:
                 continue
 
-            nivel_atual = classificar(recentes[-1], limite)
+            nivel_atual = classificar_gestor(recentes[-1], limite)
 
             if nivel_atual in ("Critico", "Alto"):
                 alertas.append({
@@ -1784,7 +1797,7 @@ def calcular_previsao_falhas(leituras, limites):
             nivel_p = previsao / limite
 
             if a > 0 and nivel_p > 0.60 and nivel_p > atual:
-                nivel_cl = classificar(previsao, limite)
+                nivel_cl = classificar_gestor(previsao, limite)
                 if nivel_cl == "Normal":
                     continue
                 alertas.append({
@@ -2102,11 +2115,17 @@ def executar_pipeline_gestor(s3, bucket, empresa_id, mac_address, agora):
     if not todas_leituras:
         print("[GESTOR] Sem leituras client para consolidar.")
         return
+    
+    for r in todas_leituras:
+        try:
+            r["servidor_id"] = int(float(r["servidor_id"]))
+        except (ValueError, TypeError, KeyError):
+            pass
 
     servidores_emp = obter_servidores_empresa(empresa_id)
     analistas = obter_analistas_por_servidor(empresa_id)
     limites_emp = {
-        srv["id_servidor"]: obter_limites_servidor(srv["id_servidor"])
+        int(srv["id_servidor"]): obter_limites_servidor(srv["id_servidor"])
         for srv in servidores_emp
     }
 
