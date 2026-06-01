@@ -1,4 +1,4 @@
-import os
+﻿import os
 import json
 import math
 from collections import Counter, defaultdict, deque
@@ -1503,374 +1503,529 @@ def gerar_json_dashboard(df_network, df_flights, periodo):
 # GESTOR
 # =========================================================
 
+METRICAS_GESTOR = ("CPU", "RAM", "DISCO")
+
+LIMITES_PADRAO_GESTOR = {
+    "CPU": 80,
+    "RAM": 80,
+    "DISCO": 85,
+}
+
+PESOS_GESTOR = {
+    "CPU": 0.35,
+    "RAM": 0.40,
+    "DISCO": 0.25,
+}
+
+def limitar_percentual(valor, minimo=0, maximo=100):
+    return max(minimo, min(maximo, safe_float(valor)))
+
+def normalizar_limite_gestor(metrica, limite):
+    metrica = str(metrica).upper()
+    limite = safe_float(limite)
+
+    if limite <= 0:
+        return LIMITES_PADRAO_GESTOR[metrica]
+
+    if limite <= 1:
+        limite *= 100
+
+    # Alguns cadastros usam margem livre: RAM 20 significa alerta perto de 80% de uso.
+    if metrica in ("RAM", "DISCO") and limite < 50:
+        limite = 100 - limite
+
+    if metrica == "CPU" and limite < 30:
+        limite = LIMITES_PADRAO_GESTOR[metrica]
+
+    return limitar_percentual(limite, 1, 100)
+
+def obter_limites_gestor(limites, servidor_id):
+    limites_servidor = limites.get(servidor_id, {}) if isinstance(limites, dict) else {}
+
+    return {
+        metrica: normalizar_limite_gestor(
+            metrica,
+            limites_servidor.get(metrica),
+        )
+        for metrica in METRICAS_GESTOR
+    }
+
+def obter_metricas_gestor(leitura):
+    metricas = leitura.get("metricas", {}) if isinstance(leitura, dict) else {}
+
+    return {
+        metrica: limitar_percentual(metricas.get(metrica.lower(), 0))
+        for metrica in METRICAS_GESTOR
+    }
+
+def leitura_tem_metricas(leitura):
+    metricas = obter_metricas_gestor(leitura)
+    return any(valor > 0 for valor in metricas.values())
+
+def leituras_validas_gestor(leituras):
+    return [
+        leitura
+        for leitura in leituras
+        if isinstance(leitura, dict)
+        and leitura.get("servidor_id") is not None
+        and isinstance(leitura.get("metricas"), dict)
+        and leitura_tem_metricas(leitura)
+    ]
+
+def ultimas_leituras_por_servidor(leituras):
+    ultimas = {}
+
+    for leitura in leituras_validas_gestor(leituras):
+        servidor_id = leitura.get("servidor_id")
+        data = pandas.to_datetime(
+            leitura.get("data_hora"),
+            errors="coerce",
+            utc=True,
+        )
+
+        if pandas.isna(data):
+            continue
+
+        if servidor_id not in ultimas or data > ultimas[servidor_id]["data"]:
+            ultimas[servidor_id] = {
+                "data": data,
+                "leitura": leitura,
+            }
+
+    return [
+        item["leitura"]
+        for item in ultimas.values()
+    ]
+
+def calcular_health_gestor(leitura):
+    metricas = leitura.get("metricas", {})
+
+    if "health_score" in metricas:
+        return limitar_percentual(metricas.get("health_score"))
+
+    valores = obter_metricas_gestor(leitura)
+
+    score = (
+        (100 - valores["CPU"]) * 0.40
+        + (100 - valores["RAM"]) * 0.40
+        + (100 - valores["DISCO"]) * 0.20
+    )
+
+    criticos = sum(valor >= 90 for valor in valores.values())
+    if criticos == 1:
+        score -= 5
+    elif criticos == 2:
+        score -= 15
+    elif criticos == 3:
+        score -= 25
+
+    return round(limitar_percentual(score), 2)
+
+def classificar_metrica_gestor(metrica, valor, limite):
+    limite = normalizar_limite_gestor(metrica, limite)
+    valor = limitar_percentual(valor)
+    razao = valor / limite if limite > 0 else 0
+
+    if razao >= 1:
+        return "Critico"
+    if razao >= 0.90:
+        return "Alto"
+    if razao >= 0.80:
+        return "Medio"
+    if razao >= 0.70:
+        return "Baixo"
+    return "Normal"
+
+def calcular_risco_leitura(leitura, limites):
+    servidor_id = leitura.get("servidor_id")
+    limites_servidor = obter_limites_gestor(limites, servidor_id)
+    metricas = obter_metricas_gestor(leitura)
+
+    risco = 0
+    total_pesos = 0
+
+    for metrica in METRICAS_GESTOR:
+        limite = limites_servidor[metrica]
+        peso = PESOS_GESTOR[metrica]
+        uso_limite = min(metricas[metrica] / limite, 1)
+        risco += uso_limite * 100 * peso
+        total_pesos += peso
+
+    if total_pesos == 0:
+        return 0
+
+    return round(risco / total_pesos, 2)
+
+def dashboard_gestor_vazio():
+    return {
+        "sem_dados": True,
+        "kpis": {
+            "disponibilidade_global": 0,
+            "nivel_risco": 0,
+            "incidentes_criticos": 0,
+            "estabilidade_operacional": 0,
+            "tendencia_operacional": "Estavel",
+        },
+        "grafico_estabilidade": {"labels": [], "valores": []},
+        "impacto_por_componente": {
+            "CPU": {"valor": 0, "severidade": "Baixo"},
+            "RAM": {"valor": 0, "severidade": "Baixo"},
+            "DISCO": {"valor": 0, "severidade": "Baixo"},
+        },
+        "previsao_falhas": [],
+        "info_servidores": [],
+    }
+
 def filtrar_periodo(leituras, periodo):
     if periodo not in PERIODOS:
         return []
 
-    delta = PERIODOS[periodo]
-    corte = pandas.Timestamp.now(tz="UTC") - delta
+    datas_validas = []
+
+    for leitura in leituras:
+        if not isinstance(leitura, dict):
+            continue
+
+        data = pandas.to_datetime(
+            leitura.get("data_hora"),
+            errors="coerce",
+            utc=True,
+        )
+
+        if not pandas.isna(data):
+            datas_validas.append(data)
+
+    if not datas_validas:
+        return []
+
+    referencia = max(datas_validas)
+    corte = referencia - PERIODOS[periodo]
     filtradas = []
 
-    for r in leituras:
-        if not isinstance(r, dict):
+    for leitura in leituras:
+        if not isinstance(leitura, dict):
             continue
 
-        if "metricas" not in r or "servidor_id" not in r:
+        if "metricas" not in leitura or "servidor_id" not in leitura:
             continue
 
-        data_str = r.get("data_hora")
-        if not data_str:
-            continue
+        data = pandas.to_datetime(
+            leitura.get("data_hora"),
+            errors="coerce",
+            utc=True,
+        )
 
-        data = pandas.to_datetime(data_str, errors="coerce", utc=True)
         if pandas.isna(data):
             continue
 
         if data >= corte:
-            filtradas.append(r)
+            filtradas.append(leitura)
 
     return filtradas
 
 def calcular_disponibilidade(leituras, limites):
-    if not leituras:
+    validas = leituras_validas_gestor(leituras)
+
+    if not validas:
         return 0
 
-    online = 0
-    validas = 0
+    disponiveis = sum(
+        1
+        for leitura in validas
+        if calcular_health_gestor(leitura) >= 40
+    )
 
-    for r in leituras:
-        s = r.get("servidor_id")
-        if s is None or s not in limites:
-            continue
-
-        m = r.get("metricas", {})
-        validas += 1
-
-        cpu_lim   = safe_float(limites[s].get("CPU",   0))
-        ram_lim   = safe_float(limites[s].get("RAM",   0))
-        disco_lim = safe_float(limites[s].get("DISCO", 0))
-
-        cpu   = safe_float(m.get("cpu",   0))
-        ram   = safe_float(m.get("ram",   0))
-        disco = safe_float(m.get("disco", 0))
-
-        if (
-            classificar(cpu,   cpu_lim)   != "Critico"
-            and classificar(ram,   ram_lim)   != "Critico"
-            and classificar(disco, disco_lim) != "Critico"
-        ):
-            online += 1
-
-    if validas == 0:
-        return 0
-    return round((online / validas) * 100, 2)
+    return round((disponiveis / len(validas)) * 100, 2)
 
 def calcular_nivel_risco(leituras, limites):
-    total = 0
-    qtd = 0
+    validas = leituras_validas_gestor(leituras)
 
-    for r in leituras:
-        s = r.get("servidor_id")
-        if s is None or s not in limites:
-            continue
-
-        m = r.get("metricas", {})
-
-        for chave in ("CPU", "RAM", "DISCO"):
-            lim = safe_float(limites[s].get(chave, 0))
-            val = safe_float(m.get(chave.lower(), 0))
-            total += SEVERIDADE.get(classificar(val, lim), 0)
-
-        qtd += 3
-
-    if qtd == 0:
+    if not validas:
         return 0
-    return round(((total / qtd) - 1) / 4 * 100, 2)
+
+    riscos = [
+        calcular_risco_leitura(leitura, limites)
+        for leitura in validas
+    ]
+
+    return round(sum(riscos) / len(riscos), 2)
 
 def calcular_incidentes_criticos(leituras, limites):
-    criticos = 0
-    for r in leituras:
-        s = r.get("servidor_id")
-        if s is None or s not in limites:
-            continue
+    incidentes = set()
 
-        m = r.get("metricas", {})
-        if (
-            classificar(safe_float(m.get("cpu")),   safe_float(limites[s].get("CPU",   0))) == "Critico"
-            or classificar(safe_float(m.get("ram")),   safe_float(limites[s].get("RAM",   0))) == "Critico"
-            or classificar(safe_float(m.get("disco")), safe_float(limites[s].get("DISCO", 0))) == "Critico"
-        ):
-            criticos += 1
-    return criticos
+    for leitura in ultimas_leituras_por_servidor(leituras):
+        servidor_id = leitura.get("servidor_id")
+        limites_servidor = obter_limites_gestor(limites, servidor_id)
+        metricas = obter_metricas_gestor(leitura)
+
+        for metrica in METRICAS_GESTOR:
+            status = classificar_metrica_gestor(
+                metrica,
+                metricas[metrica],
+                limites_servidor[metrica],
+            )
+
+            if status == "Critico":
+                incidentes.add((servidor_id, metrica))
+
+    return len(incidentes)
 
 def calcular_estabilidade_operacional(leituras, limites):
-    if not leituras:
+    validas = leituras_validas_gestor(leituras)
+
+    if not validas:
         return 0
 
-    estaveis = 0
-    validas = 0
+    scores = [
+        calcular_health_gestor(leitura)
+        for leitura in validas
+    ]
 
-    for r in leituras:
-        s = r.get("servidor_id")
-        if s is None or s not in limites:
-            continue
-
-        cpu_lim   = safe_float(limites[s].get("CPU",   0))
-        ram_lim   = safe_float(limites[s].get("RAM",   0))
-        disco_lim = safe_float(limites[s].get("DISCO", 0))
-
-        if cpu_lim <= 0 or ram_lim <= 0 or disco_lim <= 0:
-            continue
-
-        m = r.get("metricas", {})
-        validas += 1
-
-        if (
-            safe_float(m.get("cpu"))   / cpu_lim   < 0.80
-            and safe_float(m.get("ram"))   / ram_lim   < 0.80
-            and safe_float(m.get("disco")) / disco_lim < 0.80
-        ):
-            estaveis += 1
-
-    if validas == 0:
-        return 0
-    return round((estaveis / validas) * 100, 2)
+    return round(sum(scores) / len(scores), 2)
 
 def calcular_tendencia(leituras, limites):
-    agora = pandas.Timestamp.now(tz="UTC")
-
-    atual = [
-        r for r in leituras
-        if pandas.to_datetime(
-            r.get("data_hora"),
+    validas = sorted(
+        leituras_validas_gestor(leituras),
+        key=lambda leitura: pandas.to_datetime(
+            leitura.get("data_hora"),
             errors="coerce",
             utc=True,
-        ) >= agora - timedelta(hours=1)
-    ]
+        ),
+    )
 
-    anterior = [
-        r for r in leituras
-        if (
-            agora - timedelta(hours=2)
-            <= pandas.to_datetime(
-                r.get("data_hora"),
-                errors="coerce",
-                utc=True,
-            )
-            < agora - timedelta(hours=1)
-        )
-    ]
+    if len(validas) < 4:
+        return "Estavel"
 
-    ra = calcular_nivel_risco(atual, limites)
-    rb = calcular_nivel_risco(anterior, limites)
+    janela = validas[-min(len(validas), JANELA_PREVISAO):]
+    meio = len(janela) // 2
 
-    if ra > rb:
+    risco_anterior = calcular_nivel_risco(janela[:meio], limites)
+    risco_atual = calcular_nivel_risco(janela[meio:], limites)
+    diferenca = risco_atual - risco_anterior
+
+    if diferenca > 5:
         return "Subindo"
 
-    if ra < rb:
+    if diferenca < -5:
         return "Caindo"
 
     return "Estavel"
 
 def grafico_estabilidade(leituras, limites):
     grupos = {}
-    for r in leituras:
-        data = r.get("data_hora")
-        if not data:
+
+    for leitura in leituras_validas_gestor(leituras):
+        data = pandas.to_datetime(
+            leitura.get("data_hora"),
+            errors="coerce",
+            utc=True,
+        )
+
+        if pandas.isna(data):
             continue
 
-        ts = pandas.to_datetime(data, errors="coerce", utc=True)
-        if pandas.isna(ts):
-            continue
-
-        hora = ts.strftime("%Y-%m-%d %H")
-        grupos.setdefault(hora, []).append(r)
+        hora = data.strftime("%Y-%m-%d %H")
+        grupos.setdefault(hora, []).append(leitura)
 
     labels = []
     valores = []
+
     for hora in sorted(grupos.keys()):
         labels.append(hora[11:] + ":00")
         valores.append(calcular_estabilidade_operacional(grupos[hora], limites))
+
     return {"labels": labels[-7:], "valores": valores[-7:]}
 
-# adicionado id do servidor no parametro
-def gerar_mensagem(metrica, nivel, previsao, limite, servidor_id):
-    if limite <= 0:
-        pct = 0
-    else:
-        pct = round(previsao / limite * 100, 1)
+def gerar_mensagem(metrica, nivel, previsao, limite, servidor_nome):
+    previsao = limitar_percentual(previsao)
+    limite = normalizar_limite_gestor(metrica, limite)
+    nivel = str(nivel)
 
-    nivel_map = {
-        "Baixo": "baixa",
-        "Normalo": "media",
-        "Alto": "alta",
-        "Critico": "critico",
-        "baixa": "baixa",
-        "média": "media",
-        "media": "media",
-        "alta": "alta",
-        "crítico": "critico",
-        "critico": "critico",
-    }
-    chave = nivel_map.get(str(nivel), "baixa")
-
-# adicionado servidor id nas mensagens
-    mensagens = {
+    descricao = {
         "CPU": {
-            "baixa": f"Servidor {servidor_id}: CPU prevista em {pct}% do limite no servidor - Leve aumento na carga de processamento. Monitore a tendencia.",
-            "media": f"Servidor {servidor_id}: CPU prevista em {pct}% do limite - Carga de processamento em elevacao. Verifique rotinas de calculo de rotas e separacao de aeronaves em execucao.",
-            "alta": f"Servidor {servidor_id}: CPU prevista em {pct}% do limite - Processamento de dados de radar pode ser impactado. Considere redistribuir carga entre os nos do Sagitario.",
-            "critico": f"Servidor {servidor_id}: CPU prevista em {pct}% do limite - Risco de atraso no processamento de dados de voo. Notifique um analista responsavel imediatamente.",
+            "Medio": "carga de processamento em elevacao",
+            "Alto": "risco de degradacao no processamento",
+            "Critico": "risco de atraso no processamento de dados",
         },
         "RAM": {
-            "baixa": f"Servidor {servidor_id}: RAM prevista em {pct}% do limite - Leve crescimento no consumo de memoria. Monitore a tendencia.",
-            "media": f"Servidor {servidor_id}: RAM prevista em {pct}% do limite - Consumo de memoria crescente. Verifique buffers de dados de radar e faixas de voo ativas.",
-            "alta": f"Servidor {servidor_id}: RAM prevista em {pct}% do limite - Risco de degradacao no gerenciamento de planos de voo. Verifique processos de correlacao de pistas.",
-            "critico": f"Servidor {servidor_id}: RAM prevista em {pct}% do limite - Risco de falha no rastreamento de aeronaves. Reinicie processos nao essenciais e acione o sistema de contingencia do Sagitario.",
+            "Medio": "consumo de memoria em elevacao",
+            "Alto": "risco de degradacao por memoria",
+            "Critico": "risco de falha por consumo de memoria",
         },
         "DISCO": {
-            "baixa": f"Servidor {servidor_id}: Disco previsto em {pct}% do limite - Leve crescimento no uso de armazenamento. Monitore a tendencia.",
-            "media": f"Servidor {servidor_id}: Disco previsto em {pct}% do limite - Crescimento no volume de logs operacionais. Verifique retencao de gravacoes de voz e registros de radar.",
-            "alta": f"Servidor {servidor_id}: Disco previsto em {pct}% do limite - Armazenamento de dados de voo pode ser comprometido. Realize purga de arquivos temporarios e logs antigos.",
-            "critico": f"Servidor {servidor_id}: Disco previsto em {pct}% do limite - Risco de interrupcao no registro de dados operacionais. Arquive ou remova gravacoes antigas imediatamente e acione o suporte tecnico.",
+            "Medio": "uso de armazenamento em elevacao",
+            "Alto": "armazenamento pode ser impactado",
+            "Critico": "risco de interrupcao por armazenamento",
         },
     }
-    return mensagens[metrica][chave]
+
+    return (
+        f"Servidor {servidor_nome}: {metrica} previsto em "
+        f"{round(previsao, 1)}% de uso (limite {round(limite, 1)}%) - "
+        f"{descricao[metrica].get(nivel, 'tendencia de aumento')}."
+    )
 
 def calcular_previsao_falhas(leituras, limites):
     por_servidor = {}
+
     leituras_ordenadas = sorted(
-        leituras,
-        key=lambda r: pandas.to_datetime(r.get("data_hora"), errors="coerce", utc=True),
+        leituras_validas_gestor(leituras),
+        key=lambda leitura: pandas.to_datetime(
+            leitura.get("data_hora"),
+            errors="coerce",
+            utc=True,
+        ),
     )
 
-    for r in leituras_ordenadas:
-        s = r.get("servidor_id")
-        if s not in limites:
-            continue
-        m = r.get("metricas", {})
-        por_servidor.setdefault(s, {"cpu": [], "ram": [], "disco": []})
-        por_servidor[s]["cpu"].append(safe_float(m.get("cpu")))
-        por_servidor[s]["ram"].append(safe_float(m.get("ram")))
-        por_servidor[s]["disco"].append(safe_float(m.get("disco")))
+    for leitura in leituras_ordenadas:
+        servidor_id = leitura.get("servidor_id")
+        metricas = obter_metricas_gestor(leitura)
+        por_servidor.setdefault(
+            servidor_id,
+            {
+                "hostname": leitura.get("hostname") or servidor_id,
+                "CPU": [],
+                "RAM": [],
+                "DISCO": [],
+            },
+        )
+
+        if leitura.get("hostname"):
+            por_servidor[servidor_id]["hostname"] = leitura.get("hostname")
+
+        for metrica in METRICAS_GESTOR:
+            por_servidor[servidor_id][metrica].append(metricas[metrica])
 
     alertas = []
+
     for servidor_id, series in por_servidor.items():
-        for metrica in ("cpu", "ram", "disco"):
+        limites_servidor = obter_limites_gestor(limites, servidor_id)
+
+        for metrica in METRICAS_GESTOR:
             valores = series[metrica]
-            if len(valores) < 3:
+
+            if len(valores) < 4:
                 continue
 
             recentes = valores[-JANELA_PREVISAO:]
-            limite = safe_float(limites[servidor_id].get(metrica.upper()))
-            if limite <= 0:
-                continue
-
-            nivel_atual = classificar(recentes[-1], limite)
-
-            if nivel_atual in ("Critico", "Alto"):
-                alertas.append({
-                    "servidor_id": servidor_id,
-                    "metrica": metrica.upper(),
-                    "nivel_previsao": nivel_atual,
-                    "mensagem": gerar_mensagem(metrica.upper(), nivel_atual, recentes[-1], limite, servidor_id), #adicionei o id do servidor
-                })
-                continue
-
             x = np.arange(len(recentes))
-            a, b = np.polyfit(x, recentes, 1)
-            previsao = a * len(recentes) + b
-            atual = recentes[-1] / limite
-            nivel_p = previsao / limite
+            inclinacao, intercepto = np.polyfit(x, recentes, 1)
 
-            if a > 0 and nivel_p > 0.60 and nivel_p > atual:
-                nivel_cl = classificar(previsao, limite)
-                if nivel_cl == "Normal":
-                    continue
-                alertas.append({
-                    "servidor_id": servidor_id,
-                    "metrica": metrica.upper(),
-                    "nivel_previsao": nivel_cl,
-                    "mensagem": gerar_mensagem(metrica.upper(), nivel_cl, previsao, limite, servidor_id), # adicionei o id do servidor
-                })
+            if inclinacao <= 0.2:
+                continue
 
-    return alertas
+            horizonte = min(3, max(1, len(recentes) // 2))
+            atual = recentes[-1]
+            previsao = limitar_percentual(
+                inclinacao * (len(recentes) - 1 + horizonte) + intercepto
+            )
+
+            if previsao < atual + 3:
+                continue
+
+            limite = limites_servidor[metrica]
+            nivel = classificar_metrica_gestor(metrica, previsao, limite)
+
+            if nivel not in ("Medio", "Alto", "Critico"):
+                continue
+
+            alertas.append({
+                "servidor_id": servidor_id,
+                "metrica": metrica,
+                "nivel_previsao": nivel,
+                "valor_atual": round(atual, 2),
+                "valor_previsto": round(previsao, 2),
+                "limite": round(limite, 2),
+                "mensagem": gerar_mensagem(
+                    metrica,
+                    nivel,
+                    previsao,
+                    limite,
+                    series.get("hostname", servidor_id),
+                ),
+            })
+
+    prioridade = {"Critico": 3, "Alto": 2, "Medio": 1}
+    alertas.sort(
+        key=lambda item: (
+            prioridade.get(item["nivel_previsao"], 0),
+            item["valor_previsto"],
+        ),
+        reverse=True,
+    )
+
+    return alertas[:5]
 
 def calcular_impacto_componente(leituras, limites):
-    por_servidor = {}
-    for r in leituras:
-        s = r.get("servidor_id")
-        if s not in limites:
-            continue
-
-        cpu_lim = safe_float(limites[s].get("CPU"))
-        ram_lim = safe_float(limites[s].get("RAM"))
-        disco_lim = safe_float(limites[s].get("DISCO"))
-
-        if cpu_lim <= 0 or ram_lim <= 0 or disco_lim <= 0:
-            continue
-
-        m = r.get("metricas", {})
-        por_servidor.setdefault(s, {"cpu": [], "ram": [], "disco": []})
-        por_servidor[s]["cpu"].append(min((safe_float(m.get("cpu")) / cpu_lim) * 100, 100))
-        por_servidor[s]["ram"].append(min((safe_float(m.get("ram")) / ram_lim) * 100, 100))
-        por_servidor[s]["disco"].append(min((safe_float(m.get("disco")) / disco_lim) * 100, 100))
-
     medias = {"CPU": [], "RAM": [], "DISCO": []}
-    for dados in por_servidor.values():
-        if dados["cpu"]:
-            medias["CPU"].append(sum(dados["cpu"]) / len(dados["cpu"]))
-        if dados["ram"]:
-            medias["RAM"].append(sum(dados["ram"]) / len(dados["ram"]))
-        if dados["disco"]:
-            medias["DISCO"].append(sum(dados["disco"]) / len(dados["disco"]))
+    maior_peso = max(PESOS_GESTOR.values())
 
-    def faixa(v):
-        if v >= 80:
+    for leitura in leituras_validas_gestor(leituras):
+        servidor_id = leitura.get("servidor_id")
+        limites_servidor = obter_limites_gestor(limites, servidor_id)
+        metricas = obter_metricas_gestor(leitura)
+
+        for metrica in METRICAS_GESTOR:
+            limite = limites_servidor[metrica]
+            pressao = min((metricas[metrica] / limite) * 100, 100)
+            peso_relativo = PESOS_GESTOR[metrica] / maior_peso
+            medias[metrica].append(pressao * peso_relativo)
+
+    def media_final(valores):
+        return round(sum(valores) / len(valores), 1) if valores else 0
+
+    def faixa(valor):
+        if valor >= 85:
             return "Critico"
-        if v >= 60:
+        if valor >= 70:
             return "Alto"
-        if v >= 40:
+        if valor >= 50:
             return "Moderado"
         return "Baixo"
 
-    def media_final(lst):
-        return round(sum(lst) / len(lst), 1) if lst else 0
+    resultado = {}
 
-    cpu_f = media_final(medias["CPU"])
-    ram_f = media_final(medias["RAM"])
-    disco_f = media_final(medias["DISCO"])
+    for metrica in METRICAS_GESTOR:
+        valor = media_final(medias[metrica])
+        resultado[metrica] = {
+            "valor": valor,
+            "severidade": faixa(valor),
+        }
 
-    return {
-        "CPU": {"valor": cpu_f, "severidade": faixa(cpu_f)},
-        "RAM": {"valor": ram_f, "severidade": faixa(ram_f)},
-        "DISCO": {"valor": disco_f, "severidade": faixa(disco_f)},
-    }
+    return resultado
 
 def listar_info_servidores(leituras, limites, servidores, analistas):
     resultado = []
-    for srv in servidores:
-        sid = srv["id_servidor"]
-        if sid not in limites:
-            continue
 
-        incidentes = 0
-        for r in leituras:
-            if r.get("servidor_id") != sid:
+    for servidor in servidores:
+        servidor_id = servidor["id_servidor"]
+        incidentes = set()
+
+        for leitura in leituras_validas_gestor(leituras):
+            if leitura.get("servidor_id") != servidor_id:
                 continue
-            m = r.get("metricas", {})
-            if (
-                safe_float(m.get("cpu")) >= safe_float(limites[sid].get("CPU"))
-                or safe_float(m.get("ram")) >= safe_float(limites[sid].get("RAM"))
-                or safe_float(m.get("disco")) >= safe_float(limites[sid].get("DISCO"))
-            ):
-                incidentes += 1
+
+            limites_servidor = obter_limites_gestor(limites, servidor_id)
+            metricas = obter_metricas_gestor(leitura)
+
+            for metrica in METRICAS_GESTOR:
+                if (
+                    classificar_metrica_gestor(
+                        metrica,
+                        metricas[metrica],
+                        limites_servidor[metrica],
+                    )
+                    == "Critico"
+                ):
+                    incidentes.add(metrica)
+
         resultado.append({
-            "servidor": srv["hostname"],
-            "incidentes": incidentes,
-            "analistas": analistas.get(sid, 0),
-            "status": srv["status_servidor"],
+            "servidor": servidor["hostname"],
+            "incidentes": len(incidentes),
+            "analistas": analistas.get(servidor_id, 0),
+            "status": servidor["status_servidor"],
         })
+
     return resultado
 
 # =========================================================
@@ -2099,10 +2254,6 @@ def executar_pipeline_gestor(s3, bucket, empresa_id, mac_address, agora):
         elif isinstance(dados, list):
             todas_leituras.extend(dados)
 
-    if not todas_leituras:
-        print("[GESTOR] Sem leituras client para consolidar.")
-        return
-
     servidores_emp = obter_servidores_empresa(empresa_id)
     analistas = obter_analistas_por_servidor(empresa_id)
     limites_emp = {
@@ -2116,12 +2267,27 @@ def executar_pipeline_gestor(s3, bucket, empresa_id, mac_address, agora):
         "periodos": {},
     }
 
+    if not todas_leituras:
+        print("[GESTOR] Sem leituras client para consolidar.")
+        for periodo in ("24h", "7d", "30d"):
+            resultado["periodos"][periodo] = dashboard_gestor_vazio()
+
+        salvar_s3_unificado(
+            s3,
+            f"client/gestor/empresa_{empresa_id}/dashboard_gestor.json",
+            resultado,
+            formato="json_dashboard",
+            bucket=bucket,
+        )
+        return
+
     for periodo in ("24h", "7d", "30d"):
         leituras = filtrar_periodo(todas_leituras, periodo)
-        if not leituras:
-            resultado["periodos"][periodo] = {"sem_dados": True}
+        if not leituras_validas_gestor(leituras):
+            resultado["periodos"][periodo] = dashboard_gestor_vazio()
             continue
         resultado["periodos"][periodo] = {
+            "sem_dados": False,
             "kpis": {
                 "disponibilidade_global": calcular_disponibilidade(leituras, limites_emp),
                 "nivel_risco": calcular_nivel_risco(leituras, limites_emp),
