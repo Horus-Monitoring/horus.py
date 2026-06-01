@@ -1540,24 +1540,20 @@ def calcular_disponibilidade(leituras, limites):
 
     for r in leituras:
         s = r.get("servidor_id")
-        if s is None or s not in limites:
+        if s not in limites:
             continue
 
         m = r.get("metricas", {})
         validas += 1
 
-        cpu_lim   = safe_float(limites[s].get("CPU",   0))
-        ram_lim   = safe_float(limites[s].get("RAM",   0))
-        disco_lim = safe_float(limites[s].get("DISCO", 0))
-
-        cpu   = safe_float(m.get("cpu",   0))
-        ram   = safe_float(m.get("ram",   0))
-        disco = safe_float(m.get("disco", 0))
+        cpu_lim = safe_float(limites[s].get("CPU"))
+        ram_lim = safe_float(limites[s].get("RAM"))
+        disco_lim = safe_float(limites[s].get("DISCO"))
 
         if (
-            classificar(cpu,   cpu_lim)   != "Critico"
-            and classificar(ram,   ram_lim)   != "Critico"
-            and classificar(disco, disco_lim) != "Critico"
+            classificar(m.get("cpu"), cpu_lim) != "Critico"
+            and classificar(m.get("ram"), ram_lim) != "Critico"
+            and classificar(m.get("disco"), disco_lim) != "Critico"
         ):
             online += 1
 
@@ -1571,34 +1567,46 @@ def calcular_nivel_risco(leituras, limites):
 
     for r in leituras:
         s = r.get("servidor_id")
-        if s is None or s not in limites:
+        if s not in limites:
             continue
 
         m = r.get("metricas", {})
 
-        for chave in ("CPU", "RAM", "DISCO"):
-            lim = safe_float(limites[s].get(chave, 0))
-            val = safe_float(m.get(chave.lower(), 0))
-            total += SEVERIDADE.get(classificar(val, lim), 0)
+        total += SEVERIDADE.get(
+            classificar(m.get("cpu"), limites[s].get("CPU")),
+            0,
+        )
+        total += SEVERIDADE.get(
+            classificar(m.get("ram"), limites[s].get("RAM")),
+            0,
+        )
+        total += SEVERIDADE.get(
+            classificar(m.get("disco"), limites[s].get("DISCO")),
+            0,
+        )
 
         qtd += 3
 
     if qtd == 0:
         return 0
-    return round(((total / qtd) - 1) / 4 * 100, 2)
+
+    return round(
+        ((total / qtd) - 1) / 4 * 100,
+        2,
+    )
 
 def calcular_incidentes_criticos(leituras, limites):
     criticos = 0
     for r in leituras:
         s = r.get("servidor_id")
-        if s is None or s not in limites:
+        if s not in limites:
             continue
 
         m = r.get("metricas", {})
         if (
-            classificar(safe_float(m.get("cpu")),   safe_float(limites[s].get("CPU",   0))) == "Critico"
-            or classificar(safe_float(m.get("ram")),   safe_float(limites[s].get("RAM",   0))) == "Critico"
-            or classificar(safe_float(m.get("disco")), safe_float(limites[s].get("DISCO", 0))) == "Critico"
+            classificar(m.get("cpu"), limites[s].get("CPU")) == "Critico"
+            or classificar(m.get("ram"), limites[s].get("RAM")) == "Critico"
+            or classificar(m.get("disco"), limites[s].get("DISCO")) == "Critico"
         ):
             criticos += 1
     return criticos
@@ -1612,22 +1620,21 @@ def calcular_estabilidade_operacional(leituras, limites):
 
     for r in leituras:
         s = r.get("servidor_id")
-        if s is None or s not in limites:
+        if s not in limites:
             continue
 
-        cpu_lim   = safe_float(limites[s].get("CPU",   0))
-        ram_lim   = safe_float(limites[s].get("RAM",   0))
-        disco_lim = safe_float(limites[s].get("DISCO", 0))
+        cpu_lim = safe_float(limites[s].get("CPU"))
+        ram_lim = safe_float(limites[s].get("RAM"))
+        disco_lim = safe_float(limites[s].get("DISCO"))
 
         if cpu_lim <= 0 or ram_lim <= 0 or disco_lim <= 0:
             continue
 
         m = r.get("metricas", {})
         validas += 1
-
         if (
-            safe_float(m.get("cpu"))   / cpu_lim   < 0.80
-            and safe_float(m.get("ram"))   / ram_lim   < 0.80
+            safe_float(m.get("cpu")) / cpu_lim < 0.80
+            and safe_float(m.get("ram")) / ram_lim < 0.80
             and safe_float(m.get("disco")) / disco_lim < 0.80
         ):
             estaveis += 1
@@ -2077,17 +2084,9 @@ def executar_pipeline_metricas(s3, bucket, df, empresa_id, servidor_id_db, hostn
 def executar_pipeline_gestor(s3, bucket, empresa_id, mac_address, agora):
     print("\n=== PIPELINE GESTOR ===")
     arquivos = listar_arquivos_client(s3, empresa_id, bucket=bucket)
-    
-    arquivos_metricas = [
-        key for key in arquivos
-        if key.endswith("metricas.json")
-        and "alertas" not in key
-        and "resumo" not in key
-    ]
-
     todas_leituras = []
 
-    for key in arquivos_metricas:
+    for key in arquivos:
         try:
             dados = ler_json_s3(s3, key, bucket=bucket)
         except Exception as e:

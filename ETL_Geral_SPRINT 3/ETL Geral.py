@@ -1270,12 +1270,16 @@ def classificar(valor, limite):
     return "Normal"
 
 def calcular_disponibilidade(leituras, limites):
+    if not leituras:
+        return 0
     online = 0
 
     for r in leituras:
         servidor = r["servidor_id"]
-        m = r["metricas"]
+        if servidor not in limites:
+            continue
 
+        m = r["metricas"]
         cpu = classificar(m["cpu"], limites[servidor]["CPU"])
         ram = classificar(m["ram"], limites[servidor]["RAM"])
         disco = classificar(m["disco"], limites[servidor]["DISCO"])
@@ -1283,17 +1287,20 @@ def calcular_disponibilidade(leituras, limites):
         if cpu != "Critico" and ram != "Critico" and disco != "Critico":
             online += 1
 
-        if not leituras:
-            return 0
-
     return (online / len(leituras)) * 100
 
 def calcular_nivel_risco(leituras, limites):
     total = 0
     quantidade = 0
 
+    if not leituras:
+        return 0
+    online = 0
+
     for r in leituras:
         servidor = r["servidor_id"]
+        if servidor not in limites:
+            continue
         m = r["metricas"]
 
         cpu = classificar(m["cpu"], limites[servidor]["CPU"])
@@ -1316,7 +1323,14 @@ def calcular_nivel_risco(leituras, limites):
 def calcular_incidentes_criticos(leituras, limites):
     criticos = 0
 
+    if not leituras:
+        return 0
+    online = 0
+
     for r in leituras:
+        servidor = r["servidor_id"]
+        if servidor not in limites:
+            continue
         s = r["servidor_id"]
         m = r["metricas"]
 
@@ -1336,7 +1350,14 @@ def calcular_incidentes_criticos(leituras, limites):
 def calcular_estabilidade_operacional(leituras, limites):
     estaveis = 0
 
+    if not leituras:
+        return 0
+    online = 0
+
     for r in leituras:
+        servidor = r["servidor_id"]
+        if servidor not in limites:
+            continue
         s = r["servidor_id"]
         m = r["metricas"]
 
@@ -1439,8 +1460,15 @@ JANELA_PREVISAO = 12
 def calcular_previsao_falhas(leituras, limites):
     por_servidor = {}
 
+    if not leituras:
+        return 0
+    online = 0
+
     for r in sorted(leituras, key=lambda r: r["data_hora"]):
         servidor = r["servidor_id"]
+        if servidor not in limites:
+            continue
+
         if servidor not in por_servidor:
             por_servidor[servidor] = {"cpu": [], "ram": [], "disco": []}
 
@@ -2215,7 +2243,10 @@ def main():
         # =========================
         print("\n=== PIPELINE GESTOR ===")
 
-        arquivos = listar_arquivos_client(s3, empresa_id)
+        arquivos = [
+            key for key in listar_arquivos_client(s3, empresa_id)
+            if key.endswith("metricas.json")
+        ]
 
         todas_leituras = []
         for key in arquivos:
