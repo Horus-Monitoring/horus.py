@@ -1575,25 +1575,18 @@ def calcular_disponibilidade(leituras, limites):
         return 0
 
     online = 0
-    total = 0
 
     for r in leituras:
-        sid = r.get("servidor_id")
-        if sid not in limites:
-            continue
-
         m = r.get("metricas", {})
 
-        cpu = safe_float(m.get("cpu"))
-        ram = safe_float(m.get("ram"))
-        disco = safe_float(m.get("disco"))
-
-        total += 1
-
-        if cpu > 0 and ram > 0 and disco > 0:
+        if (
+            safe_float(m.get("cpu")) > 0
+            and safe_float(m.get("ram")) > 0
+            and safe_float(m.get("disco")) > 0
+        ):
             online += 1
 
-    return round((online / total) * 100, 2) if total else 0
+    return round((online / len(leituras)) * 100, 2)
 
 def calcular_nivel_risco(leituras, limites):
     leituras = ultimas_leituras_por_servidor(leituras)
@@ -1646,10 +1639,6 @@ def calcular_estabilidade_operacional(leituras, limites):
     scores = []
 
     for r in leituras:
-        sid = r.get("servidor_id")
-        if sid not in limites:
-            continue
-
         m = r.get("metricas", {})
 
         cpu = safe_float(m.get("cpu"))
@@ -1661,7 +1650,7 @@ def calcular_estabilidade_operacional(leituras, limites):
             continue
 
         carga_media = (cpu + ram + disco) / 3
-        estabilidade = max(0, 100 - carga_media)
+        estabilidade = max(0, 120 - carga_media)
 
         scores.append(estabilidade)
 
