@@ -1528,6 +1528,23 @@ def filtrar_periodo(leituras, periodo):
 
     return filtradas
 
+def ultimas_leituras_por_servidor(leituras):
+    ultimas = {}
+
+    for r in leituras:
+        sid = r.get("servidor_id")
+        data = pandas.to_datetime(r.get("data_hora"), errors="coerce", utc=True)
+
+        if sid is None or pandas.isna(data):
+            continue
+
+        if sid not in ultimas or data > ultimas[sid]["_data"]:
+            novo = r.copy()
+            novo["_data"] = data
+            ultimas[sid] = novo
+
+    return list(ultimas.values())
+
 def classificar_gestor(valor, limite):
     valor = safe_float(valor)
     limite = safe_float(limite)
@@ -1545,6 +1562,8 @@ def classificar_gestor(valor, limite):
     return "Normal"
 
 def calcular_disponibilidade(leituras, limites):
+    leituras = ultimas_leituras_por_servidor(leituras)
+
     if not leituras:
         return 0
 
@@ -1579,6 +1598,8 @@ def calcular_disponibilidade(leituras, limites):
     return round((online / validas) * 100, 2)
 
 def calcular_nivel_risco(leituras, limites):
+    leituras = ultimas_leituras_por_servidor(leituras)
+
     total = 0
     qtd = 0
 
@@ -1601,6 +1622,8 @@ def calcular_nivel_risco(leituras, limites):
     return round(((total / qtd) - 1) / 4 * 100, 2)
 
 def calcular_incidentes_criticos(leituras, limites):
+    leituras = ultimas_leituras_por_servidor(leituras)
+
     criticos = 0
     for r in leituras:
         s = r.get("servidor_id")
@@ -1617,6 +1640,8 @@ def calcular_incidentes_criticos(leituras, limites):
     return criticos
 
 def calcular_estabilidade_operacional(leituras, limites):
+    leituras = ultimas_leituras_por_servidor(leituras)
+
     if not leituras:
         return 0
 
@@ -1703,7 +1728,7 @@ def grafico_estabilidade(leituras, limites):
     valores = []
     for hora in sorted(grupos.keys()):
         labels.append(hora[11:] + ":00")
-        valores.append(calcular_estabilidade_operacional(grupos[hora], limites))
+        valores.append(calcular_estabilidade_operacional(ultimas_leituras_por_servidor(grupos[hora]), limites))
     return {"labels": labels[-7:], "valores": valores[-7:]}
 
 # adicionado id do servidor no parametro
@@ -1810,6 +1835,8 @@ def calcular_previsao_falhas(leituras, limites):
     return alertas
 
 def calcular_impacto_componente(leituras, limites):
+    leituras = ultimas_leituras_por_servidor(leituras)
+
     por_servidor = {}
     for r in leituras:
         s = r.get("servidor_id")
@@ -1861,6 +1888,8 @@ def calcular_impacto_componente(leituras, limites):
     }
 
 def listar_info_servidores(leituras, limites, servidores, analistas):
+    leituras = ultimas_leituras_por_servidor(leituras)
+    
     resultado = []
     for srv in servidores:
         sid = srv["id_servidor"]
